@@ -9,6 +9,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', direct_to_template, { "template" : "welcome.html"}),
     url(r'^examples/', include('apps.examples.urls')),
+    url(r'^polls/', include('apps.polls.urls')),
     url(r'^admin/', include(admin.site.urls)),
                        
 )
