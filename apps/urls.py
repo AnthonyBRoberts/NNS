@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     url(r'^examples/', include('apps.examples.urls')),
     url(r'^polls/', include('apps.polls.urls')),
     # url(r'^nns/', include('apps.nns.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls)),                   
 )
 
 if getattr(settings,"DEBUG"):
