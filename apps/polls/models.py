@@ -1,6 +1,38 @@
 from django.db import models
 import datetime
 from django.utils import timezone
+from django import forms
+from django.contrib.localflavor.us.models import USStateField
+from django.contrib.auth.models import User
+
+class Editor(models.Model):
+    """ Editor User Profile """
+    user        = models.OneToOneField(User, related_name='editor', unique=True)
+    can_publish = models.BooleanField(default=True)
+    bio         = models.CharField(max_length=2000)
+    # notes       = models.ForeignKey(Notes)
+
+class Reporter(models.Model):
+    """ Reporter User Profile """
+    user        = models.OneToOneField(User, related_name='reporter', unique=True)
+    bio         = models.CharField(max_length=2000)
+    byline      = models.CharField(max_length=75)
+    # notes       = models.ForeignKey(Notes)
+
+
+class Client(models.Model):
+    """ Client User Profile """
+    user        = models.OneToOneField(User, related_name='client')
+    address     = models.CharField(max_length = 100)
+    city        = models.CharField(max_length=100)
+    state       = USStateField()
+    zipcode     = models.CharField(max_length=5)
+    pub_area    = models.CharField(max_length=100)
+    phone       = models.CharField(max_length=10)
+    twitter     = models.CharField(max_length=150)
+    facebook    = models.CharField(max_length=150)
+    website     = models.URLField(max_length=200)
+    # notes       = models.ForeignKey(Notes)
 
 class Poll(models.Model):
     question = models.CharField(max_length=200)
