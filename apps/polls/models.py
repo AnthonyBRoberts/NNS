@@ -10,14 +10,14 @@ from django.db.models.signals import post_save
 
 class Editor(User):
     """ Editor User Profile """
-    user        = models.OneToOneField(User, related_name='editor', unique=True)
+    # user        = models.OneToOneField(User, related_name='editor', unique=True)
     can_publish = models.BooleanField(default=True)
     bio         = models.CharField(max_length=2000)
     # notes       = models.ForeignKey(Notes)
 
 class Reporter(User):
     """ Reporter User Profile """
-    user        = models.OneToOneField(User, related_name='reporter', unique=True)
+    # user        = models.OneToOneField(User, related_name='reporter', unique=True)
     bio         = models.CharField(max_length=2000)
     byline      = models.CharField(max_length=75)
     # notes       = models.ForeignKey(Notes)
@@ -25,7 +25,7 @@ class Reporter(User):
 
 class Client(User):
     """ Client User Profile """
-    user        = models.OneToOneField(User, related_name='client')
+    # user        = models.OneToOneField(User, related_name='client')
     address     = models.CharField(max_length = 100)
     city        = models.CharField(max_length=100)
     state       = USStateField()
@@ -54,9 +54,10 @@ class Choice(models.Model):
     votes = models.IntegerField()
     def __unicode__(self):
         return self.choice
-
+"""
 def create_editor_profile(sender, instance, created, **kwargs):
     if created:
         Editor.objects.create(user=instance)
 
 post_save.connect(create_editor_profile, sender=User)
+"""
