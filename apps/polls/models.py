@@ -4,15 +4,18 @@ from django.utils import timezone
 from django import forms
 from django.contrib.localflavor.us.models import USStateField
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
-class Editor(models.Model):
+
+
+class Editor(User):
     """ Editor User Profile """
     user        = models.OneToOneField(User, related_name='editor', unique=True)
     can_publish = models.BooleanField(default=True)
     bio         = models.CharField(max_length=2000)
     # notes       = models.ForeignKey(Notes)
 
-class Reporter(models.Model):
+class Reporter(User):
     """ Reporter User Profile """
     user        = models.OneToOneField(User, related_name='reporter', unique=True)
     bio         = models.CharField(max_length=2000)
@@ -20,7 +23,7 @@ class Reporter(models.Model):
     # notes       = models.ForeignKey(Notes)
 
 
-class Client(models.Model):
+class Client(User):
     """ Client User Profile """
     user        = models.OneToOneField(User, related_name='client')
     address     = models.CharField(max_length = 100)
@@ -51,3 +54,9 @@ class Choice(models.Model):
     votes = models.IntegerField()
     def __unicode__(self):
         return self.choice
+
+def create_editor_profile(sender, instance, created, **kwargs):
+    if created:
+        Editor.objects.create(user=instance)
+
+post_save.connect(create_editor_profile, sender=User)
