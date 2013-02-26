@@ -31,4 +31,11 @@ pip-log.txt
 
 #AWS settings
 aws.py
+
+
+#remove all settings
 settings/aws.py
+settings/common.py
+settings/dev.py
+settings/prod.py
+settings/static.py
