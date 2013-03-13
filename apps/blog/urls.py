@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from models import Post, Comment
+from models import Post
 
 urlpatterns = patterns('',
     url(r'^post/(?P<slug>[-\w]+)$', 
@@ -24,4 +24,6 @@ urlpatterns = patterns('',
         },
         name='blog_archive_week',
        ),
+    url(r'$', 'django.views.generic.list_detail.object_list',
+        { 'queryset': Post.objects.all() }, name='blog_post_list'),
 )
