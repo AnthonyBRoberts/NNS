@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
-from models import Article
+from django.views.generic import DetailView, ListView
+from apps.wiki.models import Article
 
 urlpatterns = patterns('',
     url(r'^$', 

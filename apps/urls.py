@@ -7,18 +7,16 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', direct_to_template, { "template" : "welcome.html"}),
     url(r'^accounts/', include('registration.backends.default.urls')),
-    url(r'^admin/', include(admin.site.urls)), 
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^examples/', include('apps.examples.urls')),
     url(r'^polls/', include('apps.polls.urls')),
-    url(r'^wiki/', include('apps.wiki.urls'))
+    url(r'^pastebin/', include('apps.pastebin.urls')),
+    url(r'^blog/', include('apps.blog.urls')),
+    url(r'^wiki/', include('apps.wiki.urls')),
     # url(r'^nns/', include('apps.nns.urls')),
-                       
-                      
 )
 
 if getattr(settings,"DEBUG"):
     urlpatterns += patterns('django.contrib.staticfiles.views',
         url(r'^static/(?P<path>.*)$', 'serve'),
     )
-
-

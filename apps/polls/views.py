@@ -30,7 +30,6 @@ def results(request, poll_id):
                               context_instance=RequestContext(request))
 
 def vote(request, poll_id):
-    print "csfr error?"
     p = get_object_or_404(Poll, pk=poll_id)    
     try:
         selected_choice = p.choice_set.get(pk=request.POST['choice'])

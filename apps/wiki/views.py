@@ -7,7 +7,7 @@ from django.views.generic.list_detail import object_list
 from models import Article, Edit
 from forms import ArticleForm, EditForm
 
- @login_required 
+@login_required 
 def add_article(request):
     form = ArticleForm(request.POST or None)
     if form.is_valid():
@@ -21,7 +21,7 @@ def add_article(request):
                               { 'form': form },
                               context_instance=RequestContext(request))
 
- @login_required 
+@login_required 
 def edit_article(request, slug):
     article = get_object_or_404(Article, slug=slug)
     form = ArticleForm(request.POST or None, instance=article)
