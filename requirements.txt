@@ -20,3 +20,4 @@ django-celery==3.0.11
 South==0.7.6
 django-bootstrap-toolkit
 django-registration
+docutils
