@@ -15,12 +15,12 @@ the following context:
 {% block content %}
 
 <h1>Create new account</h1>
-<form action="" method="POST">
+<form action="." method="POST">
     {% csrf_token %}
     <table>
         {{ form.as_table }}
     </table>
-    <input type="submit" name="submit" value="Submit">
+    <input type="submit" name="submit" value="Register">
 </form>
 
 {% endblock %}
