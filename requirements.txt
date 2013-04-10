@@ -18,6 +18,6 @@ django-ses==0.4.1 #remove this if you don't use Amazon SES
 redis==2.7.1
 django-celery==3.0.11
 South==0.7.6
-django-bootstrap-toolkit
+django-bootstrap-toolkit==2.10.5
 django-registration
 docutils
