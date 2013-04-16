@@ -7,16 +7,26 @@ from django.views.generic.list_detail import object_list
 from models import Article, Edit
 from forms import ArticleForm, EditForm
 
+import tempfile
+import shutil
+
+
 @login_required 
 def add_article(request):
-    form = ArticleForm(request.POST or None)
-    if form.is_valid():
-        article = form.save(commit=False)
-        article.author = request.user
-        article.save()
-        msg = "Article saved successfully"
-        messages.success(request, msg, fail_silently=True)
-        return redirect(article)
+    if request.method == 'POST':
+        form = ArticleForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.author = request.user
+            article.docfile = request.FILES['docfile']
+            article.save()
+            #if request.FILES['docfile']:
+                #article.docfile.save(request.FILES['docfile']._name, request.FILES['docfile'], True)
+            msg = "Article saved successfully"
+            messages.success(request, msg, fail_silently=True)
+            return redirect(article)
+    else:
+        form = ArticleForm()
     return render_to_response('wiki/article_form.html', 
                               { 'form': form },
                               context_instance=RequestContext(request))

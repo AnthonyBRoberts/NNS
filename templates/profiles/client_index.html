@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="well">
+        <h1>These are the Clients</h1>
+        
+        {% if clients_list %}
+        <ul>
+        {% for client in clients_list %}<li><a href="/profiles/clients/{{ client.id }}/">{{ client.city }}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>No Clients.</p>
+        {% endif %}
+        <br
+    </div>
+    
+{% endblock %}
+

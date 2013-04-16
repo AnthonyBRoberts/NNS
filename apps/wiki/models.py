@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 
-# Create your models here.
-
 class PublishedArticlesManager(models.Manager):
     
     def get_query_set(self):
@@ -14,12 +12,13 @@ class Article(models.Model):
     
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=50, unique=True)
-    text = models.TextField(help_text="Formatted using ReST")
+    text = models.TextField(help_text="Brought to you by NNS. Wurd.")
     author = models.ForeignKey(User)
     is_published = models.BooleanField(default=False, verbose_name="Publish?")
     created_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
     published = PublishedArticlesManager()
+    docfile = models.FileField(upload_to='docs/%Y/%m/%d/', blank=True, null=True)
 
     def __unicode__(self):
         return self.title

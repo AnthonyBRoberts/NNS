@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load bootstrap_toolkit %}
 {% block content %}
 
     <div class="well">
@@ -10,11 +10,11 @@
             <h1>Create new article</h1>
         {% endif %}
 
-        <form action="" method="POST">
+        <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <table>
-                {{ form.as_table }}
-                {{ edit_form.as_table }}
+                {{ form|as_bootstrap }}
+                {{ edit_form|as_bootstrap }}
             </table>
             <input type="submit" name="submit" value="Submit">
         </form>

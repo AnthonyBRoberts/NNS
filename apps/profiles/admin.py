@@ -1,4 +1,4 @@
-from apps.polls.models import Poll, Choice, Editor, Reporter, Client
+from apps.profiles.models import Poll, Choice, Editor, Reporter, Client
 from django.contrib import admin
 from django.contrib.admin import site, ModelAdmin
 from django.contrib.auth.models import User

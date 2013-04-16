@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load bootstrap_toolkit %}
 {% block content %}
 
     <div class="well">
@@ -27,7 +27,11 @@
         {{ object.text|restructuredtext }}
         </p>
 
-        <h3>Actions<h3>
+        <p>
+        <a href="{{ object.docfile.url }}">{{ object.docfile.name }}</a>
+        </p>
+
+        <h3>Actions</h3>
         <ul>
             <li>
                 <a href="{% url wiki_article_edit object.slug %}">Edit this article</a>
