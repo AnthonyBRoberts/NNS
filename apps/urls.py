@@ -14,8 +14,7 @@ urlpatterns = patterns('',
     url(r'^profiles/', include('apps.profiles.urls')),
     url(r'^pastebin/', include('apps.pastebin.urls')),
     url(r'^blog/', include('apps.blog.urls')),
-    url(r'^wiki/', include('apps.wiki.urls')),
-    # url(r'^nns/', include('apps.nns.urls')),
+    url(r'^story/', include('apps.story.urls')),
 )
 
 if getattr(settings,"DEBUG"):

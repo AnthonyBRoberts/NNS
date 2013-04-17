@@ -3,13 +3,8 @@ from django.contrib import messages
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-
 from models import Article, Edit
 from forms import ArticleForm, EditForm
-
-import tempfile
-import shutil
-
 
 @login_required 
 def add_article(request):
@@ -20,14 +15,12 @@ def add_article(request):
             article.author = request.user
             article.docfile = request.FILES['docfile']
             article.save()
-            #if request.FILES['docfile']:
-                #article.docfile.save(request.FILES['docfile']._name, request.FILES['docfile'], True)
             msg = "Article saved successfully"
             messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:
         form = ArticleForm()
-    return render_to_response('wiki/article_form.html', 
+    return render_to_response('story/article_form.html', 
                               { 'form': form },
                               context_instance=RequestContext(request))
 
@@ -46,7 +39,7 @@ def edit_article(request, slug):
             msg = "Article updated successfully"
             messages.success(request, msg, fail_silently=True)
             return redirect(article)
-    return render_to_response('wiki/article_form.html', 
+    return render_to_response('story/article_form.html', 
                               { 
                                   'form': form,
                                   'edit_form': edit_form,

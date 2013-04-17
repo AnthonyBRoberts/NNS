@@ -8,15 +8,36 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Article.docfile'
-        db.add_column('wiki_article', 'docfile',
-                      self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True),
-                      keep_default=False)
+        # Adding model 'Article'
+        db.create_table('story_article', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50)),
+            ('text', self.gf('django.db.models.fields.TextField')()),
+            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('is_published', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('created_on', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('docfile', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
+        ))
+        db.send_create_signal('story', ['Article'])
+
+        # Adding model 'Edit'
+        db.create_table('story_edit', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('article', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['story.Article'])),
+            ('editor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('edited_on', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('summary', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal('story', ['Edit'])
 
 
     def backwards(self, orm):
-        # Deleting field 'Article.docfile'
-        db.delete_column('wiki_article', 'docfile')
+        # Deleting model 'Article'
+        db.delete_table('story_article')
+
+        # Deleting model 'Edit'
+        db.delete_table('story_edit')
 
 
     models = {
@@ -56,7 +77,7 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'wiki.article': {
+        'story.article': {
             'Meta': {'object_name': 'Article'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'created_on': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
@@ -67,9 +88,9 @@ class Migration(SchemaMigration):
             'text': ('django.db.models.fields.TextField', [], {}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'wiki.edit': {
+        'story.edit': {
             'Meta': {'ordering': "['-edited_on']", 'object_name': 'Edit'},
-            'article': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['wiki.Article']"}),
+            'article': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['story.Article']"}),
             'edited_on': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -77,4 +98,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['wiki']
+    complete_apps = ['story']

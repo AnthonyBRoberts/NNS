@@ -8,7 +8,7 @@ class PublishedArticlesManager(models.Manager):
         return super(PublishedArticlesManager, self).get_query_set().filter(is_published=True)
 
 class Article(models.Model):
-    """Represents a wiki article"""
+    """Represents a story article"""
     
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=50, unique=True)
@@ -30,7 +30,7 @@ class Article(models.Model):
 
     @models.permalink 
     def get_absolute_url(self):
-        return ('wiki_article_detail', (), { 'slug': self.slug })
+        return ('story_article_detail', (), { 'slug': self.slug })
 
 class Edit(models.Model):
     """Stores an edit session"""
@@ -48,4 +48,4 @@ class Edit(models.Model):
     
     @models.permalink 
     def get_absolute_url(self):
-        return ('wiki_edit_detail', self.id)
+        return ('story_edit_detail', self.id)
