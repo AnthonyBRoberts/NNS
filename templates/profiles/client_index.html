@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block clientlist %}
 
     <div class="well">
         <h1>These are the Clients</h1>
@@ -13,7 +13,8 @@
         {% else %}
         <p>No Clients.</p>
         {% endif %}
-        <br
+        <br>
+        <a href="{% url client_add %}">Create New Client</a>
     </div>
     
 {% endblock %}

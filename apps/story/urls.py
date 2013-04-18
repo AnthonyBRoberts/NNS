@@ -6,7 +6,7 @@ urlpatterns = patterns('',
     url(r'^$', 
         'django.views.generic.list_detail.object_list',
         {
-            'queryset': Article.published.all(),
+            'queryset': Article.objects.all(),
         },
         name='story_article_index'),
     url(r'^article/(?P<slug>[-\w]+)$', 

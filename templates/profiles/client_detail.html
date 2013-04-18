@@ -2,14 +2,19 @@
 {% load bootstrap_toolkit %}
 {% block content %}
 
-    <div class="well">
+
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     
-        <h1>{{ client_info.city }}</h1>
-        <h2>{{ client_info.email }}</h2>
+    <div class="well">
+        {% if client_info %}
+            <h1>Edit Client Info {{ client_info }}</h1>
+            <h2>{{ client_info.city }}</h2>
+            <h3>{{ client_info.email }}</h3>
+        {% else %}
+            <h1>Create New Client</h1>
+        {% endif %}
         
-        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-        
-        <form action="" method="post">
+        <form action="" method="POST">
         
             {% csrf_token %}
             
@@ -17,7 +22,7 @@
                 {{ client_form|as_bootstrap }}
             </table>
             
-            <input type="submit" value="Submit" />
+            <input type="submit" name="submit" value="Submit">
             
         </form>
         

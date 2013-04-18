@@ -9,11 +9,11 @@ from forms import ArticleForm, EditForm
 @login_required 
 def add_article(request):
     if request.method == 'POST':
-        form = ArticleForm(request.POST or None, request.FILES or None)
+        form = ArticleForm(request.POST, request.FILES or None)
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
-            article.docfile = request.FILES['docfile']
+            #article.docfile = request.FILES['docfile']
             article.save()
             msg = "Article saved successfully"
             messages.success(request, msg, fail_silently=True)
@@ -46,7 +46,7 @@ def edit_article(request, slug):
                                   'article': article,
                               },
                               context_instance=RequestContext(request))
-
+@login_required 
 def article_history(request, slug):
     article = get_object_or_404(Article, slug=slug)
     return  object_list(request, 
