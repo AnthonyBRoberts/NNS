@@ -43,7 +43,7 @@
 						</ul>
 						<ul class="nav pull-right">
 							<li>
-								<a href="/accounts/login">Login</a>
+								<a href="/accounts/login/?next=/story">Login</a>
 							</li>
 						</ul>
 					</div>
@@ -67,6 +67,7 @@
 				<a href="/accounts/login/?next=/story">Login</a>
 			    </li>
 			</ul>
+			{% bootstrap_messages %}
 			<div class="tab-content">
 				<div class="tab-pane active" id="tab1">
 					<p>
@@ -97,7 +98,7 @@
 	</div>
 </div></div>
 <div class="container">
-    {% bootstrap_messages %}
+    
 
     <p><hr></p>
     <footer class="row">
