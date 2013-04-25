@@ -5,6 +5,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^static/js/(?P<path>.*)$', 'django.views.static.serve', {
+        'document_root': settings.STATIC_ROOT,
+    }),
     url(r'^$', direct_to_template, { "template" : "welcome.html"}),
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
