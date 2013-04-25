@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^pastebin/', include('apps.pastebin.urls')),
     url(r'^blog/', include('apps.blog.urls')),
     url(r'^story/', include('apps.story.urls')),
+    (r'^tinymce/', include('tinymce.urls')),
 )
 
 if getattr(settings,"DEBUG"):

@@ -72,15 +72,15 @@ class Reporter(User):
 class Client(User):
     """ Client User Profile """
     # user        = models.OneToOneField(User, related_name='client')
-    address     = models.CharField(max_length = 100)
+    address     = models.CharField(max_length=100)
     city        = models.CharField(max_length=100)
-    state       = USStateField()
-    zipcode     = models.CharField(max_length=5)
-    pub_area    = models.CharField(max_length=100)
+    state       = USStateField(default="NE")
+    zipcode     = models.CharField(max_length=5, blank=True, null=True)
     phone       = models.CharField(max_length=10)
-    twitter     = models.CharField(max_length=150)
-    facebook    = models.CharField(max_length=150)
-    website     = models.URLField(max_length=200)
+    pub_area    = models.CharField(max_length=100, blank=True, null=True, verbose_name="Circulation Area")
+    twitter     = models.CharField(max_length=150, blank=True, null=True)
+    facebook    = models.CharField(max_length=150, blank=True, null=True)
+    website     = models.URLField(max_length=200, blank=True, null=True)
     # notes       = models.ForeignKey(Notes)
     def __unicode__(self):
         return self.last_name

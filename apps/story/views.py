@@ -13,7 +13,6 @@ def add_article(request):
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
-            #article.docfile = request.FILES['docfile']
             article.save()
             msg = "Article saved successfully"
             messages.success(request, msg, fail_silently=True)

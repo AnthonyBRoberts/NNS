@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap_toolkit %}
-{% block content %}
+
+{% block storycontent %}
 
     <div class="well">
 
@@ -24,7 +25,9 @@
         <h2>{{ object.title }}</h2>
 
         <p>
-        {{ object.text|restructuredtext }}
+        
+        {{ object.text|safe}}
+        
         </p>
         {% if object.docfile %}
         <p>

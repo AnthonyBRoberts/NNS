@@ -1,8 +1,6 @@
 Code repo for the Nebraska News Service content distribution system project.
 Anthony Roberts : nns.aroberts@gmail.com 
 
-
-<<<<<<< HEAD
 This is a clone of Philip Nuzhnyi's Django-Heroku-Bootstrap. 
 ```
 git clone https://github.com/callmephilip/django-heroku-bootstrap.git
@@ -205,4 +203,4 @@ fab run
 * Tests
 * Caching
 * File uploads
->>>>>>> 0008bc8b00b3f2fddd22d7e721dd5570a5b994c5
+

@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 {% load bootstrap_toolkit %}
+{% block extra_head %}
+{{ form.media }}
+{% endblock %}
 {% block newstory %}
 
     <div class="well">
-    
+        {% if user.is_staff %}
         {% if article %}
             <h1>Edit Story {{ article }}</h1>
         {% else %}
@@ -18,7 +21,9 @@
             </table>
             <input type="submit" name="submit" value="Submit">
         </form>
-
+        {% else %}
+        <h3>You do not have permission to view this page</h3>
+        {% endif %}
     </div>
     
 {% endblock %}
