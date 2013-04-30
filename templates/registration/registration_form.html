@@ -12,9 +12,9 @@ the following context:
     information on how to display this in a template.
 {% endcomment %}
 
-{% block content %}
+{% block register %}
 
-<h1>Create new account</h1>
+<h3>Create new account</h3>
 <form action="." method="POST">
     {% csrf_token %}
     <table>

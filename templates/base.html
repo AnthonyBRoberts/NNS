@@ -159,6 +159,7 @@
                         </p>
                     </div>
                     
+                    
                 </div> <!-- tab-content -->
             </div> <!-- tabbable -->
             
@@ -178,6 +179,9 @@
                                 <li>
                                     <a href="/accounts/login/?next=/story">Login</a>
                                 </li>
+                                <li>
+                                    <a href="/accounts/register/?next=/story">Register</a>
+                                </li>
                             </ul>
                         </div> <!-- navbar-responsive-collapse -->	
                     </div> <!-- container-fluid -->
@@ -190,10 +194,16 @@
                     <li class="active">
                         <a href="/accounts/login/?next=/story">Please click here to log in</a>
                     </li>
+                    <li class="active">
+                        <a href="/accounts/register/?next=/story">Please click here to register</a>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
                         <p>{% block content %}{% endblock %}</p>
+                    </div>
+                    <div class="tab-pane active" id="tab1">
+                        <p>{% block register %}{% endblock %}</p>
                     </div>
                 </div> <!-- tab-content -->
             </div> <!-- tabbable --> 
