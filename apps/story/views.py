@@ -1,10 +1,14 @@
+import os
+import redis
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.views.generic.list_detail import object_list
 from models import Article, Edit
 from forms import ArticleForm, EditForm
+from story.tasks import send_published_article
 
 @login_required 
 def add_article(request):
@@ -16,6 +20,12 @@ def add_article(request):
             article.save()
             msg = "Article saved successfully"
             messages.success(request, msg, fail_silently=True)
+            if article.is_published:
+                subject = article.title
+                body = article.text
+                send_published_article.delay(request.user.email, subject, body)
+                msg = "Article saved and published successfully"
+                messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:
         form = ArticleForm()
@@ -30,6 +40,12 @@ def edit_article(request, slug):
     edit_form = EditForm(request.POST or None)
     if form.is_valid():
         article = form.save()
+        if article.is_published:
+                subject = article.title
+                body = article.text
+                send_published_article.delay(request.user.email, subject, body)
+                msg = "Article saved and published successfully"
+                messages.success(request, msg, fail_silently=True)
         if edit_form.is_valid():
             edit = edit_form.save(commit=False)
             edit.article = article
