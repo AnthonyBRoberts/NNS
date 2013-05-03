@@ -41,7 +41,7 @@
                             
                             <ul class="nav">
                                 {% if user.is_staff %}
-                                <li class="active">
+                                <li>
                                     <a href="/story">Stories</a>
                                 </li>
                                 <li>
@@ -63,7 +63,7 @@
                             </ul>
                             <ul class="nav pull-right">
                                     <li>
-                                        <a href="/accounts/logout/?next=/story">Logout</a>
+                                        <a href="/accounts/logout/?next=/accounts/login/?next=/story">Logout</a>
                                     </li>
                             </ul>
                             
