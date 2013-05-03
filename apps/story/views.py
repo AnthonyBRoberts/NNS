@@ -47,7 +47,7 @@ def edit_article(request, slug):
         if article.is_published:
                 subject = article.title
                 body = article.text
-                send_published_article.delay(request.user.email, subject, body)
+                send_published_article.delay(request.user.email, subject, body, attachment)
                 msg = "Article saved and published successfully"
                 messages.success(request, msg, fail_silently=True)
         if edit_form.is_valid():
