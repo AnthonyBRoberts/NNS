@@ -23,14 +23,14 @@ def add_article(request):
             if article.is_published:
                 subject = article.title
                 body = article.text
-                #if article.docfile.url != None:
-                    #attachment = article.docfile.url
-                    #send_published_article.delay(request.user.email,
-                                             #subject,
-                                             #body,
-                                             #attachment)
-                #else:
-                send_published_article.delay(request.user.email,
+                try:
+                    attachment = request.FILES.get('docfile')
+                    send_published_article.delay(request.user.email,
+                                             subject,
+                                             body,
+                                             attachment)
+                except:
+                    send_published_article.delay(request.user.email,
                                              subject,
                                              body)
                 msg = "Article saved and published successfully"

@@ -16,10 +16,11 @@ def send_published_article(sender, subject, body, attachment=None):
         #recipients.append(client.email)
         recipient = client.email
         email = EmailMessage(subject, body, sender, [recipient])
-        email.send()
+        if attachment != None:
+            content = open(attachment, 'rb').read()
+            email.attach_file(content)
     #content = open(attachment, 'rb').read()
-    #email.attach(content)
-    #email.send()
+        email.send()
 
 @task()
 def report_errors():
