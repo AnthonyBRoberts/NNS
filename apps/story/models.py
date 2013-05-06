@@ -38,7 +38,7 @@ class Article(models.Model):
 class Edit(models.Model):
     """Stores an edit session"""
     
-    article = models.ForeignKey(Article)
+    article = models.ForeignKey(Article) 
     editor = models.ForeignKey(User)
     edited_on = models.DateTimeField(auto_now_add=True)
     summary = models.CharField(max_length=100)

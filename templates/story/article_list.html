@@ -11,7 +11,7 @@
                     <ul>
                         {% for article in object_list %}
                             <li>
-                                <a href="{% url story_article_detail article.slug %}">{{ article.title }}</a>
+                                <a href="{% url story_article_detail article.slug %}">{{ article.title }}</a> - Author: {{ article.author }} - Publish Date: {{ article.publish_date|date:"D d M Y" }}
                             </li>
                         {% endfor %}
                     </ul>
@@ -20,7 +20,7 @@
                         {% for article in object_list %}
                         {% if article.is_published %}
                             <li>
-                                <a href="{% url story_article_detail article.slug %}">{{ article.title }}</a>
+                                <a href="{% url story_article_detail article.slug %}">{{ article.title }}</a> - Author: {{ article.author }} - Publish Date: {{ article.publish_date|date:"D d M Y" }}
                             </li>
                         {% endif %}
                         {% endfor %}
