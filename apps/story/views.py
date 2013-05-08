@@ -24,16 +24,16 @@ def add_article(request):
                 subject = article.title
                 body = article.text
                 try:
-                    attachment = request.FILES.get('docfile')
+                    attachment = request.FILES.items()
                     send_published_article.delay(request.user.email,
-                                             subject,
-                                             body,
-                                             attachment)
+                                                 subject,
+                                                 body,
+                                                 attachment)
                 except:
                     send_published_article.delay(request.user.email,
-                                             subject,
-                                             body)
-                msg = "Article saved and published successfully"
+                                                 subject,
+                                                 body)
+                msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:

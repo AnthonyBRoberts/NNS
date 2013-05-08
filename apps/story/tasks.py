@@ -17,9 +17,8 @@ def send_published_article(sender, subject, body, attachment=None):
         recipient = client.email
         email = EmailMessage(subject, body, sender, [recipient])
         if attachment != None:
-            content = open(attachment, 'rb').read()
-            email.attach_file(content)
-    #content = open(attachment, 'rb').read()
+            for (k, v) in attachment:
+                email.attach(v.name, v.read())
         email.send()
 
 @task()
