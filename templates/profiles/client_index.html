@@ -15,7 +15,9 @@
         <p>No Clients.</p>
         {% endif %}
         <br>
+        {% if user.is_superuser %}
         <a href="{% url client_add %}">Create New Client</a>
+        {% endif %}
         {% else %}
         <h3>You do not have permission to view this page</h3>
         {% endif %}

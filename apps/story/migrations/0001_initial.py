@@ -13,10 +13,11 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50)),
-            ('text', self.gf('django.db.models.fields.TextField')()),
+            ('text', self.gf('tinymce.models.HTMLField')()),
             ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('is_published', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('created_on', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('publish_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 13, 0, 0))),
             ('docfile', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
         ))
         db.send_create_signal('story', ['Article'])
@@ -84,8 +85,9 @@ class Migration(SchemaMigration):
             'docfile': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'publish_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 13, 0, 0)'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
-            'text': ('django.db.models.fields.TextField', [], {}),
+            'text': ('tinymce.models.HTMLField', [], {}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         'story.edit': {

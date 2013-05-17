@@ -3,7 +3,7 @@
 {% block clientdetails %}
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     <div class="well">
-        {% if user.is_superuser %}
+        {% if user.is_staff %}
         {% if client_info %}
             <h1>Edit Client Info {{ client_info }}</h1>
             <h2>{{ client_info.city }}</h2>

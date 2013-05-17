@@ -11,6 +11,15 @@ from forms import ArticleForm, EditForm
 from story.tasks import send_published_article
 
 @login_required 
+def inprogress_index(request):
+    """
+    Stories in progress view, a list of all stories in progress
+    """
+    inprogress_list = Article.objects.filter(is_published=False)
+    return render_to_response('story/article_inprogress_list.html',
+                              {'inprogress_list': inprogress_list})
+
+@login_required 
 def add_article(request):
     if request.method == 'POST':
         form = ArticleForm(request.POST, request.FILES or None)
@@ -50,12 +59,20 @@ def edit_article(request, slug):
     if form.is_valid():
         article = form.save()
         if article.is_published:
-                subject = article.title
-                body = article.text
-                attachment = article.docfile.url
-                send_published_article.delay(request.user.email, subject, body, attachment)
-                msg = "Article saved and published successfully"
-                messages.success(request, msg, fail_silently=True)
+            subject = article.title
+            body = article.text
+            try:
+                attachment = request.FILES.items()
+                send_published_article.delay(request.user.email,
+                                             subject,
+                                             body,
+                                             attachment)
+            except:
+                send_published_article.delay(request.user.email,
+                                             subject,
+                                             body)
+            msg = "Article published successfully"
+            messages.success(request, msg, fail_silently=True)
         if edit_form.is_valid():
             edit = edit_form.save(commit=False)
             edit.article = article

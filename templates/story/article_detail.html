@@ -40,13 +40,22 @@
             <li>
                 <a href="{% url story_article_edit object.slug %}">Edit this article</a>
             </li>
+            {% if user.is_superuser %}
             <li>
                 <a href="{% url story_article_history object.slug %}">View article history</a>
             </li>
+            {% endif %}
         </ul>
         {% endif %}
-        <a href="{% url story_article_index %}">See All</a>
-
+        <h3>Go To:</h3>
+        <ul>
+            <li>
+                <a href="{% url story_article_index %}">Published Articles</a>
+            </li>
+            <li>
+                <a href="/story/inprogress">Articles in Progress</a>
+            </li>
+        </ul>
     </div>
     
 {% endblock %}

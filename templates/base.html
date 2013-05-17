@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 {% load bootstrap_toolkit %}
 <html lang="en">
 <head>
@@ -13,9 +14,9 @@
         }
     </style>
     <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="{% static "js/html5.js" %}"></script>
     <![endif]-->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="{% static "js/jquery.min.js" %}"></script>
     {% bootstrap_javascript_tag %}
     {% block extra_head %}
     {% endblock %}
@@ -45,7 +46,7 @@
                                     <a href="/story">Stories</a>
                                 </li>
                                 <li>
-                                    <a href="/profiles/clients">Clients</a>
+                                    <a href="/profiles/create">Clients</a>
                                 </li>
                                 {% if user.is_superuser %}
                                 <li>
@@ -63,7 +64,7 @@
                             </ul>
                             <ul class="nav pull-right">
                                     <li>
-                                        <a href="/accounts/logout/?next=/accounts/login/?next=/story">Logout</a>
+                                        <a href="/accounts/logout/?next=/accounts/login/?next=profiles_profile_detail">Logout</a>
                                     </li>
                             </ul>
                             
@@ -74,30 +75,33 @@
             <div class="tabbable">
                 {% if user.is_staff %}
                 <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a href="/story">Recent Stories</a>
+                    <li>
+                        <a href="/story">Published Stories</a>
+                    </li>
+                    <li>
+                        <a href="/story/inprogress">Stories in progress</a>
                     </li>
                     <li>
                         <a href="/story/add/article">New Story</a>
                     </li>
                     <li>
-                        <a href="/profiles/clients">Clients</a>
+                        <a href="/profiles/">Clients</a>
                     </li>
                     {% if user.is_superuser %}
                     <li>
-                        <a href="/profiles/clients/add">Add Client</a>
+                        <a href="/profiles/create/client">Add Client</a>
                     </li>
                     <li>
                         <a href="/profiles/reporters">Reporters</a>
                     </li>
                     <li>
-                        <a href="/profiles/reporters/add">Add Reporter</a>
+                        <a href="/profiles/create/reporters">Add Reporter</a>
                     </li>
                     <li>
                         <a href="/profiles/editors">Editors</a>
                     </li>
                     <li>
-                        <a href="/profiles/editors/add">Add Editor</a>
+                        <a href="/profiles/create/editors">Add Editor</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -112,49 +116,61 @@
                     </div>
                     <div class="tab-pane active" id="tab2">
                         <p>
-                            {% block storycontent %}
+                            {% block article_inprogress_list %}
                             {% endblock %}
                         </p>
                     </div>
                     <div class="tab-pane active" id="tab3">
                         <p>
-                            {% block newstory %}
+                            {% block storycontent %}
                             {% endblock %}
                         </p>
                     </div>
                     <div class="tab-pane active" id="tab4">
                         <p>
-                            {% block clientlist %}
+                            {% block newstory %}
                             {% endblock %}
                         </p>
                     </div>
                     <div class="tab-pane active" id="tab5">
                         <p>
-                            {% block clientdetails %}
+                            {% block profile_detail %}
                             {% endblock %}
                         </p>
                     </div>
                     <div class="tab-pane active" id="tab6">
                         <p>
-                            {% block reporterlist %}
+                            {% block create_profile %}
                             {% endblock %}
                         </p>
                     </div>
                     <div class="tab-pane active" id="tab7">
                         <p>
-                            {% block reporterdetails %}
+                            {% block reporterlist %}
                             {% endblock %}
                         </p>
                     </div>
                     <div class="tab-pane active" id="tab8">
                         <p>
-                            {% block editorlist %}
+                            {% block reporterdetails %}
                             {% endblock %}
                         </p>
                     </div>
                     <div class="tab-pane active" id="tab9">
                         <p>
-                            {% block editordetails %}
+                            {% block editorlist %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="tab-pane active" id="tab10">
+                        <p>
+                            {% block edit_profile %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="tab-pane active" id="tab11">
+                        <p>
+                            {% block profile_list %}
                             {% endblock %}
                         </p>
                     </div>
@@ -177,10 +193,10 @@
                         <div class="nav-collapse collapse navbar-responsive-collapse">
                             <ul class="nav">
                                 <li>
-                                    <a href="/accounts/login/?next=/story">Login</a>
+                                    <a href="/accounts/login/?next=/profiles/create/client">Login</a>
                                 </li>
                                 <li>
-                                    <a href="/accounts/register/?next=/story">Register</a>
+                                    <a href="/accounts/register/">Register</a>
                                 </li>
                             </ul>
                         </div> <!-- navbar-responsive-collapse -->	
@@ -192,10 +208,10 @@
                 {% bootstrap_messages %}
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="/accounts/login/?next=/story">Please click here to log in</a>
+                        <a href="/accounts/login/?next=/profiles/create/client">Please click here to log in</a>
                     </li>
                     <li class="active">
-                        <a href="/accounts/register/?next=/story">Please click here to register</a>
+                        <a href="/accounts/register/">Please click here to register</a>
                     </li>
                 </ul>
                 <div class="tab-content">

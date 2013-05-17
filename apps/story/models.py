@@ -12,9 +12,10 @@ class PublishedArticlesManager(models.Manager):
 class Article(models.Model):
     """Represents a story article"""
     
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, verbose_name="Headline")
     slug = models.SlugField(max_length=50, unique=True)
     text = tinymce_models.HTMLField()
+    #text = models.CharField(max_length=10000)
     author = models.ForeignKey(User)
     is_published = models.BooleanField(default=False, verbose_name="Publish?")
     created_on = models.DateTimeField(auto_now_add=True)
@@ -41,7 +42,7 @@ class Edit(models.Model):
     article = models.ForeignKey(Article) 
     editor = models.ForeignKey(User)
     edited_on = models.DateTimeField(auto_now_add=True)
-    summary = models.CharField(max_length=100)
+    summary = models.CharField(max_length=100, verbose_name="Edit Summary")
 
     class Meta:
         ordering = ['-edited_on']

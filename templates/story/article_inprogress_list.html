@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block storylist %}
+{% block article_inprogress_list %}
 
     <div class="well">
 
         {% if object_list %}
 
-            <h2>Recent Stories</h2>
+            <h2>Stories in progress</h2>
                 <style>
                 table
                 {
@@ -15,18 +15,18 @@
                 </style>
                 <table>
                         {% for article in object_list %}
-                        {% if article.is_published %}
+
                             <tr>
                                 <td><a href="{% url story_article_detail article.slug %}">{{ article.title }}</a></td>
                                 <td>Author: {{ article.author }}</td>
                                 <td>Publish Date: {{ article.publish_date|date:"D d M Y" }}</td>
                             </tr>
-                        {% endif %}
+
                         {% endfor %}
                 </table>
         
         {% else %}
-            <h2>No articles have been published yet.</h2>
+            <h2>No articles are in progress.</h2>
         {% endif %}
         
         {% if user.is_staff %}

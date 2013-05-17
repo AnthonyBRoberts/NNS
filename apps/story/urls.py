@@ -9,6 +9,12 @@ urlpatterns = patterns('',
             'queryset': Article.objects.all(),
         },
         name='story_article_index'),
+    url(r'^inprogress/$',
+        ListView.as_view(
+            queryset=Article.objects.filter(is_published=False),
+            context_object_name='inprogress_list',
+            template_name='story/article_inprogress_list.html')
+        ),
     url(r'^article/(?P<slug>[-\w]+)$', 
         'django.views.generic.list_detail.object_detail',
         {

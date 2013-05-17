@@ -8,16 +8,50 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding field 'UserProfile.user_type'
+        db.add_column('account_userprofile', 'user_type',
+                      self.gf('django.db.models.fields.CharField')(default='Client', max_length=10),
+                      keep_default=False)
 
-        # Changing field 'Article.text'
-        db.alter_column('story_article', 'text', self.gf('django.db.models.fields.TextField')())
 
     def backwards(self, orm):
+        # Deleting field 'UserProfile.user_type'
+        db.delete_column('account_userprofile', 'user_type')
 
-        # Changing field 'Article.text'
-        db.alter_column('story_article', 'text', self.gf('tinymce.models.HTMLField')())
 
     models = {
+        'account.client': {
+            'Meta': {'object_name': 'Client', '_ormbases': ['account.UserProfile']},
+            'address': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'city': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'facebook': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
+            'phone': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
+            'pub_area': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'state': ('django.contrib.localflavor.us.models.USStateField', [], {'default': "'NE'", 'max_length': '2'}),
+            'twitter': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
+            'userprofile_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['account.UserProfile']", 'unique': 'True', 'primary_key': 'True'}),
+            'website': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'zipcode': ('django.db.models.fields.CharField', [], {'max_length': '5', 'null': 'True', 'blank': 'True'})
+        },
+        'account.editor': {
+            'Meta': {'object_name': 'Editor', '_ormbases': ['account.UserProfile']},
+            'bio': ('django.db.models.fields.CharField', [], {'max_length': '2000'}),
+            'can_publish': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'userprofile_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['account.UserProfile']", 'unique': 'True', 'primary_key': 'True'})
+        },
+        'account.reporter': {
+            'Meta': {'object_name': 'Reporter', '_ormbases': ['account.UserProfile']},
+            'bio': ('django.db.models.fields.CharField', [], {'max_length': '2000'}),
+            'byline': ('django.db.models.fields.CharField', [], {'max_length': '75'}),
+            'userprofile_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['account.UserProfile']", 'unique': 'True', 'primary_key': 'True'})
+        },
+        'account.userprofile': {
+            'Meta': {'object_name': 'UserProfile'},
+            'about': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'}),
+            'user_type': ('django.db.models.fields.CharField', [], {'default': "'Client'", 'max_length': '10'})
+        },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -53,27 +87,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        'story.article': {
-            'Meta': {'object_name': 'Article'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
-            'created_on': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'docfile': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'publish_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 4, 25, 0, 0)'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
-            'text': ('django.db.models.fields.TextField', [], {}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        'story.edit': {
-            'Meta': {'ordering': "['-edited_on']", 'object_name': 'Edit'},
-            'article': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['story.Article']"}),
-            'edited_on': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'editor': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'summary': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         }
     }
 
-    complete_apps = ['story']
+    complete_apps = ['account']

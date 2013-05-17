@@ -15,11 +15,27 @@
 
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
+            <style>
+                table
+                {
+                    width:100%;
+                }
+            </style>
             <table>
-                {{ form|as_bootstrap }}
-                {{ edit_form|as_bootstrap }}
+                <tr>
+                    <td>
+                        {{ form|as_bootstrap }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% if article %}
+                        {{ edit_form|as_bootstrap }}
+                        {% endif %}
+                    </td>
+                </tr>
             </table>
-            <input type="submit" name="submit" value="Submit">
+            <input type="submit" name="submit" value="Save">
         </form>
         {% else %}
         <h3>You do not have permission to view this page</h3>

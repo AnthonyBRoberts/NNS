@@ -1,5 +1,8 @@
 Django==1.4
+simplejson==2.2.1
+lxml==2.3.5
 Fabric==1.4.3
+unittest2==0.5.1
 HireFire==0.1
 PyYAML==3.10
 South==0.7.6
@@ -13,7 +16,7 @@ dj-database-url==0.2.1
 django-appconf==0.6
 django-bootstrap-toolkit==2.10.5
 django-celery==3.0.11
-django-registration==0.8
+django-profiles==0.2
 django-ses==0.4.1
 django-staticfiles==1.2.1
 django-storages==1.1.5
@@ -23,15 +26,17 @@ gevent==0.13.7
 greenlet==0.4.0
 gunicorn==0.14.6
 kombu==2.5.6
-lxml==2.3.5
+
 mock==1.0b1
+newrelic==1.11.0.55
 psycopg2==2.4.5
 pycrypto==2.6
 python-dateutil==1.5
 pytz==2012j
 redis==2.7.1
-simplejson==2.2.1
+
 six==1.3.0
 ssh==1.8.0
-unittest2==0.5.1
+
 wsgiref==0.1.2
+#-e hg+https://bitbucket.org/ubernostrum/django-registration@b3c41b3c7f50523b4ecb8267d6d27a918adc2e1f#egg=django_registration-dev

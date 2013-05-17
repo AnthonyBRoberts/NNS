@@ -3,7 +3,7 @@ from celery import task
 from django.core.mail.message import EmailMessage
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse
-from apps.profiles.models import Client
+from apps.account.models import Client
 
 @task(name='send-email')
 def send_published_article(sender, subject, body, attachment=None):
@@ -14,11 +14,14 @@ def send_published_article(sender, subject, body, attachment=None):
     #recipients = []
     for client in Client.objects.all():
         #recipients.append(client.email)
-        recipient = client.email
+        recipient = client.user.email
         email = EmailMessage(subject, body, sender, [recipient])
         if attachment != None:
-            for (k, v) in attachment:
-                email.attach(v.name, v.read())
+            try:
+                for (k, v) in attachment:
+                    email.attach(v.name, v.read())
+            except ValueError:
+                email.attach(attachment.name, attachment.read())
         email.send()
 
 @task()
