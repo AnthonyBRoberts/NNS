@@ -12,19 +12,25 @@
                 {
                     width:100%;
                 }
+                td
+                {
+                    padding:5px; 
+                }
                 </style>
                 <table>
+                    <tr>
+                        <td><strong>Title</strong></td>
+                        <td><strong>Author</strong></td>
+                        <td><strong>Publish Date</strong></td>
+                    </tr>
                         {% for article in object_list %}
-
                             <tr>
                                 <td><a href="{% url story_article_detail article.slug %}">{{ article.title }}</a></td>
-                                <td>Author: {{ article.author }}</td>
-                                <td>Publish Date: {{ article.publish_date|date:"D d M Y" }}</td>
+                                <td>{{ article.author }}</td>
+                                <td>{{ article.publish_date|date:"D, M d, Y" }}</td>
                             </tr>
-
                         {% endfor %}
                 </table>
-        
         {% else %}
             <h2>No articles are in progress.</h2>
         {% endif %}

@@ -1,20 +1,48 @@
-{% extends "base2.html" %}
+{% extends "base.html" %}
 {% load bootstrap_toolkit %}
 
-{% block content %}
+{% block profile_detail %}
 {{block.super}}
+    <h3>
+    Welcome {{ user.get_profile.pub_name }} 
+    </h3>
+    <h4>
+    Here's the information we currently have on your news organization
+    </h4>
+    <p>
+    <strong>Primary Email</strong><br />
+    {{ user.email }}
+    </p>
+    <p>
+    <strong>Editor:</strong> {{ user.get_full_name }}
+    </p>
+    <p>
+    <p>
+    <strong>Phone Number</strong><br />
+    {{ user.get_profile.formatted_phone }}<br />
+    </p>
+    <p>
+    <strong>Address</strong><br />
+    {{ user.get_profile.address }}, {{ user.get_profile.city }}, {{ user.get_profile.state }} {{ user.get_profile.zipcode }}
+    </p>
+    <p>
+    <strong>Circulation Area</strong><br />
+    {{ user.get_profile.pub_area }}
+    </p>
+    <p>
+    <strong>Topics of interest</strong><br />
+    {{ user.get_profile.about }}<br />
+    </p>
+    <p>
+    <strong>Website and/or Social Media</strong><br />
+    Website: <a href="{{ user.get_profile.website }}">{{ user.get_profile.website }}</a><br />
+    Facebook: {{ user.get_profile.facebook }}<br />
+    Twitter: {{ user.get_profile.twitter }}<br />
+    </p>
+
+        
     <p>		
 	<a href="{% url edit_client_profile %}">Edit my profile</a> 
     </p>
-
-    <p>
-    {{ user.first_name }} {{ user.last_name }}
-    </p>
-    
-    <p>
-    {{ profile }}
-    {{ profile.about }}
-    </p>
-    
-{% endblock content %}
+{% endblock %}
 

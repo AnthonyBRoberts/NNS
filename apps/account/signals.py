@@ -1,10 +1,10 @@
 from models import *
 from registration.signals import *
-
+"""
 def create_user_profile(sender, instance, request, **kwargs):
-    """
+
     When user is created also create a matching profile.
-    """
+
     request, instance = kwargs['request'], kwargs['user']
     
     try:
@@ -21,3 +21,4 @@ def create_user_profile(sender, instance, request, **kwargs):
         UserProfile(user = instance).save()  #Default create just a profile
 
 user_registered.connect(create_user_profile)
+"""

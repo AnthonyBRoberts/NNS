@@ -26,6 +26,7 @@ class ClientForm(forms.ModelForm):
                   'first_name',
                   'last_name',
                   'email',
+                  'phone',
                   'address',
                   'city',
                   'state',

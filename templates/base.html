@@ -46,28 +46,30 @@
                                     <a href="/story">Stories</a>
                                 </li>
                                 <li>
-                                    <a href="/profiles/create">Clients</a>
-                                </li>
-                                {% if user.is_superuser %}
-                                <li>
-                                    <a href="/profiles/create/reporter">Reporters</a>
+                                    <a href="/profiles/">Clients</a>
                                 </li>
                                 <li>
-                                    <a href="/profiles/create/editor">Editors</a>
+                                    <a href="/profile/{{ user.username }}">My Profile</a>
                                 </li>
-                                {% endif %}
                                 {% else %}
-                                <li class="active">
+                                <li>
                                     <a href="/story">Stories</a>
+                                </li>
+                                <li>
+                                    <a href="/profile/{{ user.username }}">My Profile</a>
                                 </li>
                                 {% endif %}
                             </ul>
                             <ul class="nav pull-right">
                                     <li>
+                                        {% if user.get_profile %}
+                                        <a href="/accounts/logout/?next=/accounts/login/?next=/story/">Logout</a>
+                                        {% else %}
                                         <a href="/accounts/logout/?next=/accounts/login/?next=profiles_profile_detail">Logout</a>
+                                        {% endif %}
                                     </li>
                             </ul>
-                            
+                              
                         </div> <!-- navbar-responsive-collapse -->		
                     </div> <!-- container-fluid -->
                 </div> <!-- navbar-inner -->
@@ -89,19 +91,10 @@
                     </li>
                     {% if user.is_superuser %}
                     <li>
-                        <a href="/profiles/create/client">Add Client</a>
+                        <a href="/reporters/">Reporters</a>
                     </li>
                     <li>
-                        <a href="/profiles/reporters">Reporters</a>
-                    </li>
-                    <li>
-                        <a href="/profiles/create/reporters">Add Reporter</a>
-                    </li>
-                    <li>
-                        <a href="/profiles/editors">Editors</a>
-                    </li>
-                    <li>
-                        <a href="/profiles/create/editors">Add Editor</a>
+                        <a href="/editors/">Editors</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -152,30 +145,22 @@
                     </div>
                     <div class="tab-pane active" id="tab8">
                         <p>
-                            {% block reporterdetails %}
+                            {% block editorlist %}
                             {% endblock %}
                         </p>
                     </div>
                     <div class="tab-pane active" id="tab9">
                         <p>
-                            {% block editorlist %}
-                            {% endblock %}
-                        </p>
-                    </div>
-                    <div class="tab-pane active" id="tab10">
-                        <p>
                             {% block edit_profile %}
                             {% endblock %}
                         </p>
                     </div>
-                    <div class="tab-pane active" id="tab11">
+                    <div class="tab-pane active" id="tab9">
                         <p>
-                            {% block profile_list %}
+                            {% block clientlist %}
                             {% endblock %}
                         </p>
                     </div>
-                    
-                    
                 </div> <!-- tab-content -->
             </div> <!-- tabbable -->
             

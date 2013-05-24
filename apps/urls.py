@@ -17,6 +17,17 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/django-ses/', include('django_ses.urls')),
     url(r'^story/', include('apps.story.urls')),
+    url(r'^profile/(?P<username>\w+)/$', 'profiles.views.profile_detail', name='profiles_profile_detail'),
+    url(r'^reporters/', 'profiles.views.profile_list',
+        {
+            'template_name': 'profiles/reporter_list.html'
+        },
+        name='profiles_reporter_list'),
+    url(r'^editors/', 'profiles.views.profile_list',
+        {
+            'template_name': 'profiles/editor_list.html'
+        },
+        name='profiles_editor_list'),
     url('^profiles/create/client', 'profiles.views.create_profile',
         {
           'form_class': ClientForm,

@@ -14,14 +14,19 @@ def send_published_article(sender, subject, body, attachment=None):
     recipients = []
     for profile in UserProfile.objects.all():
         if profile.user_type == 'Client':
-            recipients.append(profile.email)
-    email = EmailMessage(subject, body, sender, [recipients])
+            recipients.append(profile.user.email)
+    email = EmailMessage(subject, body, sender, recipients)
     #if attachment != None:
-        #try:
-            #for (k, v) in attachment:
-                #email.attach(v.name, v.read())
-        #except ValueError:
-    email.attach(attachment.name, attachment.read())
+    print 'fucking attachment bee-atch'
+    try:
+        doc = default_storage.open(attachment.name, '')
+        if doc:
+            email.attach(doc.name, doc.read())
+        else:
+            pass
+    except:
+        pass
+    #email.attach(attachment.name, attachment.read())
     email.send()
 
 @task()

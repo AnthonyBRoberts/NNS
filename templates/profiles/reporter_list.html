@@ -1,29 +1,22 @@
 {% extends "base.html" %}
-
-
-{% block clientlist %}
-
+{% block reporterlist %}
 {{block.super}}
-<h2>These are the clients</h2>
+<h2>These are the reporters</h2>
 <style>
 td
 {
-padding:15px;
+padding:5px;
 }
 </style>
 <table>
     <tr>
-        <td><strong>Client Name</strong></td>
-        <td><strong>Contact Name</strong></td>
+        <td><strong>Reporter Name</strong></td>
         <td><strong>Email</strong></td>
         <td><strong>Phone Number</strong></td>
     </tr>
     {% for p in object_list %}
-        {% if p.user_type == 'Client' %}
+        {% if p.user_type == 'Reporter' %}
         <tr>
-        <td>
-            <a href="{% url profiles_profile_detail p.user.username %}">{{ p.pub_name }}</a>
-        </td>
         <td>
             {{ p.user.get_full_name }}
         </td>

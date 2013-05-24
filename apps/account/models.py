@@ -1,5 +1,6 @@
 from django.db import models
 import datetime
+import phonenumbers
 from django.utils import timezone
 from django import forms
 from django.contrib.localflavor.us.models import USStateField
@@ -24,16 +25,16 @@ PUB_TYPES = (
 class UserProfile(models.Model):
     user = models.OneToOneField(User, unique=True)
     user_type = models.CharField(max_length=10, choices=USER_TYPES, default='Client')
-    about = models.TextField(blank=True, null=True, verbose_name="Special Topics")
     can_publish = models.BooleanField(default=False)
-    bio = models.CharField(max_length=2000, blank=True, null=True)
     byline = models.CharField(max_length=75, blank=True, null=True)
+    bio = models.CharField(max_length=2000, blank=True, null=True)
     """ Client Profile Fields """
+    about = models.TextField(blank=True, null=True, verbose_name="Special Topics")
     address = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     state = USStateField(blank=True, null=True, default="NE")
     zipcode = models.CharField(max_length=5, blank=True, null=True)
-    phone = models.CharField(max_length=10, blank=True, null=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
     pub_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Publication Name")
     pub_type = models.CharField(max_length=10, choices=PUB_TYPES, blank=True, null=True)
     pub_area = models.CharField(max_length=100, blank=True, null=True, verbose_name="Circulation Area")
@@ -43,8 +44,27 @@ class UserProfile(models.Model):
     # notes       = models.ForeignKey(Notes)
     def get_absolute_url(self):
         return ('profiles_profile_detail', (), { 'username': self.user.username })
+    def formatted_phone(self, country=None):
+        try:
+            fphone = phonenumbers.parse(self.phone, 'US')
+            if fphone != None:
+                return phonenumbers.format_number(fphone, phonenumbers.PhoneNumberFormat.NATIONAL)
+        except:
+            fphone = self.phone
+            return fphone
+            
+            
+        
+            return None
     def __unicode__(self):
-        return self.user.username
+        return self.user.get_full_name()
+    def save(self, *args, **kwargs):
+        try:
+            existing = UserProfile.objects.get(user=self.user)
+            self.id = existing.id  #force update instead of insert 
+        except UserProfile.DoesNotExist:
+            pass 
+        models.Model.save(self, *args, **kwargs) 
     
     get_absolute_url = models.permalink(get_absolute_url)
 
