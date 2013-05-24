@@ -14,8 +14,7 @@ class Article(models.Model):
     
     title = models.CharField(max_length=100, verbose_name="Headline")
     slug = models.SlugField(max_length=50, unique=True)
-    text = tinymce_models.HTMLField()
-    #text = models.CharField(max_length=10000)
+    text = models.CharField(max_length=10000)
     author = models.ForeignKey(User)
     is_published = models.BooleanField(default=False, verbose_name="Publish?")
     created_on = models.DateTimeField(auto_now_add=True)
