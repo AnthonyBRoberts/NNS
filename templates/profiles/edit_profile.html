@@ -4,13 +4,12 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     <div class="well">
         <h2>Edit Profile:</h2>
-        <form action="." method="POST">
+        <form action="" method="POST">
             {% csrf_token %}
             <table>
                 {{ form|as_bootstrap }}
             </table>
             <input type="submit" name="submit" value="Save">
-            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
         </form>
     </div>
 {% endblock %}

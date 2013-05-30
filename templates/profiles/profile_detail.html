@@ -3,51 +3,59 @@
 
 {% block profile_detail %}
 {{block.super}}
+    
     <h3>
-    Welcome {{ user.get_profile.pub_name }} 
+    Welcome {{ profile }} 
     </h3>
     <h4>
     Here's the information we currently have on your news organization
     </h4>
     <p>
     <strong>Primary Email</strong><br />
-    {{ user.email }}
+    {{ profile.user.email }}
     </p>
     <p>
-    <strong>Editor:</strong> {{ user.get_full_name }}
+    <strong>Editor:</strong> {{ profile.user.get_full_name }}
     </p>
     <p>
     <p>
     <strong>Phone Number</strong><br />
-    {{ user.get_profile.formatted_phone }}<br />
+    {{ profile.formatted_phone }}<br />
     </p>
     <p>
     <strong>Address</strong><br />
-    {{ user.get_profile.address }}, {{ user.get_profile.city }}, {{ user.get_profile.state }} {{ user.get_profile.zipcode }}
+    {{ profile.address }}, {{ profile.city }}, {{ profile.state }} {{ profile.zipcode }}
     </p>
     <p>
     <strong>Circulation Area</strong><br />
-    {{ user.get_profile.pub_area }}
+    {{ profile.pub_area }}
     </p>
     <p>
     <strong>Topics of interest</strong><br />
-    {{ user.get_profile.about }}<br />
+    {{ profile.about }}<br />
     </p>
     <p>
     <strong>Website and/or Social Media</strong><br />
-    Website: <a href="{{ user.get_profile.website }}">{{ user.get_profile.website }}</a><br />
-    Facebook: {{ user.get_profile.facebook }}<br />
-    Twitter: {{ user.get_profile.twitter }}<br />
+    Website: <a href="{{ profile.website }}">{{ profile.website }}</a><br />
+    Facebook: {{ profile.facebook }}<br />
+    Twitter: {{ profile.twitter }}<br />
     </p>
+    
 
-    {% if user.is_staff %}
+    {% if profile.user.username == request.user.username and request.user.is_staff %}
     <p>		
 	<a href="{% url edit_reporter_profile %}">Edit my profile</a> 
     </p>
-    {% else %}
+    {% elif profile.user.username == request.user.username %}
     <p>		
 	<a href="{% url edit_client_profile %}">Edit my profile</a> 
     </p>
+    {% elif request.user.is_superuser %}
+    <p>		
+	<a href="{% url edit_client_profile %}">Edit Client profile</a> 
+    </p>
+    {% else %}
+    <br />
     {% endif %}
 {% endblock %}
 
