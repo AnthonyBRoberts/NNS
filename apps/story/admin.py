@@ -21,8 +21,6 @@ class ArticleAdmin(admin.ModelAdmin):
                        'docfile', 'text'),
             }),
     ]
-    class Media:
-        js = ['/static/js/tinymce/tinymce.min.js', 'static/js/tinymce/textareas.js']
     inlines = [EditInline]
 
 admin.site.register(Article, ArticleAdmin)
