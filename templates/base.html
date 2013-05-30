@@ -49,14 +49,14 @@
                                     <a href="/profiles/">Clients</a>
                                 </li>
                                 <li>
-                                    <a href="/profile/{{ user.username }}">My Profile</a>
+                                    <a href="/profiles/{{ user.username }}">My Profile</a>
                                 </li>
                                 {% else %}
                                 <li>
                                     <a href="/story">Stories</a>
                                 </li>
                                 <li>
-                                    <a href="/profile/{{ user.username }}">My Profile</a>
+                                    <a href="/profiles/{{ user.username }}">My Profile</a>
                                 </li>
                                 {% endif %}
                             </ul>
@@ -178,7 +178,7 @@
                         <div class="nav-collapse collapse navbar-responsive-collapse">
                             <ul class="nav">
                                 <li>
-                                    <a href="/accounts/login/?next=/profiles/create/client">Login</a>
+                                    <a href="/accounts/login/?next=/story/">Login</a>
                                 </li>
                                 <li>
                                     <a href="/accounts/register/">Register</a>
@@ -193,7 +193,7 @@
                 {% bootstrap_messages %}
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="/accounts/login/?next=/profiles/create/client">Please click here to log in</a>
+                        <a href="/accounts/login/?next=/story/">Please click here to log in</a>
                     </li>
                     <li class="active">
                         <a href="/accounts/register/">Please click here to register</a>

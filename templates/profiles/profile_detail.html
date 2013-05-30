@@ -40,9 +40,14 @@
     Twitter: {{ user.get_profile.twitter }}<br />
     </p>
 
-        
+    {% if user.is_staff %}
+    <p>		
+	<a href="{% url edit_reporter_profile %}">Edit my profile</a> 
+    </p>
+    {% else %}
     <p>		
 	<a href="{% url edit_client_profile %}">Edit my profile</a> 
     </p>
+    {% endif %}
 {% endblock %}
 

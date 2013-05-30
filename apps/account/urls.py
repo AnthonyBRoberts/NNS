@@ -1,44 +1,35 @@
-from django.conf.urls import patterns, include, url
-from django.views.generic import DetailView, ListView
-from apps.profiles.models import Editor, Reporter, Client
+from django.conf.urls.defaults import *
+from account.models import *
+from account.forms import *
+from profiles import views
+
 
 urlpatterns = patterns('',
-    url(r'^clients/$',
-        ListView.as_view(
-            queryset=Client.objects.order_by('-city'),
-            context_object_name='clients_list',
-            template_name='profiles/client_index.html')
-        ),
-    url(r'^clients/(?P<client_id>\d+)/$',
-        'profiles.views.client_details',
-        name='client_detail'),
-    url(r'^clients/add$',
-        'profiles.views.add_client',
-        name='client_add'),
-    url(r'^reporters/$',
-        ListView.as_view(
-            queryset=Reporter.objects.order_by('first_name'),
-            context_object_name='reporter_list',
-            template_name='profiles/reporter_index.html')
-        ),
-    url(r'^reporters/(?P<reporter_id>\d+)/$',
-        'profiles.views.reporter_details',
-        name='reporter_detail'),
-    url(r'^reporters/add$',
-        'profiles.views.add_reporter',
-        name='reporter_add'),
-    url(r'^editors/$',
-        ListView.as_view(
-            queryset=Editor.objects.order_by('first_name'),
-            context_object_name='editor_list',
-            template_name='profiles/editor_index.html')
-        ),
-    url(r'^editors/(?P<editor_id>\d+)/$',
-        'profiles.views.editor_details',
-        name='editor_detail'),
-    url(r'^editors/add$',
-        'profiles.views.add_editor',
-        name='editor_add'),
-)
-
-
+    url(r'^(?P<username>\w+)/$',
+        'profiles.views.profile_detail',
+        name='profiles_profile_detail'),
+    url('^client/create', 'profiles.views.create_profile',
+        {
+          'form_class': ClientForm,
+        },
+        name='create_client_profile'),
+    url('^client/edit', 'profiles.views.edit_profile',
+        {
+            'form_class': ClientForm,
+        },
+        name='edit_client_profile'),
+    url('^reporter/edit', 'profiles.views.edit_profile',
+        {
+            'form_class': ReporterForm,
+        },
+        name='edit_reporter_profile'),                 
+    url(r'^create/$',
+       'profiles.views.create_profile',
+       name='profiles_create_profile'),
+    url(r'^edit/$',
+       'profiles.views.edit_profile',
+       name='profiles_edit_profile'),
+    url(r'^$',
+       'profiles.views.profile_list',
+       name='profiles_profile_list'),
+    )
