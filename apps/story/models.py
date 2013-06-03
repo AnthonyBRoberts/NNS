@@ -15,6 +15,7 @@ class Article(models.Model):
     title = models.CharField(max_length=100, verbose_name="Headline")
     slug = models.SlugField(max_length=50, unique=True)
     text = models.CharField(max_length=10000)
+    email_text = models.CharField(max_length=10000, blank=True, null=True)
     author = models.ForeignKey(User)
     is_published = models.BooleanField(default=False, verbose_name="Publish?")
     created_on = models.DateTimeField(auto_now_add=True)
@@ -41,7 +42,7 @@ class Edit(models.Model):
     article = models.ForeignKey(Article) 
     editor = models.ForeignKey(User)
     edited_on = models.DateTimeField(auto_now_add=True)
-    summary = models.CharField(max_length=100, verbose_name="Edit Summary")
+    summary = models.CharField(max_length=100, blank=True, null=True, verbose_name="Edit Summary")
 
     class Meta:
         ordering = ['-edited_on']

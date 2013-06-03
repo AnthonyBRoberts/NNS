@@ -14,6 +14,10 @@ class ArticleAdminForm(forms.ModelForm):
     
 class ArticleAdmin(admin.ModelAdmin):
     form = ArticleAdminForm
+    list_display = ('title', 'author', 'is_published', 'docfile')
+    list_filter = ['title', 'author', 'is_published', ]
+    search_fields = ['title', 'author',]
+    date_hierarchy = 'publish_date'
     fieldsets = [
         (None, {'classes': ['edit'], 
             'fields': (('title', 'slug'), 'author',

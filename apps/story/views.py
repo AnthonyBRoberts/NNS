@@ -32,8 +32,9 @@ def add_article(request):
             if article.is_published:
                 subject = article.title
                 body = article.text
+                docfile = article.docfile
                 try:
-                    attachment = request.FILES.items()
+                    attachment = docfile
                     send_published_article.delay(request.user.email,
                                                  subject,
                                                  body,
@@ -54,15 +55,16 @@ def add_article(request):
 @login_required 
 def edit_article(request, slug):
     article = get_object_or_404(Article, slug=slug)
+    docfile = article.docfile
     form = ArticleForm(request.POST or None, instance=article)
     edit_form = EditForm(request.POST or None)
     if form.is_valid():
         article = form.save()
         if article.is_published:
             subject = article.title
-            body = article.text
+            body = article.email_text
             try:
-                attachment = request.FILES.items()
+                attachment = docfile
                 send_published_article.delay(request.user.email,
                                              subject,
                                              body,

@@ -2,6 +2,7 @@ import logging
 from celery import task
 from django.core.mail.message import EmailMessage
 from django.core.servers.basehttp import FileWrapper
+from django.core.files.storage import default_storage
 from django.http import HttpResponse
 from apps.account.models import UserProfile
 
@@ -16,17 +17,15 @@ def send_published_article(sender, subject, body, attachment=None):
         if profile.user_type == 'Client':
             recipients.append(profile.user.email)
     email = EmailMessage(subject, body, sender, recipients)
-    #if attachment != None:
-    print 'fucking attachment bee-atch'
-    try:
-        doc = default_storage.open(attachment.name, '')
-        if doc:
-            email.attach(doc.name, doc.read())
-        else:
+    if attachment != None:
+        try:
+            docfile = default_storage.open(attachment.name, 'w+')
+            if docfile:
+                email.attach_file(docfile.name)
+            else:
+                pass
+        except:
             pass
-    except:
-        pass
-    #email.attach(attachment.name, attachment.read())
     email.send()
 
 @task()
