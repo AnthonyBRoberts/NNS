@@ -19,15 +19,15 @@ def send_published_article(sender, subject, body, attachment=None):
     email = EmailMessage(subject, body, sender, recipients)
     if attachment != None:
         try:
-            docfile = default_storage.open(attachment.name, 'rb')
+            docfile = default_storage.open(attachment.name, 'r')
             if docfile:
-                email.attach_file(docfile.name)
+                email.attach(docfile.name, docfile.read())
             else:
                 pass
         except:
             pass
     email.send()
-
+ 
 @task()
 def report_errors():
     logging.error("reporting errors")
