@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from tinymce import models as tinymce_models
+from taggit.managers import TaggableManager
 import datetime
 
 class PublishedArticlesManager(models.Manager):
@@ -20,9 +21,9 @@ class Article(models.Model):
     is_published = models.BooleanField(default=False, verbose_name="Publish?")
     created_on = models.DateTimeField(auto_now_add=True)
     publish_date = models.DateTimeField(default=datetime.datetime.now())
-    objects = models.Manager()
     published = PublishedArticlesManager()
     docfile = models.FileField(upload_to='docs/%Y/%m/%d/', blank=True, null=True)
+    tags = TaggableManager()
 
     def __unicode__(self):
         return self.title

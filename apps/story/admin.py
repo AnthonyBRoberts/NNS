@@ -25,7 +25,7 @@ class ArticleAdmin(admin.ModelAdmin):
                        'docfile', 'text'),
             }),
     ]
-    inlines = [EditInline]
+    #inlines = [EditInline]
 
 admin.site.register(Article, ArticleAdmin)
 

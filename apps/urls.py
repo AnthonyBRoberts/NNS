@@ -8,9 +8,6 @@ from account.models import *
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^static/js/(?P<path>.*)$', 'django.views.static.serve', {
-        'document_root': settings.STATIC_ROOT,
-    }),
     url(r'^$', TemplateView.as_view(template_name= "welcome.html")),
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

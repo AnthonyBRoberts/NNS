@@ -40,11 +40,7 @@
             <li>
                 <a href="{% url story_article_edit object.slug %}">Edit this article</a>
             </li>
-            {% if user.is_superuser %}
-            <li>
-                <a href="{% url story_article_history object.slug %}">View article history</a>
-            </li>
-            {% endif %}
+        
         </ul>
         {% endif %}
         <h3>Go To:</h3>

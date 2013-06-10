@@ -31,7 +31,7 @@ def add_article(request):
             messages.success(request, msg, fail_silently=True)
             if article.is_published:
                 subject = article.title
-                body = article.text
+                body = article.email_text + article.text
                 docfile = article.docfile
                 try:
                     attachment = docfile
@@ -56,37 +56,42 @@ def add_article(request):
 def edit_article(request, slug):
     article = get_object_or_404(Article, slug=slug)
     docfile = article.docfile
-    form = ArticleForm(request.POST or None, instance=article)
-    edit_form = EditForm(request.POST or None)
-    if form.is_valid():
-        article = form.save()
-        if article.is_published:
-            subject = article.title
-            body = article.email_text
-            try:
-                attachment = docfile
-                send_published_article.delay(request.user.email,
-                                             subject,
-                                             body,
-                                             attachment)
-            except:
-                send_published_article.delay(request.user.email,
-                                             subject,
-                                             body)
-            msg = "Article published successfully"
-            messages.success(request, msg, fail_silently=True)
-        if edit_form.is_valid():
-            edit = edit_form.save(commit=False)
-            edit.article = article
-            edit.editor = request.user
-            edit.save()
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, request.FILES, instance=article)
+        #edit_form = EditForm(request.POST or None)
+        if form.is_valid():
+            article = form.save()
             msg = "Article updated successfully"
             messages.success(request, msg, fail_silently=True)
+            if article.is_published:
+                subject = article.title
+                body = article.email_text + article.text
+                try:
+                    attachment = docfile
+                    send_published_article.delay(request.user.email,
+                                                 subject,
+                                                 body,
+                                                 attachment)
+                except:
+                    send_published_article.delay(request.user.email,
+                                                 subject,
+                                                 body)
+                msg = "Article published successfully"
+                messages.success(request, msg, fail_silently=True)
+            #if edit_form.is_valid():
+                #edit = edit_form.save(commit=False)
+                #edit.article = article
+                #edit.editor = request.user
+                #edit.save()
+                
             return redirect(article)
+    else:
+        form = ArticleForm(instance=article)
+        #edit_form = EditForm()
     return render_to_response('story/article_form.html', 
                               { 
                                   'form': form,
-                                  'edit_form': edit_form,
+                                  #'edit_form': edit_form,
                                   'article': article,
                               },
                               context_instance=RequestContext(request))
