@@ -13,11 +13,13 @@ dj-database-url==0.2.1
 django-appconf==0.6
 django-bootstrap-toolkit==2.10.5
 django-celery==3.0.11
+django-datetime-widget==0.5.3a
 django-profiles==0.2
 django-registration==0.8
 django-ses==0.4.1
 django-staticfiles==1.2.1
 django-storages==1.1.5
+django-taggit==0.10a1
 django-tinymce==1.5.1
 docutils==0.10
 gevent==0.13.7
