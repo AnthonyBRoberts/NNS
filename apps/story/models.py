@@ -21,6 +21,7 @@ class Article(models.Model):
     is_published = models.BooleanField(default=False, verbose_name="Publish?")
     created_on = models.DateTimeField(auto_now_add=True)
     publish_date = models.DateTimeField(default=datetime.datetime.now())
+    objects = models.Manager()
     published = PublishedArticlesManager()
     docfile = models.FileField(upload_to='docs/%Y/%m/%d/', blank=True, null=True)
     tags = TaggableManager()
