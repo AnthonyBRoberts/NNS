@@ -55,7 +55,7 @@ def add_article(request):
 @login_required 
 def edit_article(request, slug):
     article = get_object_or_404(Article, slug=slug)
-    docfile = article.docfile
+    #docfile = article.docfile
     if request.method == 'POST':
         form = ArticleForm(request.POST, request.FILES, instance=article)
         #edit_form = EditForm(request.POST or None)
@@ -67,7 +67,7 @@ def edit_article(request, slug):
                 subject = article.title
                 body = article.email_text + article.text
                 try:
-                    attachment = docfile
+                    attachment = article.docfile
                     send_published_article.delay(request.user.email,
                                                  subject,
                                                  body,

@@ -3,9 +3,11 @@ from django.forms import *
 from django.db.models import *
 from models import Article, Edit
 from tinymce.widgets import TinyMCE
+from taggit.models import Tag, TaggedItem
 
-class EditInline(admin.TabularInline):
-    model = Edit
+class TaggedItemInline(admin.TabularInline):
+    model = TaggedItem
+    
 
 class ArticleAdminForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE())
@@ -25,7 +27,7 @@ class ArticleAdmin(admin.ModelAdmin):
                        'docfile', 'text'),
             }),
     ]
-    #inlines = [EditInline]
+    #inlines = [TaggedItemInline]
 
 admin.site.register(Article, ArticleAdmin)
 

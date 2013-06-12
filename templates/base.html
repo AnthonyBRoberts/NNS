@@ -3,14 +3,15 @@
 {% load bootstrap_toolkit %}
 <html lang="en">
 <head>
+	<link href="{% static "favicon.ico" %}" title="Nebraska News Service" type="image/x-icon" rel="icon" />
     <meta charset="utf-8">
     <title>Nebraska News Service</title>
-    <meta name="description" content="">
+    <meta name="description" content="The Nebraska state government news wire service provided by the University of Nebraska College of Journalism and Mass Communications">
     <meta name="author" content="Anthony Roberts">
     {% bootstrap_stylesheet_tag %}
     <style type="text/css">
         body {
-            padding-top: 60px;
+            padding-top: 20px;
         }
     </style>
     <!--[if lt IE 9]>
@@ -27,17 +28,19 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12 column">
-        
+        	<div class="navbar">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a href="/" class="brand"><img src="{% static "images/welcome/nns_logo.png" %}" alt="Nebraska News Service Logo" /></a>
+                        
+                        
+                    </div> <!-- container-fluid -->
+                </div> <!-- navbar-inner -->
+            </div> <!-- navbar -->
         {% if user.is_authenticated %}
             <div class="navbar">
                 <div class="navbar-inner">
                     <div class="container-fluid">
-                        <a class="btn btn-navbar">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </a>
-                        <a href="/" class="brand">Nebraska News Service</a>
                         <div class="nav-collapse collapse navbar-responsive-collapse">
                             
                             <ul class="nav">
@@ -191,14 +194,7 @@
             <div class="tabbable">
                 
                 {% bootstrap_messages %}
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a href="/accounts/login/?next=/story/">Please click here to log in</a>
-                    </li>
-                    <li class="active">
-                        <a href="/accounts/register/">Please click here to register</a>
-                    </li>
-                </ul>
+                
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
                         <p>{% block content %}{% endblock %}</p>
@@ -209,9 +205,7 @@
                 </div> <!-- tab-content -->
             </div> <!-- tabbable --> 
             {% endif %}
-        </div> <!-- span12 column -->
-    </div>  <!-- row-fluid -->
-</div> <!-- container-fluid -->
+
 
 <div class="container">
     <p><hr></p>
