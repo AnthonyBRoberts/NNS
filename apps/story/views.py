@@ -35,12 +35,18 @@ def add_article(request):
                 docfile = article.docfile
                 try:
                     attachment = docfile
-                    send_published_article.delay(request.user.email,
+                    send_published_article.delay(request.user.username,
+                                                 request.user.get_full_name(),
+                                                 request.user.date_joined,
+                                                 request.user.email,
                                                  subject,
                                                  body,
                                                  attachment)
                 except:
-                    send_published_article.delay(request.user.email,
+                    send_published_article.delay(request.user.username,
+                                                 request.user.get_full_name(),
+                                                 request.user.date_joined,
+                                                 request.user.email,
                                                  subject,
                                                  body)
                 msg = "Article published successfully"
@@ -68,12 +74,18 @@ def edit_article(request, slug):
                 body = article.email_text + article.text
                 try:
                     attachment = article.docfile
-                    send_published_article.delay(request.user.email,
+                    send_published_article.delay(request.user.username,
+                                                 request.user.get_full_name(),
+                                                 request.user.date_joined,
+                                                 request.user.email,
                                                  subject,
                                                  body,
                                                  attachment)
                 except:
-                    send_published_article.delay(request.user.email,
+                    send_published_article.delay(request.user.username,
+                                                 request.user.get_full_name(),
+                                                 request.user.date_joined,
+                                                 request.user.email,
                                                  subject,
                                                  body)
                 msg = "Article published successfully"
