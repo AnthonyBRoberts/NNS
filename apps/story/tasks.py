@@ -8,7 +8,7 @@ from apps.account.models import UserProfile
 from templated_email import get_templated_mail
 
 @task(name='send-email')
-def send_published_article(username, full_name, signup_date, sender, subject, body, attachment=None):
+def send_published_article(username, full_name, signup_date, sender, subject, email_text, story_text, attachment=None):
     """
     Task for emailing published articles.
     Runs when an article is saved and is_published==True
@@ -28,7 +28,10 @@ def send_published_article(username, full_name, signup_date, sender, subject, bo
         context={
             'username':username,
             'full_name':full_name,
-            'signup_date':signup_date
+            'signup_date':signup_date,
+            'subject':subject,
+            'email_text':email_text,
+            'story_text':story_text
         },
         # Optional:
         cc=reporters,

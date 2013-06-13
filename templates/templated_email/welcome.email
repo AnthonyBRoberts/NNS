@@ -1,23 +1,21 @@
-{% block subject %}My subject for {{username}}{% endblock %}
+{% block subject %}New Story: {{subject}}{% endblock %}
 {% block plain %}
   Hi {{full_name}},
 
-  You just signed up for my website, using:
-      username: {{username}}
-      join date: {{signup_date}}
+  {{email_text}}
+  
+  {{story_text}}
 
-  Thanks, you rock!
+
+
 {% endblock %}
 
 {% block html %}
   <p>Hi {{full_name}},</p>
 
-  <p>You just signed up for my website, using:
-      <dl>
-        <dt>username</dt><dd>{{username}}</dd>
-        <dt>join date</dt><dd>{{signup_date}}</dd>
-      </dl>
-  </p>
+  <p>{{email_text}}</p>
 
-  <p>Thanks, you rock!</p>
+  <p>{{story_text}}</p>
+
+  <p>Thanks, </p>
 {% endblock %}

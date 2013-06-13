@@ -41,6 +41,8 @@ def add_article(request):
                                                  request.user.email,
                                                  subject,
                                                  body,
+                                                 email_text,
+                                                 story_text,
                                                  attachment)
                 except:
                     send_published_article.delay(request.user.username,
@@ -48,7 +50,8 @@ def add_article(request):
                                                  request.user.date_joined,
                                                  request.user.email,
                                                  subject,
-                                                 body)
+                                                 email_text,
+                                                 story_text)
                 msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
             return redirect(article)
@@ -71,7 +74,8 @@ def edit_article(request, slug):
             messages.success(request, msg, fail_silently=True)
             if article.is_published:
                 subject = article.title
-                body = article.email_text + article.text
+                email_text = article.email_text
+                story_text = article.text
                 try:
                     attachment = article.docfile
                     send_published_article.delay(request.user.username,
@@ -79,7 +83,8 @@ def edit_article(request, slug):
                                                  request.user.date_joined,
                                                  request.user.email,
                                                  subject,
-                                                 body,
+                                                 email_text,
+                                                 story_text,
                                                  attachment)
                 except:
                     send_published_article.delay(request.user.username,
@@ -87,7 +92,8 @@ def edit_article(request, slug):
                                                  request.user.date_joined,
                                                  request.user.email,
                                                  subject,
-                                                 body)
+                                                 email_text,
+                                                 story_text)
                 msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
             #if edit_form.is_valid():
