@@ -31,7 +31,8 @@ def add_article(request):
             messages.success(request, msg, fail_silently=True)
             if article.is_published:
                 subject = article.title
-                body = article.email_text + article.text
+                email_text = article.email_text
+                story_text = article.text
                 docfile = article.docfile
                 try:
                     attachment = docfile

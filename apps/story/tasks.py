@@ -23,7 +23,7 @@ def send_published_article(username, full_name, signup_date, sender, subject, em
     #email = EmailMessage(subject, body, sender, recipients)
     email = get_templated_mail(
         template_name='welcome',
-        from_email=sender,
+        from_email='nns.aroberts@gmail.com',
         to=['nns.aroberts@gmail.com'],
         context={
             'username':username,
