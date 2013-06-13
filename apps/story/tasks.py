@@ -8,7 +8,8 @@ from apps.account.models import UserProfile
 from templated_email import get_templated_mail
 
 @task(name='send-email')
-def send_published_article(username, full_name, signup_date, sender, subject, email_text, story_text, attachment=None):
+def send_published_article(sender, subject, body, attachment=None):
+    #(username, full_name, signup_date, sender, subject, email_text, story_text, attachment=None):
     """
     Task for emailing published articles.
     Runs when an article is saved and is_published==True
@@ -20,7 +21,8 @@ def send_published_article(username, full_name, signup_date, sender, subject, em
             recipients.append(profile.user.email)
         if profile.user_type == 'Reporter':
             reporters.append(profile.user.email)
-    #email = EmailMessage(subject, body, sender, recipients)
+    email = EmailMessage(subject, body, sender, recipients)
+    """
     email = get_templated_mail(
         template_name='welcome',
         from_email='nns.aroberts@gmail.com',
@@ -39,7 +41,9 @@ def send_published_article(username, full_name, signup_date, sender, subject, em
         # headers={'My-Custom-Header':'Custom Value'},
         # template_prefix="my_emails/",
         # template_suffix="email",
-)
+    )
+    """
+
     if attachment != None:
         try:
             docfile = default_storage.open(attachment.name, 'r')

@@ -31,28 +31,30 @@ def add_article(request):
             messages.success(request, msg, fail_silently=True)
             if article.is_published:
                 subject = article.title
-                email_text = article.email_text
-                story_text = article.text
+                body = article.email_text + article.text
+                #email_text = article.email_text
+                #story_text = article.text
                 docfile = article.docfile
                 try:
                     attachment = docfile
-                    send_published_article.delay(request.user.username,
-                                                 request.user.get_full_name(),
-                                                 request.user.date_joined,
+                    send_published_article.delay(#request.user.username,
+                                                 #request.user.get_full_name(),
+                                                 #request.user.date_joined,
                                                  request.user.email,
                                                  subject,
                                                  body,
-                                                 email_text,
-                                                 story_text,
+                                                 #email_text,
+                                                 #story_text,
                                                  attachment)
                 except:
-                    send_published_article.delay(request.user.username,
-                                                 request.user.get_full_name(),
-                                                 request.user.date_joined,
+                    send_published_article.delay(#request.user.username,
+                                                 #request.user.get_full_name(),
+                                                 #request.user.date_joined,
                                                  request.user.email,
                                                  subject,
-                                                 email_text,
-                                                 story_text)
+                                                 body)
+                                                 #email_text,
+                                                 #story_text
                 msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
             return redirect(article)
@@ -79,22 +81,24 @@ def edit_article(request, slug):
                 story_text = article.text
                 try:
                     attachment = article.docfile
-                    send_published_article.delay(request.user.username,
-                                                 request.user.get_full_name(),
-                                                 request.user.date_joined,
+                    send_published_article.delay(#request.user.username,
+                                                 #request.user.get_full_name(),
+                                                 #request.user.date_joined,
                                                  request.user.email,
                                                  subject,
-                                                 email_text,
-                                                 story_text,
+                                                 body,
+                                                 #email_text,
+                                                 #story_text,
                                                  attachment)
                 except:
-                    send_published_article.delay(request.user.username,
-                                                 request.user.get_full_name(),
-                                                 request.user.date_joined,
+                    send_published_article.delay(#request.user.username,
+                                                 #request.user.get_full_name(),
+                                                 #request.user.date_joined,
                                                  request.user.email,
                                                  subject,
-                                                 email_text,
-                                                 story_text)
+                                                 #email_text,
+                                                 #story_text,
+                                                 body)
                 msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
             #if edit_form.is_valid():
