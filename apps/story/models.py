@@ -24,7 +24,7 @@ class Article(models.Model):
     objects = models.Manager()
     published = PublishedArticlesManager()
     docfile = models.FileField(upload_to='docs/%Y/%m/%d/', blank=True, null=True)
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     def __unicode__(self):
         return self.title
