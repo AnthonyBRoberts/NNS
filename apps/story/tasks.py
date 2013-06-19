@@ -69,12 +69,15 @@ def send_published_article(sender, subject, email_text, story_text, attachment=N
     """
     recipients = []
     reporters = []
+    editors = []
     for profile in UserProfile.objects.all():
         if profile.user_type == 'Client':
             recipients.append(profile.user.email)
         if profile.user_type == 'Reporter':
             reporters.append(profile.user.email)
-    email = EMail(subject, to='nns.aroberts@gmail.com', cc=reporters, bcc=recipients)
+        if profile.user_type == 'Editor':
+            editors.append(profile.user.email)
+    email = EMail(subject, to=editors, cc=reporters, bcc=recipients)
 
     ctx = {'story_text': story_text, 'email_text': email_text}
     email.text('../templates/templated_email/emaila.txt', ctx)
