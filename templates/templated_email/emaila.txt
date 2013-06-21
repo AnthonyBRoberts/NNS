@@ -1,9 +1,10 @@
-Hi {{ user }},
-
-Here is some stuff I say in an email
+Nebraska News Service
 
 {{ email_text }}
 
+Here's the story published on the {% now "jS \o\f F, Y" %}:
+
 {{ story_text }}
 
-Thanks,
+
+
