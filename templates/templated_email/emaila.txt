@@ -1,10 +1,10 @@
 Nebraska News Service
 
-{{ email_text }}
+{{ email_text|striptags }}
 
 Here's the story published on the {% now "jS \o\f F, Y" %}:
 
-{{ story_text }}
+{{ story_text|striptags }}
 
 
 

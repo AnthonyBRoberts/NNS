@@ -8,8 +8,8 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.generic.list_detail import object_list
-from forms import ArticleForm, EditForm
-from models import Article, Edit
+from story.models import Article
+from story.forms import ArticleForm
 from story.tasks import send_published_article
 
 @login_required 
@@ -23,6 +23,9 @@ def inprogress_index(request):
 
 @login_required 
 def add_article(request):
+    """
+    Create new article
+    """
     if request.method == 'POST':
         form = ArticleForm(request.POST, request.FILES or None)
         if form.is_valid():
@@ -33,9 +36,9 @@ def add_article(request):
             messages.success(request, msg, fail_silently=True)
             if article.is_published and article.publish_date <= datetime.datetime.today():
                 subject = article.title
-                body = article.email_text + '\n --------- \n' + article.text
                 email_text = article.email_text
-                story_text = article.text
+                story_text = article.title + '\n' + 'By ' + article.author.get_full_name() + '\n' + article.text#This is a bad idea, move to template, make more variables
+                
                 docfile = article.docfile
                 try:
                     attachment = docfile
@@ -60,6 +63,9 @@ def add_article(request):
 
 @login_required 
 def edit_article(request, slug):
+    """
+    Update existing article
+    """
     article = get_object_or_404(Article, slug=slug)
     if request.method == 'POST':
         form = ArticleForm(request.POST, request.FILES, instance=article)
@@ -69,10 +75,9 @@ def edit_article(request, slug):
             messages.success(request, msg, fail_silently=True)
             if article.is_published and article.publish_date <= datetime.datetime.today():
                 subject = article.title
-                body = article.email_text + '\n --------- \n' + article.text
                 email_text = article.email_text
                 story_text = article.text
-                if article.docfile:
+                if article.docfile is not None:
                     attachment = article.docfile
                     send_published_article.delay(request.user.email,
                                                  subject,
@@ -96,6 +101,7 @@ def edit_article(request, slug):
                                   'article': article,
                               },
                               context_instance=RequestContext(request))
+
 @login_required 
 def article_history(request, slug):
     article = get_object_or_404(Article, slug=slug)
