@@ -34,7 +34,7 @@ class Article_RForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE())
     class Meta:
         model = Article
-        exclude = ['author', 'slug', 'publish_date', 'email_text', 'is_published', 'docfile']
+        exclude = ['author', 'byline', 'slug', 'publish_date', 'email_text', 'is_published', 'docfile']
         dateTimeOptions = {
             'format': 'mm/dd/yyyy HH:ii P',
             'autoclose': 'true',

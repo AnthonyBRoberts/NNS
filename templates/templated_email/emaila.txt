@@ -4,6 +4,8 @@ Nebraska News Service
 
 Here's the story published on the {% now "jS \o\f F, Y" %}:
 
+{{ byline }}
+
 {{ story_text|striptags }}
 
 

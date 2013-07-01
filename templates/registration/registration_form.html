@@ -1,31 +1,26 @@
-{% extends "base.html" %}
+{% extends "registration/registration_base.html" %}
+{% load url from future %}
+{% load i18n %}
 
-{% comment %}
-**registration/registration_form.html**
-Used to show the form users will fill out to register. By default, has
-the following context:
-
-``form``
-    The registration form. This will be an instance of some subclass
-    of ``django.forms.Form``; consult `Django's forms documentation
-    <http://docs.djangoproject.com/en/dev/topics/forms/>`_ for
-    information on how to display this in a template.
-{% endcomment %}
+{% block masthead %}
+<h2>{% trans "Registration form" %}</h2>
+{% endblock %}
 
 {% block register %}
-
+    {% block extracss %}
+    {{ form.media.css }}
+    {% endblock %}
 <h3>Create new account</h3>
-<form action="." method="POST">
+<form method="post" action=".">
     {% csrf_token %}
-    <table>
-        <tr>
-          <td><p>This is where the profile form goes</p></td>
-        </tr>
-        <tr>
-          <td>{{ form.as_table }}</td>
-        </tr>
-    </table>
-    <input type="submit" name="submit" value="Register">
+    {{ form.non_field_errors }}
+    {% for field in form %}
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }}
+        {{ field }}
+    </div>
+    {% endfor %}
+    <input type="submit" value="{% trans "Register" %}">
 </form>
-
 {% endblock %}

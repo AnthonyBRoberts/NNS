@@ -78,23 +78,7 @@
                 </div> <!-- navbar-inner -->
             </div> <!-- navbar -->
             <div class="tabbable">
-                {% if user.get_profile.user_type == "Reporter" %}
-                <ul class="nav nav-tabs">
-                    <li>
-                        <a href="/story">Published Stories</a>
-                    </li>
-                    <li>
-                        <a href="/story/inprogress">Stories in progress</a>
-                    </li>
-                    <li>
-                        <a href="/story/add/article">New Story</a>
-                    </li>
-                    <li>
-                        <a href="/profiles/">Clients</a>
-                    </li>
-                </ul>
-                {% endif %}
-                {% if user.get_profile.user_type == "Editor" %}
+                {% if user.get_profile.user_type == "Reporter" or user.get_profile.user_type == "Editor" %}
                 <ul class="nav nav-tabs">
                     <li>
                         <a href="/story">Published Stories</a>
@@ -111,9 +95,11 @@
                     <li>
                         <a href="/reporters/">Reporters</a>
                     </li>
+                    {% if user.get_profile.user_type == "Editor" %}
                     <li>
                         <a href="/editors/">Editors</a>
                     </li>
+                    {% endif %}
                 </ul>
                 {% endif %}
             {% bootstrap_messages %}

@@ -2,13 +2,24 @@ from django.conf.urls.defaults import patterns, include, url
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.contrib import admin
+from registration.views import register
 from account.forms import *
 from account.models import *
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name= "welcome.html")),
-    url(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^accounts/register/$',
+        register,
+        {'backend': 'registration.backends.simple.SimpleBackend',
+        'template_name': 'registration/registration_form.html',
+        'form_class': EmailRegistrationForm,
+        'success_url': getattr(
+            settings, 'REGISTRATION_EMAIL_REGISTER_SUCCESS_URL', None),
+        },
+        name='registration_register', 
+    ),
+    url(r'^accounts/', include('registration_email.backends.default.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/django-ses/', include('django_ses.urls')),

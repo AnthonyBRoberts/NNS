@@ -3,6 +3,7 @@ from django.forms.fields import ChoiceField
 from django.forms.widgets import RadioSelect
 from django.db import models
 from models import *
+from registration_email.forms import EmailRegistrationForm
 
 class ClientForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -67,8 +68,8 @@ class ReporterForm(forms.ModelForm):
         about = forms.CharField(label='Reporter beats',
                                 help_text='What will you focus on in your reporting?')
         pub_type = forms.ChoiceField(widget=forms.RadioSelect, choices=PUB_TYPES)
-        fields = ['first_name','last_name','email','phone','about','byline']
-        exclude = ['pub_name','pub_type','user','user_type','can_publish','bio',
+        fields = ['first_name','last_name','email','phone','bio','byline']
+        exclude = ['pub_name','pub_type','user','user_type','can_publish','about',
                    'last_login','date_joined','is_staff','is_active',
                    'address','city','state','zipcode','pub_area','twitter','facebook','website',
                    'is_superuser','groups','user_permissions'] 
@@ -83,3 +84,9 @@ class ReporterForm(forms.ModelForm):
         u.save()
         reporter = super(ReporterForm, self).save(*args,**kwargs)
         return reporter
+
+"""
+class CustomEmailRegistrationForm(EmailRegistrationForm):
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+"""

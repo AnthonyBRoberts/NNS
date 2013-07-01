@@ -1,11 +1,12 @@
-from django.db import models
 import datetime
 import phonenumbers
-from django.utils import timezone
 from django import forms
-from django.contrib.localflavor.us.models import USStateField
-from django.contrib.auth.models import User
+from django.db import models
 from django.db.models.signals import post_save
+from django.contrib.auth.models import User
+from django.contrib.localflavor.us.models import USStateField
+from django.dispatch import receiver
+from django.utils import timezone
 from registration.signals import *
 
 USER_TYPES = (
@@ -67,7 +68,13 @@ class UserProfile(models.Model):
         models.Model.save(self, *args, **kwargs) 
     
     get_absolute_url = models.permalink(get_absolute_url)
-
+"""
+@receiver(user_registered)
+def user_registered_handler(sender, user, request, **kwargs):
+    user.first_name = request.POST.get('first_name')
+    user.last_name = request.POST.get('last_name')
+    user.save()
+"""
 def create_profile(sender, **kwargs):
     user = kwargs['instance']
     if kwargs['created']:
