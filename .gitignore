@@ -1,5 +1,7 @@
 *.py[co]
 *.pyc
+celerybeat.pid
+celerybeat-schedule
 
 # Local data files
 *.db
