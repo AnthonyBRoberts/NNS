@@ -16,6 +16,7 @@ django-celery==3.0.11
 django-datetime-widget==0.5.3a
 django-profiles==0.2
 django-registration==0.8
+-e git://github.com/bitmazk/django-registration-email@3112a175a7f1fc220c6abedeb9f45094fb4ab355#egg=django_registration_email-dev
 django-ses==0.4.1
 django-staticfiles==1.2.1
 django-storages==1.1.5
