@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.forms import *
 from django.db.models import *
-from models import Article, Edit
+from models import Article
 from tinymce.widgets import TinyMCE
 from taggit.models import Tag, TaggedItem
 
@@ -16,8 +16,8 @@ class ArticleAdminForm(forms.ModelForm):
     
 class ArticleAdmin(admin.ModelAdmin):
     form = ArticleAdminForm
-    list_display = ('title', 'author', 'is_published', 'docfile')
-    list_filter = ['title', 'author', 'is_published', ]
+    list_display = ('title', 'is_published', 'docfile')
+    list_filter = ['author', 'is_published', ]
     search_fields = ['title', 'author',]
     date_hierarchy = 'publish_date'
     fieldsets = [
@@ -30,4 +30,5 @@ class ArticleAdmin(admin.ModelAdmin):
     #inlines = [TaggedItemInline]
 
 admin.site.register(Article, ArticleAdmin)
+
 

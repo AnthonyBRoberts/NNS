@@ -12,7 +12,8 @@ class EMail(object):
     >>> email = Email(to='oz@example.com', subject='A great non-spammy email!')
     >>> ctx = {'username': 'Oz Katz'}
     >>> email.text('templates/email.txt', ctx)
-    >>> email.html('templates/email.html', ctx)  # Optional
+    >>> email.html('templates/email.html', ctx)  #Optional
+    >>> email.add_attachment(attachment) #Optional
     >>> email.send()
     """
     def __init__(self, subject, to, cc, bcc):

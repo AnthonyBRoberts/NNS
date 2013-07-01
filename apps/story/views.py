@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.generic.list_detail import object_list
 from story.models import Article
-from story.forms import ArticleForm
+from story.forms import *
 from story.tasks import send_published_article
 
 @login_required 
@@ -20,25 +20,32 @@ def inprogress_index(request):
     inprogress_list = Article.objects.filter(is_published=False)
     return render_to_response('story/article_inprogress_list.html',
                               {'inprogress_list': inprogress_list})
-
+ 
 @login_required 
 def add_article(request):
     """
     Create new article
     """
     if request.method == 'POST':
-        form = ArticleForm(request.POST, request.FILES or None)
+        if request.user.get_profile().user_type == 'Reporter':
+            form = Article_RForm(request.POST, request.FILES or None)
+            form.author = request.user
+            form.publish_date = datetime.datetime.now()
+        elif request.user.get_profile().user_type == 'Editor':
+            form = Article_EForm(request.POST, request.FILES or None)
+        else:
+            form = Article_RForm(request.POST, request.FILES or None)
         if form.is_valid():
             article = form.save(commit=False)
-            article.author = request.user
+            article.publish_date = datetime.datetime.now()
             article.save()
+            article.author.add(request.user)
             msg = "Article saved successfully"
             messages.success(request, msg, fail_silently=True)
             if article.is_published and article.publish_date <= datetime.datetime.today():
                 subject = article.title
                 email_text = article.email_text
-                story_text = article.title + '\n' + 'By ' + article.author.get_full_name() + '\n' + article.text#This is a bad idea, move to template, make more variables
-                
+                story_text = article.text
                 docfile = article.docfile
                 try:
                     attachment = docfile
@@ -56,7 +63,12 @@ def add_article(request):
                 messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:
-        form = ArticleForm()
+        if request.user.get_profile().user_type == 'Reporter':
+            form = Article_RForm()
+        elif request.user.get_profile().user_type == 'Editor':
+            form = Article_EForm()
+        else:
+            form = Article_RForm()
     return render_to_response('story/article_form.html', 
                               { 'form': form },
                               context_instance=RequestContext(request))
@@ -68,7 +80,13 @@ def edit_article(request, slug):
     """
     article = get_object_or_404(Article, slug=slug)
     if request.method == 'POST':
-        form = ArticleForm(request.POST, request.FILES, instance=article)
+        if request.user.get_profile().user_type == 'Reporter':
+            form = Article_RForm(request.POST, request.FILES, instance=article)
+            form.publish_date = datetime.datetime.now()
+        elif request.user.get_profile().user_type == 'Editor':
+            form = Article_EForm(request.POST, request.FILES, instance=article)
+        else:
+            form = Article_RForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
             article = form.save()
             msg = "Article updated successfully"
@@ -94,7 +112,12 @@ def edit_article(request, slug):
                 messages.success(request, msg, fail_silently=True)   
             return redirect(article)
     else:
-        form = ArticleForm(instance=article)
+        if request.user.get_profile().user_type == 'Reporter':
+            form = Article_RForm(instance=article)
+        elif request.user.get_profile().user_type == 'Editor':
+            form = Article_EForm(instance=article)
+        else:
+            form = Article_RForm(instance=article)
     return render_to_response('story/article_form.html', 
                               { 
                                   'form': form,

@@ -5,6 +5,8 @@ from tinymce import models as tinymce_models
 from taggit.managers import TaggableManager
 import datetime
 
+
+
 class PublishedArticlesManager(models.Manager):
     
     def get_query_set(self):
@@ -14,10 +16,10 @@ class Article(models.Model):
     """Represents a story article"""
     
     title = models.CharField(max_length=100, verbose_name="Headline")
-    slug = models.SlugField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=100, unique=True)
     text = models.CharField(max_length=10000)
     email_text = models.CharField(max_length=10000, blank=True, null=True)
-    author = models.ForeignKey(User)
+    author = models.ManyToManyField(User)
     is_published = models.BooleanField(default=False, verbose_name="Publish?")
     created_on = models.DateTimeField(auto_now_add=True)
     publish_date = models.DateTimeField(default=datetime.datetime.now())
@@ -31,7 +33,10 @@ class Article(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            y = self.publish_date.strftime("%Y")
+            m = self.publish_date.strftime("%b").lower()
+            d = self.publish_date.strftime("%d")
+            self.slug = slugify(self.title) + "-" + d  + "-" + m  + "-" + y
         super(Article, self).save(*args, **kwargs)
 
     @models.permalink 

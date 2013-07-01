@@ -15,9 +15,32 @@ class ArticleForm(forms.ModelForm):
             'autoclose': 'true',
             'showMeridian': 'false',
         }
+
+class Article_EForm(forms.ModelForm):
+    text = forms.CharField(widget=TinyMCE())
+    email_text = forms.CharField(widget=TinyMCE())
+    class Meta:
+        model = Article
+        dateTimeOptions = {
+            'format': 'mm/dd/yyyy HH:ii P',
+            'autoclose': 'true',
+            'showMeridian': 'false',
+        }
         widgets = {
             'publish_date': DateTimeWidget(options = dateTimeOptions)
         }
+
+class Article_RForm(forms.ModelForm):
+    text = forms.CharField(widget=TinyMCE())
+    class Meta:
+        model = Article
+        exclude = ['author', 'slug', 'publish_date', 'email_text', 'is_published', 'docfile']
+        dateTimeOptions = {
+            'format': 'mm/dd/yyyy HH:ii P',
+            'autoclose': 'true',
+            'showMeridian': 'false',
+        }
+
 
 class EditForm(forms.ModelForm):
     class Meta:

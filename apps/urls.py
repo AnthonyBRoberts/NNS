@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib import admin
 from account.forms import *
 from account.models import *
-#from profiles import views
 admin.autodiscover()
 
 urlpatterns = patterns('',
