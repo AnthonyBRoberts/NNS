@@ -14,7 +14,10 @@ class UserProfileInline(admin.StackedInline):
         }),
         ('Client information', {
             'classes': ('collapse',),
-            'fields': (('pub_name', 'pub_type'), 'pub_area', 'phone', 'address', 'city', 'state', 'zipcode', 'website', ('facebook', 'twitter'), 'about'),
+            'fields': (('pub_name', 'pub_type'),
+                       'pub_area', 'phone', 'address', 'city',
+                       'state', 'zipcode', 'website',
+                       ('facebook', 'twitter'), 'about'),
         }),
     )
 

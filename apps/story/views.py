@@ -42,7 +42,7 @@ def add_article(request):
             article.save()
             msg = "Article saved successfully"
             messages.success(request, msg, fail_silently=True)
-            if article.is_published and article.publish_date <= datetime.datetime.today():
+            if article.is_published and article.send_now and article.publish_date <= datetime.datetime.today():
                 subject = article.title
                 byline = article.byline
                 email_text = article.email_text
@@ -67,11 +67,19 @@ def add_article(request):
             return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
-            form = Article_RForm()
+            form = Article_RForm(
+                initial={'byline': request.user.get_profile().byline}
+        )
         elif request.user.get_profile().user_type == 'Editor':
-            form = Article_EForm()
+            form = Article_EForm(
+                initial={'byline': request.user.get_profile().byline,
+                         'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'
+                         }
+        )
         else:
-            form = Article_RForm()
+            form = Article_RForm(
+                initial={'byline': request.user.get_profile().byline}
+        )
     return render_to_response('story/article_form.html', 
                               { 'form': form },
                               context_instance=RequestContext(request))
@@ -94,7 +102,7 @@ def edit_article(request, slug):
             article = form.save()
             msg = "Article updated successfully"
             messages.success(request, msg, fail_silently=True)
-            if article.is_published and article.publish_date <= datetime.datetime.today():
+            if article.is_published and article.send_now and article.publish_date <= datetime.datetime.today():
                 subject = article.title
                 email_text = article.email_text
                 story_text = article.text
@@ -119,11 +127,26 @@ def edit_article(request, slug):
             return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
-            form = Article_RForm(instance=article)
+            form = Article_RForm(instance=article,
+                initial={'byline': article.author.get_profile().byline}
+            )
         elif request.user.get_profile().user_type == 'Editor':
-            form = Article_EForm(instance=article)
+            if article.email_text:
+                form = Article_EForm(instance=article,
+                    initial={'byline': request.user.get_profile().byline,
+                             'email_text': article.email_text
+                             }
+                )
+            else:
+                form = Article_EForm(instance=article,
+                    initial={'byline': article.author.get_profile().byline,
+                             'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'
+                             }
+                )
         else:
-            form = Article_RForm(instance=article)
+            form = Article_RForm(instance=article,
+                initial={'byline': article.author.get_profile().byline}
+            )
     return render_to_response('story/article_form.html', 
                               { 
                                   'form': form,

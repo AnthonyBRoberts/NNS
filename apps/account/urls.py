@@ -1,7 +1,6 @@
 from django.conf.urls.defaults import *
 from account.models import *
 from account.forms import *
-from account import views
 
 
 urlpatterns = patterns('',
@@ -20,6 +19,13 @@ urlpatterns = patterns('',
             'success_url': '/profiles/client/edit/',
         },
         name='edit_client_profile'),
+    url('^unsubscribe', 'profiles.views.edit_profile',
+        {
+            'form_class': UnsubscribeForm,
+            'success_url': '/profiles/client/edit/',
+            'template_name': 'profiles/unsubscribe.html',
+        },
+        name='unsubscribe'),
     url('^reporter/edit', 'profiles.views.edit_profile',
         {
             'form_class': ReporterForm,
@@ -36,3 +42,4 @@ urlpatterns = patterns('',
        'profiles.views.profile_list',
        name='profiles_profile_list'),
     )
+    

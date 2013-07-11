@@ -13,6 +13,8 @@ USER_TYPES = (
     ('Editor', 'Editor'),
     ('Reporter', 'Reporter'),
     ('Client', 'Client'),
+    ('InactiveClient', 'InactiveClient'),
+    ('InactiveReporter', 'InactiveReporter'),
 )
 
 PUB_TYPES = (
@@ -25,7 +27,7 @@ PUB_TYPES = (
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, unique=True)
-    user_type = models.CharField(max_length=10, choices=USER_TYPES, default='Client')
+    user_type = models.CharField(max_length=25, choices=USER_TYPES, default='Client')
     can_publish = models.BooleanField(default=False)
     byline = models.CharField(max_length=75, blank=True, null=True)
     bio = models.CharField(max_length=2000, blank=True, null=True)
@@ -42,9 +44,10 @@ class UserProfile(models.Model):
     twitter = models.CharField(max_length=150, blank=True, null=True)
     facebook = models.CharField(max_length=150, blank=True, null=True)
     website = models.URLField(max_length=200, blank=True, null=True)
-    # notes       = models.ForeignKey(Notes)
+
     def get_absolute_url(self):
         return ('profiles_profile_detail', (), { 'username': self.user.username })
+    
     def formatted_phone(self, country=None):
         try:
             fphone = phonenumbers.parse(self.phone, 'US')
@@ -53,12 +56,10 @@ class UserProfile(models.Model):
         except:
             fphone = self.phone
             return fphone
-            
-            
         
-            return None
     def __unicode__(self):
         return self.user.get_full_name()
+    
     def save(self, *args, **kwargs):
         try:
             existing = UserProfile.objects.get(user=self.user)

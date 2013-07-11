@@ -5,9 +5,8 @@ from models import Article
 from tinymce.widgets import TinyMCE
 from taggit.models import Tag, TaggedItem
 
-class TaggedItemInline(admin.TabularInline):
-    model = TaggedItem
-    
+class TagInline(admin.TabularInline):
+    model = Tag
 
 class ArticleAdminForm(forms.ModelForm):
     text = forms.CharField(widget=TinyMCE())
@@ -27,8 +26,9 @@ class ArticleAdmin(admin.ModelAdmin):
                        'docfile', 'text'),
             }),
     ]
-    #inlines = [TaggedItemInline]
+    #inlines = (TagInline, )
 
 admin.site.register(Article, ArticleAdmin)
+
 
 

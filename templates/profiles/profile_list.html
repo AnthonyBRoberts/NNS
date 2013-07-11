@@ -3,6 +3,7 @@
 {% block clientlist %}
 
 {{block.super}}
+{% if user.is_staff %}
 <h2>These are the clients</h2>
 <style>
 td
@@ -10,6 +11,7 @@ td
 padding:15px;
 }
 </style>
+
 <table>
     <tr>
         <td><strong>Client Name</strong></td>
@@ -36,5 +38,8 @@ padding:15px;
         {% endif %} 
     {% endfor %}
 </table>
+{% else %}
+        <h3>You do not have permission to view this page</h3>
+{% endif %}
 {% endblock %}
 

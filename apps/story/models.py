@@ -22,6 +22,7 @@ class Article(models.Model):
     author = models.ForeignKey(User)
     byline = models.CharField(max_length=100, blank=True, null=True)
     is_published = models.BooleanField(default=False, verbose_name="Publish?")
+    send_now = models.BooleanField(default=False, verbose_name="Send Now?")
     created_on = models.DateTimeField(auto_now_add=True)
     publish_date = models.DateTimeField(default=datetime.datetime.now())
     objects = models.Manager()
@@ -61,3 +62,7 @@ class Edit(models.Model):
     @models.permalink 
     def get_absolute_url(self):
         return ('story_edit_detail', self.id)
+
+
+#def create_tags(sender, **kwargs):
+    

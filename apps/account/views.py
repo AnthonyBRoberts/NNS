@@ -13,9 +13,30 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-
 from profiles import utils
 
+
+def unsubscribe(request, form_class, success_url=None,
+                   template_name='profiles/unsubscribe.html'):
+    try:
+        profile_obj = request.user.get_profile()
+    except ObjectDoesNotExist:
+        return HttpResponseRedirect(reverse('profiles_create_profile'))
+    
+    if success_url is None:
+        success_url = reverse('profiles_profile_detail',
+                              kwargs={ 'username': request.user.username })
+    if request.method == 'POST':
+        form = form_class(data=request.POST, files=request.FILES, instance=profile_obj)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(success_url)
+    else:
+        form = form_class(instance=profile_obj)
+    return render_to_response(template_name,
+                              { 'form': form,
+                                'profile': profile_obj, })
+unsubscribe = login_required(unsubscribe)
 
 def create_profile(request, form_class=None, success_url=None,
                    template_name='profiles/create_profile.html',
