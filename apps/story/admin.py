@@ -22,7 +22,7 @@ class ArticleAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'classes': ['edit'], 
             'fields': (('title', 'slug'), 'author',
-                       ('is_published', 'publish_date'),
+                       ('send_now', 'is_published', 'publish_date'),
                        'docfile', 'text'),
             }),
     ]

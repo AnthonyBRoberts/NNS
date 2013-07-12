@@ -69,13 +69,7 @@ class UserProfile(models.Model):
         models.Model.save(self, *args, **kwargs) 
     
     get_absolute_url = models.permalink(get_absolute_url)
-"""
-@receiver(user_registered)
-def user_registered_handler(sender, user, request, **kwargs):
-    user.first_name = request.POST.get('first_name')
-    user.last_name = request.POST.get('last_name')
-    user.save()
-"""
+
 def create_profile(sender, **kwargs):
     user = kwargs['instance']
     if kwargs['created']:
