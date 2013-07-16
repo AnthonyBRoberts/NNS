@@ -16,15 +16,13 @@
             <h1>Create new story</h1>
         {% endif %}
 
-        <form action="" method="POST" enctype="multipart/form-data" onSubmit="return confirm('Are you sure?')">
+        <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
                         {{ form|as_bootstrap }}
-			{% if form.is_published %}
-            <input type="submit" name="submit" value="Save" onClick="if(confirm('Are you sure?')) alert('Article has been emailed to clients'); else alert('Article was not sent') return">
-            {% else %}
+
             <input type="submit" name="submit" value="Save">
-            {% endif %}
+
         </form>
         {% else %}
         <h3>You do not have permission to view this page</h3>

@@ -1,9 +1,13 @@
-{% extends "base.html" %}
+{% extends "welcome.html" %}
 {% load bootstrap_toolkit %}
 
 {% block profile_detail %}
 {{block.super}}
-    
+<div class="row-fluid">
+    <div class="span8">
+    {% if user.username == request.user.username %}
+<div class="row-fluid">
+    <div class="span8">
     <h3>
     Welcome {{ profile }} 
     </h3>
@@ -18,7 +22,6 @@
     <strong>Editor:</strong> {{ profile.user.get_full_name }}
     </p>
     <p>
-    <p>
     <strong>Phone Number</strong><br />
     {{ profile.formatted_phone }}<br />
     </p>
@@ -26,7 +29,7 @@
     <strong>Address</strong><br />
     {{ profile.address }}, {{ profile.city }}, {{ profile.state }} {{ profile.zipcode }}
     </p>
-    <p>
+    <p> 
     <strong>Circulation Area</strong><br />
     {{ profile.pub_area }}
     </p>
@@ -40,6 +43,20 @@
     Facebook: {{ profile.facebook }}<br />
     Twitter: {{ profile.twitter }}<br />
     </p>
+	</div>
+    <div class="span4" align="right">
+    {% if profile.user_type == 'Reporter' or profile.user_type == 'Editor' %}
+    <a href="/profiles/reporter/edit">
+    {% elif profile.user_type == 'Client' or profile.user_type == 'InactiveClient'%}
+    <a href="/profiles/client/edit">
+    {% endif %}
+        <button class="btn btn-large" type="button">Edit my profile</button>
+    </a>
+    </div>
+</div>
+    {% else %}
+        <h3>You do not have permission to view this page</h3>
+    {% endif %}
     
 
 

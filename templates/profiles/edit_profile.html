@@ -4,7 +4,9 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     <div class="well">
     	{% if user.get_profile.user_type == 'InactiveClient' %}
-        <label>Note: This account has been unsubscribed from email list.</label>
+        <div class="container-fluid">
+        <p class="text-error">Note: This account has been unsubscribed from email list.</p>
+        </div>
         {% endif %}
         
         <h2>Edit Profile:</h2>

@@ -8,7 +8,7 @@ from account.models import *
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name= "welcome.html")),
+    url(r'^$', TemplateView.as_view(template_name= "welcome_content.html")),
     url(r'^accounts/register/$',
         register,
         {'backend': 'registration.backends.simple.SimpleBackend',

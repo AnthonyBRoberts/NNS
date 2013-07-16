@@ -8,9 +8,12 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views.generic.list_detail import object_list
+from notification import models as notification
 from story.models import Article
 from story.forms import *
 from story.tasks import send_published_article
+from apps.account.models import UserProfile
+
 
 @login_required 
 def inprogress_index(request):
@@ -40,6 +43,11 @@ def add_article(request):
             article.author = request.user
             article.publish_date = datetime.datetime.now()
             article.save()
+            #if request.user.get_profile().user_type == 'Reporter':
+                #to_user = []
+                #for profile in UserProfile.objects.filter(user_type = 'Editor'):
+                    #to_user.append(profile.user.email)
+                #notification.send(to_user, "reporter_story_update", {"from_user": request.user})
             msg = "Article saved successfully"
             messages.success(request, msg, fail_silently=True)
             if article.is_published and article.send_now and article.publish_date <= datetime.datetime.today():

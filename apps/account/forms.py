@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib import messages
 from django.forms.fields import ChoiceField
 from django.forms.widgets import RadioSelect
 from django.db import models
@@ -23,7 +24,7 @@ class ClientForm(forms.ModelForm):
     pub_name = forms.CharField(label='News organization name')
     pub_type = forms.ChoiceField(choices=PUB_TYPES, label='News media type')
     #if user_type == 'InactiveClient':
-    subscribe = forms.BooleanField(label='Subscribe to NNS Emails', )
+    subscribe = forms.BooleanField(label='Subscribe to NNS Emails', required=False, initial=True)
     
     class Meta:
         model = UserProfile
@@ -103,7 +104,7 @@ class UnsubscribeForm(forms.ModelForm):
     email = forms.EmailField(label='Primary Email')
     first_name = forms.CharField(label='Editor first name')
     last_name = forms.CharField(label='Editor last name')    
-    unsubscribe = forms.BooleanField(label='Unsubscribe from NNS Emails')
+    unsubscribe = forms.BooleanField(label='Unsubscribe from NNS Emails', required=False)
     
     class Meta:
         model = UserProfile
