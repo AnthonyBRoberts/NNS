@@ -45,6 +45,7 @@
     </p>
 	</div>
     <div class="span4" align="right">
+    {% if profile.user.username == request.user.username %}
     {% if profile.user_type == 'Reporter' or profile.user_type == 'Editor' %}
     <a href="/profiles/reporter/edit">
     {% elif profile.user_type == 'Client' or profile.user_type == 'InactiveClient'%}
@@ -52,6 +53,7 @@
     {% endif %}
         <button class="btn btn-large" type="button">Edit my profile</button>
     </a>
+    {% endif %}
     </div>
 </div>
     {% else %}

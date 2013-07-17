@@ -21,7 +21,10 @@
 
                         {{ form|as_bootstrap }}
 
-            <input type="submit" name="submit" value="Save">
+            <input class="btn btn-large btn-primary" type="submit" name="submit" value="Save">
+            {% if article %}
+            <a class="btn btn-large" href="{% url story_article_detail article.slug %}">Cancel</a>
+            {% endif %}
 
         </form>
         {% else %}
