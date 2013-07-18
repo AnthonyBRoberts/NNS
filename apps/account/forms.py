@@ -13,17 +13,16 @@ class ClientForm(forms.ModelForm):
             self.initial['email'] = self.instance.user.email
             self.initial['first_name'] = self.instance.user.first_name
             self.initial['last_name'] = self.instance.user.last_name
-            #self.initial['user_type'] = self.instance.user.get_profile().user_type
+            self.initial['user_type'] = self.instance.user.get_profile().user_type
         except User.DoesNotExist:
             pass
         
     email = forms.EmailField(label='Primary Email',
                              help_text='Where we will send new stories')
-    first_name = forms.CharField(label='Editor first name')
-    last_name = forms.CharField(label='Editor last name')
+    first_name = forms.CharField(label='First name')
+    last_name = forms.CharField(label='Last name')
     pub_name = forms.CharField(label='News organization name')
     pub_type = forms.ChoiceField(choices=PUB_TYPES, label='News media type')
-    #if user_type == 'InactiveClient':
     subscribe = forms.BooleanField(label='Subscribe to NNS Emails', required=False, initial=True)
     
     class Meta:
@@ -102,8 +101,8 @@ class UnsubscribeForm(forms.ModelForm):
         except User.DoesNotExist:
             pass
     email = forms.EmailField(label='Primary Email')
-    first_name = forms.CharField(label='Editor first name')
-    last_name = forms.CharField(label='Editor last name')    
+    first_name = forms.CharField(label='First name')
+    last_name = forms.CharField(label='Last name')    
     unsubscribe = forms.BooleanField(label='Unsubscribe from NNS Emails', required=False)
     
     class Meta:

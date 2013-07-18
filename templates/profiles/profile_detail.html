@@ -12,37 +12,46 @@
     Welcome {{ profile }} 
     </h3>
     <h4>
-    Here's the information we currently have on your news organization
+    
+    {% if profile.user_type == 'Client' %}Here's the information we currently have on your news organization
+    {% elif profile.user_type == 'Reporter' %}Your profile information
+    {% endif %}
     </h4>
-    <p>
-    <strong>Primary Email</strong><br />
-    {{ profile.user.email }}
-    </p>
-    <p>
-    <strong>Editor:</strong> {{ profile.user.get_full_name }}
-    </p>
-    <p>
-    <strong>Phone Number</strong><br />
-    {{ profile.formatted_phone }}<br />
-    </p>
-    <p>
-    <strong>Address</strong><br />
-    {{ profile.address }}, {{ profile.city }}, {{ profile.state }} {{ profile.zipcode }}
-    </p>
-    <p> 
-    <strong>Circulation Area</strong><br />
-    {{ profile.pub_area }}
-    </p>
+    <ul>
+    <li><strong>Primary Email: </strong>{{ profile.user.email }}</li>
+    {% if profile.user_type == 'Client' %}
+    <li><strong>Editor: </strong>{{ profile.user.get_full_name }}</li>
+    {% endif %}
+    <li><strong>Phone Number: </strong>{{ profile.formatted_phone }}</li>
+    {% if profile.address %}
+    <li><strong>Address: </strong>{{ profile.address }}, {{ profile.city }}, {{ profile.state }} {{ profile.zipcode }}</li>
+    {% endif %}
+    {% if profile.pub_area %}
+    <li><strong>Circulation Area: </strong>{{ profile.pub_area }}</li>
+    {% endif %}
+    </ul>
+    {% if profile.about %}
     <p>
     <strong>Topics of interest</strong><br />
-    {{ profile.about }}<br />
+    {{ profile.about }}
     </p>
+    {% endif %}
+    {% if profile.bio %}
     <p>
-    <strong>Website and/or Social Media</strong><br />
-    Website: <a href="{{ profile.website }}">{{ profile.website }}</a><br />
-    Facebook: {{ profile.facebook }}<br />
-    Twitter: {{ profile.twitter }}<br />
+    <strong>Bio</strong><br />
+    {{ profile.bio }}
     </p>
+    {% endif %}
+    {% if profile.user_type == 'Client' %}
+    <p>
+    <strong>Website and/or Social Media</strong>
+    </p>
+    <ul>
+    <li>Website: <a href="{{ profile.website }}">{{ profile.website }}</a></li>
+    <li>Facebook: {{ profile.facebook }}</li>
+    <li>Twitter: {{ profile.twitter }}</li>
+    </ul>
+    {% endif %}
 	</div>
     <div class="span4" align="right">
     {% if profile.user.username == request.user.username %}
