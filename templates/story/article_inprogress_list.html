@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block article_inprogress_list %}
-
+{% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
         {% if object_list %}
 
             <h2>Stories in progress</h2>
@@ -36,9 +36,8 @@
         {% else %}
             <h2>No articles are in progress.</h2>
         {% endif %}
-        
-        {% if user.is_staff %}
         <a href="{% url story_article_add %}"><button class="btn btn-large btn-primary" type="button">Create New Story</button></a>
-        {% endif %}
-        
+{% else %}
+        <h3>You do not have permission to view this page</h3>
+{% endif %}  
 {% endblock %}

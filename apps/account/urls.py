@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     url('^client/create', 'profiles.views.create_profile',
         {
           'form_class': ClientForm,
-          'success_url': 'profiles_profile_detail',
+          'success_url': 'profiles/client/edit/',
         },
         name='create_client_profile'),
     url('^client/edit', 'profiles.views.edit_profile',

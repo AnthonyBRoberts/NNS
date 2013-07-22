@@ -3,7 +3,7 @@
 {% block clientlist %}
 
 {{block.super}}
-{% if user.is_staff %}
+{% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %} 
 <h2>These are the clients</h2>
 <style>
 td

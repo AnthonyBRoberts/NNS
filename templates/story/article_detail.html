@@ -29,7 +29,7 @@
     	</div>
 		<div class="span3">
 			<div class="well" align="center">  
-    		{% if user.is_staff %}    
+    		{% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}  
         	<h3>Actions</h3>
             	<a href="{% url story_article_edit object.slug %}"><button class="btn btn-large btn-block" type="button">Edit this article</button></a>
         	<h3>Go To:</h3>

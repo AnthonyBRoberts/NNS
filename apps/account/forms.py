@@ -50,8 +50,7 @@ class ClientForm(forms.ModelForm):
             p.user_type = 'Client'
         u.save()
         p.save()
-        client = super(ClientForm, self).save(*args,**kwargs)
-        return client
+        
 
 
 
