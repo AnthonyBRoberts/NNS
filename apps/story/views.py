@@ -141,9 +141,7 @@ def edit_article(request, slug):
         elif request.user.get_profile().user_type == 'Editor':
             if article.email_text:
                 form = Article_EForm(instance=article,
-                    initial={'byline': request.user.get_profile().byline,
-                             'email_text': article.email_text
-                             }
+                    initial={'email_text': article.email_text}
                 )
             else:
                 form = Article_EForm(instance=article,
