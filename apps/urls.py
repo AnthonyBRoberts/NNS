@@ -1,14 +1,18 @@
 from django.conf.urls.defaults import patterns, include, url
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.conf import settings
 from django.contrib import admin
 from registration.views import register
 from account.forms import *
-from account.models import *
+from account.models import UserProfile
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name="welcome_content.html")),
+    url(r'^$', ListView.as_view(
+        template_name="welcome_content.html",
+        model=UserProfile,
+        )
+    ),
     url(r'^accounts/register/$',
         register,
         {'backend': 'registration.backends.simple.SimpleBackend',
