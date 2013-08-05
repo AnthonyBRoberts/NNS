@@ -13,6 +13,11 @@ urlpatterns = patterns('',
         model=UserProfile,
         )
     ),
+    url(r'^about/$', ListView.as_view(
+        template_name="about.html",
+        model=UserProfile,
+        )
+    ),
     url(r'^accounts/register/$',
         register,
         {'backend': 'registration.backends.simple.SimpleBackend',
