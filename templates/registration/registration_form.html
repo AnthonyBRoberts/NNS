@@ -14,13 +14,22 @@
 <form method="post" action=".">
     {% csrf_token %}
     {{ form.non_field_errors }}
-    {% for field in form %}
-    <div class="fieldWrapper">
-        {{ field.errors }}
-        {{ field.label_tag }}
-        {{ field }}
+    <div class="row-fluid">
+    	<div class="span9">
+    		{% for field in form %}
+    		<div class="fieldWrapper">
+        		{{ field.errors }}
+        		{{ field.label_tag }}
+        		{{ field }}
+    		</div>
+    		{% endfor %}
+        </div>
+        <div class="span3" align="center">
+    		<div class="well">
+        		<p><a href="/about/">Click here for our privacy policy and terms of service.</a></p>
+    		</div>
+        </div>
     </div>
-    {% endfor %}
     <p>&nbsp;</p>
     <p><input type="submit" value="{% trans "Register" %}" class="btn btn-large btn-primary"></p>
 </form>
