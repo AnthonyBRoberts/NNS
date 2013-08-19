@@ -2,11 +2,10 @@ from django import forms
 from models import Article, Edit
 from django.contrib.admin import widgets
 from datetimewidget.widgets import DateTimeWidget
+from suit_redactor.widgets import RedactorWidget
 from tinymce.widgets import TinyMCE
 
 class ArticleForm(forms.ModelForm):
-    text = forms.CharField(widget=TinyMCE())
-    email_text = forms.CharField(widget=TinyMCE())
     class Meta:
         model = Article
         exclude = ['author', 'slug']
@@ -15,10 +14,12 @@ class ArticleForm(forms.ModelForm):
             'autoclose': 'true',
             'showMeridian': 'false',
         }
+        widgets = {
+            'email_text': RedactorWidget(editor_options={'lang': 'en'}),
+            'text': RedactorWidget(editor_options={'lang': 'en'}),
+        }
 
 class Article_EForm(forms.ModelForm):
-    text = forms.CharField(widget=TinyMCE())
-    email_text = forms.CharField(widget=TinyMCE())
     class Meta:
         model = Article
         exclude = ['slug']
@@ -28,11 +29,12 @@ class Article_EForm(forms.ModelForm):
             'showMeridian': 'false',
         }
         widgets = {
-            'publish_date': DateTimeWidget(options = dateTimeOptions)
+            'publish_date': DateTimeWidget(options = dateTimeOptions),
+            'email_text': RedactorWidget(editor_options={'lang': 'en'}),
+            'text': RedactorWidget(editor_options={'lang': 'en'}),
         }
 
 class Article_RForm(forms.ModelForm):
-    text = forms.CharField(widget=TinyMCE())
     class Meta:
         model = Article
         exclude = ['author', 'byline', 'slug', 'publish_date', 'email_text', 'is_published', 'send_now', 'docfile']
@@ -40,6 +42,9 @@ class Article_RForm(forms.ModelForm):
             'format': 'mm/dd/yyyy HH:ii P',
             'autoclose': 'true',
             'showMeridian': 'false',
+        }
+        widgets = {
+            'text': RedactorWidget(editor_options={'lang': 'en'})
         }
 
 
