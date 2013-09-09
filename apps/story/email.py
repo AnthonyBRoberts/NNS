@@ -16,11 +16,9 @@ class EMail(object):
     >>> email.add_attachment(attachment) #Optional
     >>> email.send()
     """
-    def __init__(self, subject, to, cc, bcc):
+    def __init__(self, subject, to):
         self.subject = subject
         self.to = to
-        self.cc = cc
-        self.bcc = bcc
         self._html = None
         self._text = None
         self._attachment = None
@@ -47,8 +45,6 @@ class EMail(object):
             self._text,
             from_addr,
             to=self.to,
-            cc=self.cc,
-            bcc=self.bcc
         )
         if self._html:
             msg.attach_alternative(self._html, 'text/html')
