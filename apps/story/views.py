@@ -1,6 +1,7 @@
 import os
 import redis
 import datetime
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import redirect, render_to_response, get_object_or_404
@@ -84,6 +85,7 @@ def add_article(request):
                          'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'
                          }
         )
+            form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
         else:
             form = Article_RForm(
                 initial={'byline': request.user.get_profile().byline}
@@ -143,12 +145,14 @@ def edit_article(request, slug):
                 form = Article_EForm(instance=article,
                     initial={'email_text': article.email_text}
                 )
+                form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
             else:
                 form = Article_EForm(instance=article,
                     initial={'byline': article.author.get_profile().byline,
                              'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'
                              }
                 )
+                form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
         else:
             form = Article_RForm(instance=article,
                 initial={'byline': article.author.get_profile().byline}
