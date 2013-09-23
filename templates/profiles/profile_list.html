@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-
+{% load bootstrap_toolkit %}
 {% block clientlist %}
 
 {{block.super}}
-{% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %} 
+{% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
 <h2>These are the clients</h2>
 <style>
 td
@@ -42,6 +42,9 @@ padding:15px;
     {% endfor %}
     </tbody>
 </table>
+
+
+
 {% else %}
         <h3>You do not have permission to view this page</h3>
 {% endif %}

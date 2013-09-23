@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.utils.encoding import smart_str, smart_unicode
 from django.views.generic.list_detail import object_list
 from notification import models as notification
 from story.models import Article
@@ -21,7 +22,7 @@ def inprogress_index(request):
     """
     Stories in progress view, a list of all stories in progress
     """
-    inprogress_list = Article.objects.filter(is_published=False)
+    inprogress_list = Article.objects.filter(is_published=False).order_by('author')
     return render_to_response('story/article_inprogress_list.html',
                               {'inprogress_list': inprogress_list})
  
@@ -43,6 +44,7 @@ def add_article(request):
             article = form.save(commit=False)
             article.author = request.user
             article.publish_date = datetime.datetime.now()
+            article.text = smart_str(article.text)
             article.save()
             #if request.user.get_profile().user_type == 'Reporter':
                 #to_user = []
@@ -55,7 +57,7 @@ def add_article(request):
                 subject = article.title
                 byline = article.byline
                 email_text = article.email_text
-                story_text = article.text
+                story_text = smart_unicode(article.text, 'cp1252')
                 docfile = article.docfile
                 try:
                     attachment = docfile
@@ -109,13 +111,14 @@ def edit_article(request, slug):
         else:
             form = Article_RForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
+            article.text = article.text
             article = form.save()
             msg = "Article updated successfully"
             messages.success(request, msg, fail_silently=True)
             if article.is_published and article.send_now and article.publish_date <= datetime.datetime.today():
                 subject = article.title
                 email_text = article.email_text
-                story_text = article.text
+                story_text = smart_unicode(article.text)
                 byline = article.byline
                 if article.docfile is not None:
                     attachment = article.docfile

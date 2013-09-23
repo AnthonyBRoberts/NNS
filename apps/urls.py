@@ -44,7 +44,6 @@ urlpatterns = patterns('',
         },
         name='profiles_editor_list'),
     url(r'^profiles/', include('apps.account.urls')),
-    (r'^tinymce/', include('tinymce.urls')),
 )
 
 if getattr(settings,"DEBUG"):

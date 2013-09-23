@@ -6,12 +6,12 @@ urlpatterns = patterns('',
     url(r'^$', 
         'django.views.generic.list_detail.object_list',
         {
-            'queryset': Article.objects.all(),
+            'queryset': Article.objects.all().order_by('-publish_date'),
         },
         name='story_article_index'),
     url(r'^inprogress/$',
         ListView.as_view(
-            queryset=Article.objects.filter(is_published=False),
+            queryset=Article.objects.filter(is_published=False).order_by('-publish_date'),
             context_object_name='inprogress_list',
             template_name='story/article_inprogress_list.html')
         ),
