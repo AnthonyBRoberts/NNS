@@ -6,6 +6,9 @@ celerybeat-schedule
 # Local data files
 *.db
 
+# idea files
+.idea/*git 
+
 # Packages
 *.egg
 *.egg-info

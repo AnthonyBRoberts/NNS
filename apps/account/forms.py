@@ -1,10 +1,11 @@
-from django import forms
-from django.contrib import messages
-from django.forms.fields import ChoiceField
-from django.forms.widgets import RadioSelect
-from django.db import models
+import django
+import django.contrib
+import django.forms.fields
+import django.forms.widgets
+import django.db
 from models import *
-from registration_email.forms import EmailRegistrationForm
+from suit_redactor.widgets import RedactorWidget
+
 
 class ClientForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -72,6 +73,7 @@ class ReporterForm(forms.ModelForm):
         password = forms.CharField(label='Password', help_text='')
         bio = forms.CharField(label='Reporter beats',
                                 help_text='What will you focus on in your reporting?')
+        widgets = {'bio': RedactorWidget(editor_options={'lang': 'en'})}
         fields = ['first_name','last_name','email','phone','bio','byline']
         exclude = ['pub_name','pub_type','user','user_type','can_publish','about',
                    'last_login','date_joined','is_staff','is_active',

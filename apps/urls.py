@@ -3,6 +3,7 @@ from django.views.generic import TemplateView, ListView
 from django.conf import settings
 from django.contrib import admin
 from registration.views import register
+from registration_email.forms import EmailRegistrationForm
 from account.forms import *
 from account.models import UserProfile
 admin.autodiscover()

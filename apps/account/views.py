@@ -3,21 +3,18 @@ Views for creating, editing and viewing site-specific user profiles.
 
 """
 
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse
-from django.http import Http404
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-from django.views.generic.list_detail import object_list
-from profiles import utils
+import django.contrib.auth.decorators
+import django.contrib.auth.models
+import django.core.exceptions
+import django.core.urlresolvers
+import django.http
+import django.shortcuts
+import django.template
+import django.views.generic.list_detail
 
 
 def unsubscribe(request, form_class, success_url=None,
-                   template_name='profiles/unsubscribe.html'):
+                template_name='profiles/unsubscribe.html'):
     try:
         profile_obj = request.user.get_profile()
     except ObjectDoesNotExist:
@@ -25,7 +22,7 @@ def unsubscribe(request, form_class, success_url=None,
     
     if success_url is None:
         success_url = reverse('profiles_profile_detail',
-                              kwargs={ 'username': request.user.username })
+                              kwargs={'username': request.user.username})
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES, instance=profile_obj)
         if form.is_valid():
@@ -34,9 +31,10 @@ def unsubscribe(request, form_class, success_url=None,
     else:
         form = form_class(instance=profile_obj)
     return render_to_response(template_name,
-                              { 'form': form,
-                                'profile': profile_obj, })
+                              {'form': form,
+                              'profile': profile_obj, })
 unsubscribe = login_required(unsubscribe)
+
 
 def create_profile(request, form_class=None, success_url=None,
                    template_name='profiles/create_profile.html',
@@ -140,6 +138,7 @@ def create_profile(request, form_class=None, success_url=None,
                               context_instance=context)
 create_profile = login_required(create_profile)
 
+
 def edit_profile(request, form_class=None, success_url=None,
                  template_name='profiles/edit_profile.html',
                  extra_context=None):
@@ -232,6 +231,7 @@ def edit_profile(request, form_class=None, success_url=None,
                               context_instance=context)
 edit_profile = login_required(edit_profile)
 
+
 def profile_detail(request, username, public_profile_field=None,
                    template_name='profiles/profile_detail.html',
                    extra_context=None):
@@ -302,8 +302,9 @@ def profile_detail(request, username, public_profile_field=None,
         context[key] = callable(value) and value() or value
     
     return render_to_response(template_name,
-                              { 'profile': profile_obj },
+                              {'profile': profile_obj},
                               context_instance=context)
+
 
 def profile_list(request, public_profile_field=None,
                  template_name='profiles/profile_list.html', **kwargs):

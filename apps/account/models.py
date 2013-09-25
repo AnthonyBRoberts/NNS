@@ -25,6 +25,7 @@ PUB_TYPES = (
     ('Other', 'Other'),
 )
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, unique=True)
     user_type = models.CharField(max_length=25, choices=USER_TYPES, default='Client')
@@ -46,12 +47,12 @@ class UserProfile(models.Model):
     website = models.URLField(max_length=200, blank=True, null=True)
 
     def get_absolute_url(self):
-        return ('profiles_profile_detail', (), { 'username': self.user.username })
+        return 'profiles_profile_detail', (), {'username': self.user.username}
     
     def formatted_phone(self, country=None):
         try:
             fphone = phonenumbers.parse(self.phone, 'US')
-            if fphone != None:
+            if fphone is not None:
                 return phonenumbers.format_number(fphone, phonenumbers.PhoneNumberFormat.NATIONAL)
         except:
             fphone = self.phone
@@ -63,12 +64,13 @@ class UserProfile(models.Model):
     def save(self, *args, **kwargs):
         try:
             existing = UserProfile.objects.get(user=self.user)
-            self.id = existing.id  #force update instead of insert 
+            self.id = existing.id  # force update instead of insert
         except UserProfile.DoesNotExist:
             pass 
         models.Model.save(self, *args, **kwargs) 
     
     get_absolute_url = models.permalink(get_absolute_url)
+
 
 def create_profile(sender, **kwargs):
     user = kwargs['instance']
