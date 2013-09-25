@@ -1,5 +1,5 @@
 from django import forms
-from models import Article, Edit
+from models import Article
 from django.contrib.admin import widgets
 from datetimewidget.widgets import DateTimeWidget
 from suit_redactor.widgets import RedactorWidget
@@ -16,7 +16,7 @@ class ArticleForm(forms.ModelForm):
         }
         widgets = {
             'email_text': RedactorWidget(editor_options={'lang': 'en'}),
-            'text': RedactorWidget(editor_options={'lang': 'en'}),
+            'text': RedactorWidget(editor_options={'lang': 'en', 'cleanup': 'true', 'pastePlainText': 'true'}),
         }
 
 class Article_EForm(forms.ModelForm):
@@ -31,7 +31,7 @@ class Article_EForm(forms.ModelForm):
         widgets = {
             'publish_date': DateTimeWidget(options = dateTimeOptions),
             'email_text': RedactorWidget(editor_options={'lang': 'en'}),
-            'text': RedactorWidget(editor_options={'lang': 'en'}),
+            'text': RedactorWidget(editor_options={'lang': 'en', 'cleanup': 'true', 'pastePlainText': 'true'}),
         }
 
 class Article_RForm(forms.ModelForm):
@@ -44,11 +44,6 @@ class Article_RForm(forms.ModelForm):
             'showMeridian': 'false',
         }
         widgets = {
-            'text': RedactorWidget(editor_options={'lang': 'en'})
+            'text': RedactorWidget(editor_options={'lang': 'en', 'cleanup': 'true', 'pastePlainText': 'true'})
         }
 
-
-class EditForm(forms.ModelForm):
-    class Meta:
-        model = Edit
-        fields = ['summary']

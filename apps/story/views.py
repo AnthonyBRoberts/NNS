@@ -1,6 +1,7 @@
 import os
 import redis
 import datetime
+from tools.killgremlins import killgremlins
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -44,7 +45,7 @@ def add_article(request):
             article = form.save(commit=False)
             article.author = request.user
             article.publish_date = datetime.datetime.now()
-            article.text = smart_str(article.text)
+            #article.text = article.text.encode('cp1252')
             article.save()
             #if request.user.get_profile().user_type == 'Reporter':
                 #to_user = []
@@ -57,7 +58,7 @@ def add_article(request):
                 subject = article.title
                 byline = article.byline
                 email_text = article.email_text
-                story_text = smart_unicode(article.text, 'cp1252')
+                story_text = article.text #.decode('cp1252', errors='replace')
                 docfile = article.docfile
                 try:
                     attachment = docfile
@@ -111,7 +112,7 @@ def edit_article(request, slug):
         else:
             form = Article_RForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
-            article.text = article.text
+            #article.text = article.text.encode('cp1252', 'replace')
             article = form.save()
             msg = "Article updated successfully"
             messages.success(request, msg, fail_silently=True)
@@ -167,9 +168,4 @@ def edit_article(request, slug):
                               },
                               context_instance=RequestContext(request))
 
-@login_required 
-def article_history(request, slug):
-    article = get_object_or_404(Article, slug=slug)
-    return  object_list(request, 
-                        queryset=Edit.objects.filter(article__slug=slug),
-                        extra_context={'article': article})
+
