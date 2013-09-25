@@ -57,3 +57,10 @@ def killgremlins(text):
             text = unicode(text, "iso-8859-1")
         text = re.sub(u"[\x80-\xff]", fixup, text)
     return text
+
+
+
+def replace_all(text, dic):
+    for i, j in dic.iteritems():
+        text = text.replace(i, j)
+    return text

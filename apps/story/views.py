@@ -1,7 +1,7 @@
 import os
 import redis
 import datetime
-from tools.killgremlins import killgremlins
+from tools.killgremlins import killgremlins, replace_all
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from django.utils.encoding import smart_str, smart_unicode
+from django.utils.encoding import smart_str, smart_unicode, force_unicode
 from django.views.generic.list_detail import object_list
 from notification import models as notification
 from story.models import Article
@@ -45,7 +45,9 @@ def add_article(request):
             article = form.save(commit=False)
             article.author = request.user
             article.publish_date = datetime.datetime.now()
-            #article.text = article.text.encode('cp1252')
+            reps = {u'\u201c': '\"', u'\u2019': '\'', u'\u2018': '\'', u'\u201d':'\"', u'\u2013': '-', u'\u2014': '--'}
+            cleaned_text = replace_all(article.text, reps)
+            article.text = cleaned_text
             article.save()
             #if request.user.get_profile().user_type == 'Reporter':
                 #to_user = []
@@ -112,7 +114,9 @@ def edit_article(request, slug):
         else:
             form = Article_RForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
-            #article.text = article.text.encode('cp1252', 'replace')
+            reps = {u'\u201c': '\"', u'\u2019': '\'', u'\u2018': '\'', u'\u201d':'\"', u'\u2013': '-', u'\u2014': '--'}
+            cleaned_text = replace_all(article.text, reps)
+            article.text = cleaned_text
             article = form.save()
             msg = "Article updated successfully"
             messages.success(request, msg, fail_silently=True)

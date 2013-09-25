@@ -16,7 +16,7 @@ class ArticleForm(forms.ModelForm):
         }
         widgets = {
             'email_text': RedactorWidget(editor_options={'lang': 'en'}),
-            'text': RedactorWidget(editor_options={'lang': 'en', 'cleanup': 'true', 'pastePlainText': 'true'}),
+            'text': RedactorWidget(editor_options={'lang': 'en'}),
         }
 
 class Article_EForm(forms.ModelForm):
@@ -31,7 +31,7 @@ class Article_EForm(forms.ModelForm):
         widgets = {
             'publish_date': DateTimeWidget(options = dateTimeOptions),
             'email_text': RedactorWidget(editor_options={'lang': 'en'}),
-            'text': RedactorWidget(editor_options={'lang': 'en', 'cleanup': 'true', 'pastePlainText': 'true'}),
+            'text': RedactorWidget(editor_options={'lang': 'en'}),
         }
 
 class Article_RForm(forms.ModelForm):
@@ -44,6 +44,6 @@ class Article_RForm(forms.ModelForm):
             'showMeridian': 'false',
         }
         widgets = {
-            'text': RedactorWidget(editor_options={'lang': 'en', 'cleanup': 'true', 'pastePlainText': 'true'})
+            'text': RedactorWidget(editor_options={'lang': 'en'})
         }
 
