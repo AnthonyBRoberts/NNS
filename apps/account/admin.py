@@ -8,6 +8,7 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
     verbose_name_plural = 'user profiles'
+    list_filter = ('user_type', )
     fieldsets = (
         ('Staff information', {
             'fields': (('user_type', 'can_publish'), 'byline', 'bio'),
@@ -22,8 +23,9 @@ class UserProfileInline(admin.StackedInline):
     )
 
 class UserAdmin(UserAdmin):
-    inlines = (UserProfileInline, )
 
+    inlines = (UserProfileInline, )
+    
     
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

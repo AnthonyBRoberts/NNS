@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap_toolkit %}
+{% load url from future %}
+{% load i18n %}
 
 {% block profile_detail %}
     {{block.super}}
@@ -47,7 +49,7 @@
                 {% endif %}
                 {% if profile.bio %}
                     <p><strong>Bio</strong><br />
-                    {{ profile.bio }}
+                    {{ profile.bio|safe }}
                     </p>
                 {% endif %}
                 {% if profile.user_type == 'Client' %}
@@ -59,19 +61,27 @@
                     </ul>
                 {% endif %}
             </div>
-            <div class="span4" align="left">
+            <div class="span3" align="left">
                 {% if profile.user.username == request.user.username %}
-                    {% if profile.user_type == 'Reporter' %}
-                        <a href="/profiles/reporter/edit">
-                    {% elif profile.user_type == 'Editor' %}
-                        <a href="/profiles/reporter/edit">
-                    {% elif profile.user_type == 'Client' or profile.user_type == 'InactiveClient'%}
-                        <a href="/profiles/client/edit">
-                    {% endif %}
-                    <button class="btn btn-large" type="button">Edit my profile</button>
-                </a>
+                    <div class="well" align="center">
+                        {% if profile.user_type == 'Reporter' %}
+                            <a href="/profiles/reporter/edit">
+                        {% elif profile.user_type == 'Editor' %}
+                            <a href="/profiles/reporter/edit">
+                        {% elif profile.user_type == 'Client' or profile.user_type == 'InactiveClient'%}
+                            <a href="/profiles/client/edit">
+                        {% endif %}
+
+                        <button class="btn btn-large btn-block" type="button">Edit my profile</button></a>
+                        <p></p>
+                        <p><a href="{% url "auth_password_reset" %}"><button class="btn btn-large btn-block" type="button">{% trans "Change password" %}</button></a></p>
+                        {% if request.user.is_superuser %}
+                        <a href="/reporting/"><button class="btn btn-large btn-block" type="button">View SES Stats</button></a>
+                        {% endif %}
+                    </div>
                 {% endif %}
             </div>
         </div>
     {% endif %}
+
 {% endblock %}

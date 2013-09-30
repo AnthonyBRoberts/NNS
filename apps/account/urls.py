@@ -1,3 +1,5 @@
+from django.core.urlresolvers import reverse
+import django.http
 from django.conf.urls.defaults import *
 from account.models import *
 from account.forms import *
@@ -16,7 +18,6 @@ urlpatterns = patterns('',
     url('^client/edit', 'profiles.views.edit_profile',
         {
             'form_class': ClientForm,
-            'success_url': '/profiles/client/edit/',
         },
         name='edit_client_profile'),
     url('^unsubscribe', 'profiles.views.edit_profile',
@@ -29,7 +30,6 @@ urlpatterns = patterns('',
     url('^reporter/edit', 'profiles.views.edit_profile',
         {
             'form_class': ReporterForm,
-            'success_url': '/profiles/reporter/edit/',
         },
         name='edit_reporter_profile'),                 
     url(r'^create/$',

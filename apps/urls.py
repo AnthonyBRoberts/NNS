@@ -33,6 +33,7 @@ urlpatterns = patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/django-ses/', include('django_ses.urls')),
+    url(r'^reporting/', include('django_ses.urls')),
     url(r'^story/', include('apps.story.urls')),
     url(r'^reporters/', 'profiles.views.profile_list',
         {

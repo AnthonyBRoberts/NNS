@@ -9,11 +9,12 @@ import time
 def send_published_article(sender, subject, byline, email_text, story_text, attachment=None):
     """
     Task for emailing published articles.
-    Runs when an article is saved and is_published==True
+    Runs when an article is saved and both is_published & send_now==True
     """
     for profile in UserProfile.objects.all():
         recipient = profile.user.email
-        email = EMail(subject, recipient)
+        bcc = ['nns.aroberts@gmail.com',]
+        email = EMail(subject, recipient, bcc)
         ctx = {'subject': subject, 'story_text': story_text, 'email_text': email_text, 'byline': byline}
         email.text('../templates/templated_email/emaila.txt', ctx)
         email.html('../templates/templated_email/emaila.html', ctx)  
