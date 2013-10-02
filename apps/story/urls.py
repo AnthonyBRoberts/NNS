@@ -4,17 +4,11 @@ from apps.story.models import Article
 
 urlpatterns = patterns('',
     url(r'^$', 
-        'django.views.generic.list_detail.object_list',
-        {
-            'queryset': Article.objects.all().order_by('-publish_date'),
-        },
+        'story.views.story_index',
         name='story_article_index'),
     url(r'^inprogress/$',
-        ListView.as_view(
-            queryset=Article.objects.filter(is_published=False).order_by('-publish_date'),
-            context_object_name='inprogress_list',
-            template_name='story/article_inprogress_list.html')
-        ),
+        'story.views.inprogress_index',
+        name='inprogress_list'),
     url(r'^article/(?P<slug>[-\w]+)$', 
         'django.views.generic.list_detail.object_detail',
         {

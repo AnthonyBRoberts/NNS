@@ -2,7 +2,10 @@
 Views for creating, editing and viewing site-specific user profiles.
 
 """
-
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 import django.contrib.auth.decorators
 import django.contrib.auth.models
 import django.core.exceptions
@@ -11,7 +14,7 @@ import django.http
 import django.shortcuts
 import django.template
 import django.views.generic.list_detail
-
+from account.models import *
 
 def unsubscribe(request, form_class, success_url=None,
                 template_name='profiles/unsubscribe.html'):
@@ -35,6 +38,23 @@ def unsubscribe(request, form_class, success_url=None,
                               'profile': profile_obj, })
 unsubscribe = login_required(unsubscribe)
 
+
+def client_index(request):
+    """
+    Client index view, a list of all clients
+    """
+    client_list = UserProfile.objects.filter(user_type='Client').order_by('pub_name')
+    paginator = Paginator(client_list, 10)
+    page = request.GET.get('page')
+    try:
+        show_lines = paginator.page(page)
+    except PageNotAnInteger:
+        show_lines = paginator.page(1)
+    except EmptyPage:
+        show_lines = paginator.page(paginator.num_pages)
+    return render_to_response('profiles/profile_list.html', RequestContext(request, {
+        'lines': show_lines,
+    }))
 
 def create_profile(request, form_class=None, success_url=None,
                    template_name='profiles/create_profile.html',

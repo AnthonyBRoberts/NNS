@@ -2,6 +2,7 @@ import os
 import redis
 import datetime
 from tools.killgremlins import killgremlins, replace_all
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -23,9 +24,38 @@ def inprogress_index(request):
     """
     Stories in progress view, a list of all stories in progress
     """
-    inprogress_list = Article.objects.filter(is_published=False).order_by('author')
-    return render_to_response('story/article_inprogress_list.html',
-                              {'inprogress_list': inprogress_list})
+    inprogress_list = Article.objects.filter(is_published=False).order_by('-publish_date')
+    paginator = Paginator(inprogress_list, 10)
+    page = request.GET.get('page')
+    try:
+        show_lines = paginator.page(page)
+    except PageNotAnInteger:
+        show_lines = paginator.page(1)
+    except EmptyPage:
+        show_lines = paginator.page(paginator.num_pages)
+    return render_to_response('story/article_inprogress_list.html', RequestContext(request, {
+        'lines': show_lines, 'inprogress_list': inprogress_list,
+    }))
+
+
+@login_required 
+def story_index(request):
+    """
+    Story index view, a list of all published stories
+    """
+    story_list = Article.objects.filter(is_published=True).order_by('-publish_date')
+    paginator = Paginator(story_list, 10)
+    page = request.GET.get('page')
+    try:
+        show_lines = paginator.page(page)
+    except PageNotAnInteger:
+        show_lines = paginator.page(1)
+    except EmptyPage:
+        show_lines = paginator.page(paginator.num_pages)
+    return render_to_response('story/article_list.html', RequestContext(request, {
+        'lines': show_lines, 
+    }))
+
  
 @login_required 
 def add_article(request):

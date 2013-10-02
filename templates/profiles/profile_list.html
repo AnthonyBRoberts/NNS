@@ -22,27 +22,26 @@ padding:15px;
     </tr>
     </thead>
     <tbody>
-    {% for p in object_list %}
-        {% if p.user_type == 'Client' %}
+    {% for line in lines %}
         <tr>
         <td>
-            <a href="{% url profiles_profile_detail p.user.username %}">{{ p.pub_name }}</a>
+            <a href="{% url profiles_profile_detail line.user.username %}">{{ line.pub_name }}</a>
         </td>
         <td>
-            {{ p.user.get_full_name }}
+            {{ line.user.get_full_name }}
         </td>
         <td>
-            {{ p.user.email }}
+            {{ line.user.email }}
         </td>
         <td>
-            {{ p.formatted_phone }}
+            {{ line.formatted_phone }}
         </td>
         </tr>
-        {% endif %} 
+
     {% endfor %}
     </tbody>
 </table>
-
+{{ lines|pagination }}
 
 
 {% else %}

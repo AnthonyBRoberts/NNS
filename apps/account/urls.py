@@ -39,7 +39,7 @@ urlpatterns = patterns('',
        'profiles.views.edit_profile',
        name='profiles_edit_profile'),
     url(r'^$',
-       'profiles.views.profile_list',
+       'account.views.client_index',
        name='profiles_profile_list'),
     )
     

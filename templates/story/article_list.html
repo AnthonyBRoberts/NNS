@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-
+{% load bootstrap_toolkit %}
 {% block storylist %}
 
-        {% if object_list %}
+        {% if lines %}
             <h2>Recent Stories</h2>
                 <style>
                 table{width:100%;}
@@ -14,18 +14,20 @@
                         <td><strong>Author</strong></td>
                         <td><strong>Publish Date</strong></td>
                     </tr>
-                        {% for article in object_list %}
-                        {% if article.is_published %}
+                        {% for line in lines %}
+
                             <tr>
-                                <td><a href="{% url story_article_detail article.slug %}">{{ article.title }}</a></td>
+                                <td><a href="{% url story_article_detail line.slug %}">{{ line.title }}</a></td>
                                 <td>
-                                	{{ article.author.get_full_name }}
+                                	{{ line.author.get_full_name }}
                                 </td>
-                                <td>{{ article.publish_date|date:"D, M d, Y" }}</td>
+                                <td>{{ line.publish_date|date:"D, M d, Y" }}</td>
                             </tr>
-                        {% endif %}
+
                         {% endfor %}
                 </table>
+                {{ lines|pagination }}
+
         {% else %}
             <h2>No articles have been published yet.</h2>
         {% endif %}
