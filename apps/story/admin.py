@@ -36,9 +36,9 @@ class ArticleAdmin(ModelAdmin):
     date_hierarchy = 'publish_date'
     fieldsets = [
         (None, {'classes': ['edit'], 
-            'fields': (('title', 'slug'), 'author',
+            'fields': (('title', 'slug'), ('author', 'byline'),
                        ('publish_date', 'is_published', 'send_now'),
-                       'docfile', 'text', 'email_text'),
+                       'docfile', 'tags', 'text', 'email_text'),
             }),
     ]
 
