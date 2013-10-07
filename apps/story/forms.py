@@ -3,7 +3,6 @@ from models import Article
 from django.contrib.admin import widgets
 from datetimewidget.widgets import DateTimeWidget
 from suit_redactor.widgets import RedactorWidget
-from tinymce.widgets import TinyMCE
 
 class ArticleForm(forms.ModelForm):
     class Meta:

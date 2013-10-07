@@ -1,8 +1,25 @@
 from django.contrib import admin
-from django.contrib.admin import site, ModelAdmin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.admin import site, ModelAdmin, SimpleListFilter
 from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
+from django.utils.translation import ugettext_lazy as _
 from models import *
+
+
+class UserTypeFilter(SimpleListFilter):
+    title = 'User Type' # or use _('country') for translated title
+    parameter_name = 'user_type'
+
+    def lookups(self, request, model_admin):
+        usertypes = set([c.user_type for c in UserProfile.objects.all()])
+        return [(c, c) for c in usertypes]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(userprofile__user_type=self.value())
+        else:
+            return queryset
+
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
@@ -22,7 +39,20 @@ class UserProfileInline(admin.StackedInline):
         }),
     )
 
+
 class UserAdmin(UserAdmin):
+    list_display = ('get_pub_name', 'email', 'first_name', 'last_name', 'get_user_type', 'is_staff', )
+    list_display_links = ('get_pub_name', 'email', 'first_name', 'last_name', 'is_staff', 'get_user_type',)
+    list_filter = ('is_staff', UserTypeFilter,)
+
+
+    def get_user_type(self, user):
+        return ('%s' % user.get_profile().user_type)
+    get_user_type.short_description = "User Type"
+
+    def get_pub_name(self, user):
+        return ('%s' % user.get_profile().pub_name)
+    get_pub_name.short_description = "News Organization Name"
 
     inlines = (UserProfileInline, )
     
