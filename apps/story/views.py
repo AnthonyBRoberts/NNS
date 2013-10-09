@@ -79,6 +79,7 @@ def add_article(request):
             cleaned_text = replace_all(article.text, reps)
             article.text = cleaned_text
             article.save()
+            form.save_m2m()
             #if request.user.get_profile().user_type == 'Reporter':
                 #to_user = []
                 #for profile in UserProfile.objects.filter(user_type = 'Editor'):

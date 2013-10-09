@@ -11,21 +11,17 @@ from apps.account.models import UserProfile
 from tinymce.widgets import TinyMCE
 from taggit.models import Tag, TaggedItem
 
-class TagInline(admin.TabularInline):
-    model = Tag
 
 class ArticleAdminForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ArticleAdminForm, self).__init__(*args, **kwargs)
-        self.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
+        self.fields['author'].queryset = User.objects.filter(Q(userprofile__user_type = 'Reporter') | Q(userprofile__user_type = 'Editor'))
     class Meta:
         widgets = {
             'email_text': RedactorWidget(editor_options={'lang': 'en'}),
             'text': RedactorWidget(editor_options={'lang': 'en'}),
         }
         model = Article
-
-
 
     
 class ArticleAdmin(ModelAdmin):
