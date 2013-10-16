@@ -4,7 +4,7 @@ import os, sys
 
 
 __all__ = ['deploy', 'testing', 'run','collectstatic']
-=======
+
 
 
 def patch_python_path(f):
