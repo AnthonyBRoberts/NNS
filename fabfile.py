@@ -75,13 +75,13 @@ def testing():
 
 	@check_git_state
 	@needsdatabase
-	def __deploy():
-		print "Deploying your application"
+	def __testing():
+		print "Deploying your application to testing server"
 		print "----------------------------"
 
 		print "Migrations..."
 
-		for app in enumerate_apps():
+		for app in enumerate_apps(): 
 			local_migrate(app)
 			
 		if is_git_clean():
@@ -94,7 +94,7 @@ def testing():
 
 
 		print "Sync remote database"
-		remote_syncdb()
+		testing_syncdb("nns-test-server")
 
 
 		for app in ["djcelery"]:

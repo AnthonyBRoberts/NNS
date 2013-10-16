@@ -11,10 +11,13 @@ def needsdatabase(f):
     return wrap
 
 def remote_syncdb():
-    local("heroku run python manage.py syncdb --settings=settings.prod")
+    local("heroku run python manage.py syncdb --settings=settings.prod") 
 
-def what_is_my_database_url():
-    local("heroku config | grep POSTGRESQL")
+def testing_syncdb(app_name):
+    local("heroku run python manage.py syncdb --app %s --settings=settings.prod" % (app_name)) 
+
+def what_is_my_database_url(app_name):
+    local("heroku config --app %s | grep POSTGRESQL" % (app_name)) 
 
 def remote_migrate(app_name):
     if os.path.exists(os.path.join("./apps", app_name, "migrations")):
