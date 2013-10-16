@@ -108,7 +108,7 @@ def testing():
 		print "Transferring static files to S3"
 		collectstatic()	
 
-	__deploy()
+	__testing()
 
 
 @patch_python_path
