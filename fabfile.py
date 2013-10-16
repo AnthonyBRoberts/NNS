@@ -70,7 +70,7 @@ def deploy():
 @patch_python_path
 def testing():
 	from tools.git import check_git_state, is_git_clean
-	from tools.database import needsdatabase, local_migrate, remote_migrate, remote_syncdb
+	from tools.database import needsdatabase, local_migrate, remote_migrate, testing_syncdb
 	from tools.apps import enumerate_apps
 
 	@check_git_state

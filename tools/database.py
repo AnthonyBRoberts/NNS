@@ -14,7 +14,7 @@ def remote_syncdb():
     local("heroku run python manage.py syncdb --settings=settings.prod") 
 
 def testing_syncdb(app_name):
-    local("heroku run python manage.py syncdb --app %s --settings=settings.prod" % (app_name)) 
+    local("heroku run python manage.py syncdb --app nns-test-server --settings=settings.prod") 
 
 def what_is_my_database_url(app_name):
     local("heroku config --app %s | grep POSTGRESQL" % (app_name)) 
