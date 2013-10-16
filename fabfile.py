@@ -2,7 +2,10 @@ from fabric.api import *
 from functools import wraps
 import os, sys
 
+
 __all__ = ['deploy', 'testing', 'run','collectstatic']
+=======
+
 
 def patch_python_path(f):
 	@wraps(f)	 	
@@ -106,6 +109,7 @@ def testing():
 		collectstatic()	
 
 	__deploy()
+
 
 @patch_python_path
 def run():

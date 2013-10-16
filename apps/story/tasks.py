@@ -28,3 +28,4 @@ def send_published_article(sender, subject, byline, email_text, story_text, atta
             email.add_attachment(attachment) 
         email.send()
         time.sleep(1)
+
