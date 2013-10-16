@@ -2,7 +2,7 @@ from fabric.api import *
 from functools import wraps
 import os, sys
 
-__all__ = ['deploy','run','collectstatic']
+__all__ = ['deploy', 'testing', 'run','collectstatic']
 
 def patch_python_path(f):
 	@wraps(f)	 	
@@ -41,6 +41,49 @@ def deploy():
 		if is_git_clean():
 			print "Pushing code on Heroku"
 			local("git push heroku master")
+		else:
+			print "Committing migrations..."
+			local("git add .")
+			local("git commit -a -m '[DHB] data migrations'")
+
+
+		print "Sync remote database"
+		remote_syncdb()
+
+
+		for app in ["djcelery"]:
+			with settings(warn_only=True):
+				print "Migrating %s ..." % app
+				local("heroku run python manage.py migrate %s --settings=settings.prod" % (app))
+
+		for app in enumerate_apps():
+			remote_migrate(app)
+
+		print "Transferring static files to S3"
+		collectstatic()	
+
+	__deploy()
+
+@patch_python_path
+def testing():
+	from tools.git import check_git_state, is_git_clean
+	from tools.database import needsdatabase, local_migrate, remote_migrate, remote_syncdb
+	from tools.apps import enumerate_apps
+
+	@check_git_state
+	@needsdatabase
+	def __deploy():
+		print "Deploying your application"
+		print "----------------------------"
+
+		print "Migrations..."
+
+		for app in enumerate_apps():
+			local_migrate(app)
+			
+		if is_git_clean():
+			print "Pushing code on Heroku test server"
+			local("git push testing develop:master")
 		else:
 			print "Committing migrations..."
 			local("git add .")
