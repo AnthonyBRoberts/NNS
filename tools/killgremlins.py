@@ -60,7 +60,22 @@ def killgremlins(text):
 
 
 
-def replace_all(text, dic):
-    for i, j in dic.iteritems():
+def replace_all(text):
+
+    reps = {
+        u'\u201c': '\"', 
+        u'\u2019': '\'', 
+        u'\u2018': '\'', 
+        u'\u201d': '\"', 
+        u'\u2013': '-', 
+        u'\u2014': '--',
+        u'\u2026': '...',
+        u'\u2022': '- ',
+        u'\u2039': '<',
+        u'\u203A': '>',
+        u'\u2122': 'TM',
+        u'\u20dc': '~'
+    }
+    for i, j in reps.iteritems():
         text = text.replace(i, j)
     return text

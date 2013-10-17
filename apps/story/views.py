@@ -75,8 +75,7 @@ def add_article(request):
             article = form.save(commit=False)
             article.author = request.user
             article.publish_date = datetime.datetime.now()
-            reps = {u'\u201c': '\"', u'\u2019': '\'', u'\u2018': '\'', u'\u201d':'\"', u'\u2013': '-', u'\u2014': '--'}
-            cleaned_text = replace_all(article.text, reps)
+            cleaned_text = replace_all(article.text)
             article.text = cleaned_text
             article.save()
             form.save_m2m()
@@ -145,8 +144,7 @@ def edit_article(request, slug):
         else:
             form = Article_RForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
-            reps = {u'\u201c': '\"', u'\u2019': '\'', u'\u2018': '\'', u'\u201d':'\"', u'\u2013': '-', u'\u2014': '--'}
-            cleaned_text = replace_all(article.text, reps)
+            cleaned_text = replace_all(article.text)
             article.text = cleaned_text
             article = form.save()
             msg = "Article updated successfully"
