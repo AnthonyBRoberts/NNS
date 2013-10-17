@@ -13,13 +13,13 @@
                     <tr>
                         <td><strong>Title</strong></td>
                         <td><strong>Author</strong></td>
-                        <td><strong>Publish Date</strong></td>
+                        <td><strong>Article Created Date</strong></td>
                     </tr>
                         {% for line in lines %}
                             <tr>
                                 <td><a href="{% url story_article_detail line.slug %}">{{ line.title }}</a></td>
                                 <td> {{ line.author.get_full_name }} </td>
-                                <td> {{ line.publish_date|date:"D, M d, Y" }}</td>
+                                <td> {{ line.created_on|date:"D, M d, Y" }}</td>
                             </tr>
                         {% endfor %}
                 </table>

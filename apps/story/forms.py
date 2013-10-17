@@ -19,6 +19,9 @@ class ArticleForm(forms.ModelForm):
         }
 
 class Article_EForm(forms.ModelForm):
+
+    broadcast_only = forms.BooleanField(label='Send to broadcast only', required=False)
+
     class Meta:
         model = Article
         exclude = ['slug']
@@ -32,6 +35,12 @@ class Article_EForm(forms.ModelForm):
             'email_text': RedactorWidget(editor_options={'lang': 'en'}),
             'text': RedactorWidget(editor_options={'lang': 'en'}),
         }
+
+    #def save(self, *args, **kwargs):
+        #s = self.instance.article
+        #if self.cleaned_data['broadcast_only']:
+            
+
 
 class Article_RForm(forms.ModelForm):
     class Meta:

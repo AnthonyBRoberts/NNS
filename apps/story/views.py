@@ -90,18 +90,21 @@ def add_article(request):
                 subject = article.title
                 byline = article.byline
                 email_text = article.email_text
-                story_text = article.text #.decode('cp1252', errors='replace')
+                story_text = article.text 
                 docfile = article.docfile
-                try:
+                bc_only = article.broadcast_only
+                if article.docfile is not None:
                     attachment = docfile
-                    send_published_article.delay(request.user.email,
+                    send_published_article.delay(bc_only,
+                                                 request.user.email,
                                                  subject,
                                                  byline,
                                                  email_text,
                                                  story_text,
                                                  attachment)
-                except:
-                    send_published_article.delay(request.user.email,
+                else:
+                    send_published_article.delay(bc_only,
+                                                 request.user.email,
                                                  subject,
                                                  byline,
                                                  email_text,
@@ -154,16 +157,19 @@ def edit_article(request, slug):
                 email_text = article.email_text
                 story_text = smart_unicode(article.text)
                 byline = article.byline
+                bc_only = form.cleaned_data['broadcast_only']
                 if article.docfile is not None:
                     attachment = article.docfile
-                    send_published_article.delay(request.user.email,
+                    send_published_article.delay(bc_only,
+                                                 request.user.email,
                                                  subject,
                                                  byline,
                                                  email_text,
                                                  story_text,
                                                  attachment)
                 else:
-                    send_published_article.delay(request.user.email,
+                    send_published_article.delay(bc_only,
+                                                 request.user.email,
                                                  subject,
                                                  byline,
                                                  email_text,

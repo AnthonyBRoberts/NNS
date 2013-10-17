@@ -28,7 +28,7 @@ class Article(models.Model):
     publish_date = models.DateTimeField(default=datetime.datetime.now())
     objects = models.Manager()
     published = PublishedArticlesManager()
-    docfile = models.FileField(upload_to='docs/%Y/%m/%d/', blank=True, null=True)
+    docfile = models.FileField(upload_to='docs/%Y/%m/%d/', blank=True, null=True, verbose_name="Add Attachment")
     tags = TaggableManager(blank=True)
 
     def __unicode__(self):

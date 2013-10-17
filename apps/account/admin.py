@@ -7,7 +7,7 @@ from models import *
 
 
 class UserTypeFilter(SimpleListFilter):
-    title = 'User Type' # or use _('country') for translated title
+    title = 'User Type'
     parameter_name = 'user_type'
 
     def lookups(self, request, model_admin):
@@ -17,6 +17,21 @@ class UserTypeFilter(SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value():
             return queryset.filter(userprofile__user_type=self.value())
+        else:
+            return queryset
+
+
+class PubTypeFilter(SimpleListFilter):
+    title = 'Pub Type'
+    parameter_name = 'pub_type'
+
+    def lookups(self, request, model_admin):
+        pubtypes = set([c.pub_type for c in UserProfile.objects.all()])
+        return [(c, c) for c in pubtypes]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(userprofile__pub_type=self.value())
         else:
             return queryset
 
@@ -41,9 +56,9 @@ class UserProfileInline(admin.StackedInline):
 
 
 class UserAdmin(UserAdmin):
-    list_display = ('get_pub_name', 'email', 'first_name', 'last_name', 'get_user_type', 'is_staff', )
-    list_display_links = ('get_pub_name', 'email', 'first_name', 'last_name', 'is_staff', 'get_user_type',)
-    list_filter = ('is_staff', UserTypeFilter,)
+    list_display = ('get_pub_name', 'get_pub_type', 'email', 'first_name', 'last_name', 'get_user_type', 'is_staff', )
+    list_display_links = ('get_pub_name', 'get_pub_type', 'email', 'first_name', 'last_name', 'is_staff', 'get_user_type',)
+    list_filter = ('is_staff', UserTypeFilter, PubTypeFilter, )
 
 
     def get_user_type(self, user):
@@ -53,6 +68,10 @@ class UserAdmin(UserAdmin):
     def get_pub_name(self, user):
         return ('%s' % user.get_profile().pub_name)
     get_pub_name.short_description = "News Organization Name"
+
+    def get_pub_type(self, user):
+        return ('%s' % user.get_profile().pub_type)
+    get_pub_type.short_description = "News Organization Type"
 
     inlines = (UserProfileInline, )
     
