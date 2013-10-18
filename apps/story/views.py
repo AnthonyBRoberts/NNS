@@ -92,7 +92,7 @@ def add_article(request):
                 email_text = article.email_text
                 story_text = article.text 
                 docfile = article.docfile
-                bc_only = article.broadcast_only
+                bc_only = form.cleaned_data['broadcast_only']
                 if article.docfile is not None:
                     attachment = docfile
                     send_published_article.delay(bc_only,
