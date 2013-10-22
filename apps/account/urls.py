@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 import django.http
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from account.models import *
 from account.forms import *
 
@@ -42,4 +42,3 @@ urlpatterns = patterns('',
        'account.views.client_index',
        name='profiles_profile_list'),
     )
-    

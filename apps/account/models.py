@@ -4,7 +4,8 @@ from django import forms
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from django.contrib.localflavor.us.models import USStateField
+from localflavor.us.models import USStateField
+from localflavor.us.us_states import STATE_CHOICES
 from django.dispatch import receiver
 from django.utils import timezone
 from registration.signals import *
@@ -36,7 +37,7 @@ class UserProfile(models.Model):
     about = models.TextField(blank=True, null=True, verbose_name="Special Topics")
     address = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
-    state = USStateField(blank=True, null=True, default="NE")
+    state = USStateField()
     zipcode = models.CharField(max_length=5, blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
     pub_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Publication Name")

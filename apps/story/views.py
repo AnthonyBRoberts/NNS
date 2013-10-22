@@ -11,7 +11,6 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.encoding import smart_str, smart_unicode, force_unicode
-from django.views.generic.list_detail import object_list
 from notification import models as notification
 from story.models import Article
 from story.forms import *
