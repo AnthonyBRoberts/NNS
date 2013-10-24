@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap_toolkit %}
+{% load url from future %}
 {% block storylist %}
 
         {% if lines %}
@@ -17,7 +18,7 @@
                         {% for line in lines %}
 
                             <tr>
-                                <td><a href="{% url story_article_detail line.slug %}">{{ line.title }}</a></td>
+                                <td><a href="{% url 'story_article_detail' line.slug %}">{{ line.title }}</a></td>
                                 <td>
                                 	{{ line.author.get_full_name }}
                                 </td>
@@ -34,7 +35,7 @@
         <hr>
         <p>
             {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
-                <a href="{% url story_article_add %}"><button class="btn btn-large btn-primary" type="button">Create New Story</button></a>
+                <a href="{% url 'story_article_add' %}"><button class="btn btn-large btn-primary" type="button">Create New Story</button></a>
             {% endif %}
         </p>       
  

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-
-
+{% load bootstrap_toolkit %}
+{% load url from future %}
 {% block editorlist %}
 
 {{block.super}}
@@ -13,28 +13,32 @@ padding:5px;
 }
 </style>
 <table class="table table-striped table-bordered">
+    <thead>
     <tr>
         <td><strong>Editor Name</strong></td>
         <td><strong>Email</strong></td>
         <td><strong>Phone Number</strong></td>
     </tr>
-    {% for p in object_list %}
-        {% if p.user_type == 'Editor' %}
+    </thead>
+    <tbody>
+    {% for line in lines %}
+
         <tr>
         <td>
-            {{ p.user.get_full_name }}
+            {{ line.user.get_full_name }}
         </td>
         <td>
-            {{ p.user.email }}
+            {{ line.user.email }}
         </td>
         <td>
-            {{ p.formatted_phone }}
+            {{ line.formatted_phone }}
         </td>
         </tr>
-        {% endif %} 
-    {% endfor %}
-</table>
 
+    {% endfor %}
+    </tbody>
+</table>
+{{ lines|pagination }}
 {% else %}
         <h3>You do not have permission to view this page</h3>
 {% endif %}

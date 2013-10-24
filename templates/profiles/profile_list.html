@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap_toolkit %}
+{% load url from future %}
 {% block clientlist %}
 
 {{block.super}}
@@ -25,7 +26,7 @@ padding:15px;
     {% for line in lines %}
         <tr>
         <td>
-            <a href="{% url profiles_profile_detail line.user.username %}">{{ line.pub_name }}</a>
+            <a href="{% url 'profiles_profile_detail' line.user.username %}">{{ line.pub_name }}</a>
         </td>
         <td>
             {{ line.user.get_full_name }}
