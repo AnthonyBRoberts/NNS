@@ -15,6 +15,7 @@ django-bootstrap-toolkit==2.14.0
 django-celery==3.0.17
 django-datetime-widget==0.5.3a
 django-notification==1.1
+django-localflavor
 django-profiles==0.2
 django-registration==1.0
 -e git://github.com/bitmazk/django-registration-email#egg=registration_email
