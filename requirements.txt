@@ -16,7 +16,7 @@ django-celery==3.0.17
 django-datetime-widget==0.5.3a
 django-notification==1.1
 django-localflavor
-django-profiles==0.2
+-e git://github.com/AnthonyBRoberts/django-profiles#egg=django-profiles
 django-registration==1.0
 -e git://github.com/bitmazk/django-registration-email#egg=registration_email
 django-ses==0.4.1
