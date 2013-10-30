@@ -1,8 +1,8 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls.defaults import patterns, include, url
 from django.views.generic import TemplateView, ListView
 from django.conf import settings
 from django.contrib import admin
-from registration.views import RegistrationView
+from registration.views import register
 from registration_email.forms import EmailRegistrationForm
 from account.forms import *
 from account.models import UserProfile
@@ -20,7 +20,7 @@ urlpatterns = patterns('',
         )
     ),
     url(r'^accounts/register/$',
-        RegistrationView.register,
+        register,
         {'backend': 'registration.backends.simple.SimpleBackend',
         'template_name': 'registration/registration_form.html',
         'form_class': EmailRegistrationForm,
@@ -35,11 +35,15 @@ urlpatterns = patterns('',
     url(r'^admin/django-ses/', include('django_ses.urls')),
     url(r'^reporting/', include('django_ses.urls')),
     url(r'^story/', include('apps.story.urls')),
-    url(r'^reporters/',
-        'account.views.reporter_index',
+    url(r'^reporters/', 'profiles.views.profile_list',
+        {
+            'template_name': 'profiles/reporter_list.html'
+        },
         name='profiles_reporter_list'),
-    url(r'^editors/', 
-        'account.views.editor_index',
+    url(r'^editors/', 'profiles.views.profile_list',
+        {
+            'template_name': 'profiles/editor_list.html'
+        },
         name='profiles_editor_list'),
     url(r'^profiles/', include('apps.account.urls')),
 )
