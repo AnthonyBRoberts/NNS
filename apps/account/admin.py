@@ -59,6 +59,8 @@ class UserAdmin(UserAdmin):
     list_display = ('get_pub_name', 'get_pub_type', 'email', 'first_name', 'last_name', 'get_user_type', 'is_staff', )
     list_display_links = ('get_pub_name', 'get_pub_type', 'email', 'first_name', 'last_name', 'is_staff', 'get_user_type',)
     list_filter = ('is_staff', UserTypeFilter, PubTypeFilter, )
+    search_fields = ['email', 'first_name', 'last_name', 
+                    'userprofile__pub_name', 'userprofile__about', 'userprofile__user_type',]
 
 
     def get_user_type(self, user):
