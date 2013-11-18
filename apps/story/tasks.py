@@ -1,4 +1,3 @@
-import logging
 from celery import task
 from django.core.servers.basehttp import FileWrapper
 from django.db.models import Q
@@ -32,5 +31,4 @@ def send_published_article(bc_only, sender, subject, byline, email_text, story_t
         if attachment:
             email.add_attachment(attachment) 
         email.send()
-        time.sleep(1)
-
+        time.sleep(5)
