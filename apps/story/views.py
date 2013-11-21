@@ -111,8 +111,8 @@ def add_article(request):
                     else:
                         send_published_article.delay(date_string, request.user.email, r, subject,
                                                         byline, email_text, story_text)
-                    msg = "Article published successfully"
-                    messages.success(request, msg, fail_silently=True)
+                msg = "Article published successfully"
+                messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
