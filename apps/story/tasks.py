@@ -1,9 +1,11 @@
 import logging
 from celery import task
 from django.core.servers.basehttp import FileWrapper
+from django.core.files import File
 from django.db.models import Q
 from apps.account.models import UserProfile
-from story.email import EMail
+from story.email import EMail, log_email
+import datetime
 import time
 
 @task(name='send-email')
@@ -13,6 +15,10 @@ def send_published_article(bc_only, sender, subject, byline, email_text, story_t
     Runs when an article is saved and both is_published & send_now==True
     """
     recipients = []
+    date_string = time.strftime("%Y-%m-%d-%H-%M")
+    logFile = open('static/email_logs/sent_emails-' + date_string + '.txt', 'w')
+    logFile.write("Recipients for " + date_string + ":\n")
+    logFile.close()
     for profile in UserProfile.objects.filter(user_type = 'Editor'):
         recipients.append(profile.user.email)
     for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
@@ -32,5 +38,8 @@ def send_published_article(bc_only, sender, subject, byline, email_text, story_t
         if attachment:
             email.add_attachment(attachment) 
         email.send()
-        time.sleep(1)
+        log_email(r, date_string)
+        time.sleep(1)  
+    
+
 
