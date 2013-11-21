@@ -1,5 +1,6 @@
 import os
 import redis
+import time
 import datetime
 from tools.killgremlins import killgremlins, replace_all
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -16,6 +17,7 @@ from story.models import Article
 from story.forms import *
 from story.tasks import send_published_article
 from apps.account.models import UserProfile
+
 
 
 @login_required 
@@ -78,11 +80,6 @@ def add_article(request):
             article.text = cleaned_text
             article.save()
             form.save_m2m()
-            #if request.user.get_profile().user_type == 'Reporter':
-                #to_user = []
-                #for profile in UserProfile.objects.filter(user_type = 'Editor'):
-                    #to_user.append(profile.user.email)
-                #notification.send(to_user, "reporter_story_update", {"from_user": request.user})
             msg = "Article saved successfully"
             messages.success(request, msg, fail_silently=True)
             if article.is_published and article.send_now and article.publish_date <= datetime.datetime.today():
@@ -90,26 +87,32 @@ def add_article(request):
                 byline = article.byline
                 email_text = article.email_text
                 story_text = article.text 
-                docfile = article.docfile
                 bc_only = form.cleaned_data['broadcast_only']
-                if article.docfile is not None:
-                    attachment = docfile
-                    send_published_article.delay(bc_only,
-                                                 request.user.email,
-                                                 subject,
-                                                 byline,
-                                                 email_text,
-                                                 story_text,
-                                                 attachment)
+                recipients = []
+                date_string = time.strftime("%Y-%m-%d-%H-%M")
+                logFile = open('static/email_logs/sent_emails-' + date_string + '.txt', 'w')
+                logFile.write("Recipients for " + date_string + ":\n")
+                logFile.close()
+                for profile in UserProfile.objects.filter(user_type = 'Editor'):
+                    recipients.append(profile.user.email)
+                for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
+                    recipients.append(profile.user.email)
+                if bc_only:
+                    for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
+                        recipients.append(profile.user.email)
                 else:
-                    send_published_article.delay(bc_only,
-                                                 request.user.email,
-                                                 subject,
-                                                 byline,
-                                                 email_text,
-                                                 story_text)
-                msg = "Article published successfully"
-                messages.success(request, msg, fail_silently=True)
+                    for profile in UserProfile.objects.filter(user_type = 'Client'):        
+                        recipients.append(profile.user.email)
+                for r in recipients:
+                    if article.docfile is not None:
+                        attachment = article.docfile
+                        send_published_article.delay(date_string, request.user.email, r, subject,
+                                                        byline, email_text, story_text, attachment)
+                    else:
+                        send_published_article.delay(date_string, request.user.email, r, subject,
+                                                        byline, email_text, story_text)
+                    msg = "Article published successfully"
+                    messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
@@ -153,29 +156,35 @@ def edit_article(request, slug):
             messages.success(request, msg, fail_silently=True)
             if article.is_published and article.send_now and article.publish_date <= datetime.datetime.today():
                 subject = article.title
-                email_text = article.email_text
-                story_text = smart_unicode(article.text)
                 byline = article.byline
+                email_text = article.email_text
+                story_text = article.text 
                 bc_only = form.cleaned_data['broadcast_only']
-                if article.docfile is not None:
-                    attachment = article.docfile
-                    send_published_article.delay(bc_only,
-                                                 request.user.email,
-                                                 subject,
-                                                 byline,
-                                                 email_text,
-                                                 story_text,
-                                                 attachment)
+                recipients = []
+                date_string = time.strftime("%Y-%m-%d-%H-%M")
+                logFile = open('static/email_logs/sent_emails-' + date_string + '.txt', 'w')
+                logFile.write("Recipients for " + date_string + ":\n")
+                logFile.close()
+                for profile in UserProfile.objects.filter(user_type = 'Editor'):
+                    recipients.append(profile.user.email)
+                for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
+                    recipients.append(profile.user.email)
+                if bc_only:
+                    for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
+                        recipients.append(profile.user.email)
                 else:
-                    send_published_article.delay(bc_only,
-                                                 request.user.email,
-                                                 subject,
-                                                 byline,
-                                                 email_text,
-                                                 story_text)
-                                                 
+                    for profile in UserProfile.objects.filter(user_type = 'Client'):        
+                        recipients.append(profile.user.email)
+                for r in recipients:
+                    if article.docfile is not None:
+                        attachment = article.docfile
+                        send_published_article.delay(date_string, request.user.email, r, subject,
+                                                        byline, email_text, story_text, attachment)
+                    else:
+                        send_published_article.delay(date_string, request.user.email, r, subject,
+                                                        byline, email_text, story_text)
                 msg = "Article published successfully"
-                messages.success(request, msg, fail_silently=True)   
+                messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
@@ -205,5 +214,3 @@ def edit_article(request, slug):
                                   'article': article,
                               },
                               context_instance=RequestContext(request))
-
-
