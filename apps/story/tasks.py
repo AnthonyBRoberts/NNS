@@ -1,5 +1,6 @@
 from celery import task
 from story.email import EMail, log_email
+import logging
 import datetime
 import time
 
@@ -18,3 +19,7 @@ def send_published_article(date_string, sender, recipient, subject, byline, emai
     email.send()
     #log_email(recipient, date_string)
     time.sleep(1)
+
+@task()
+def report_errors():
+        logging.error("reporting errors")

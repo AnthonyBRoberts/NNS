@@ -116,20 +116,13 @@ def add_article(request):
             return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
-            form = Article_RForm(
-                initial={'byline': request.user.get_profile().byline}
-        )
+            form = Article_RForm(initial={'byline': request.user.get_profile().byline})
         elif request.user.get_profile().user_type == 'Editor':
-            form = Article_EForm(
-                initial={'byline': request.user.get_profile().byline,
-                         'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'
-                         }
-        )
+            form = Article_EForm(initial={'byline': request.user.get_profile().byline,
+                         'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'})
             form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
         else:
-            form = Article_RForm(
-                initial={'byline': request.user.get_profile().byline}
-        )
+            form = Article_RForm(initial={'byline': request.user.get_profile().byline})
     return render_to_response('story/article_form.html', 
                               { 'form': form },
                               context_instance=RequestContext(request))
@@ -188,26 +181,18 @@ def edit_article(request, slug):
             return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
-            form = Article_RForm(instance=article,
-                initial={'byline': article.author.get_profile().byline}
-            )
+            form = Article_RForm(instance=article, initial={'byline': article.author.get_profile().byline})
         elif request.user.get_profile().user_type == 'Editor':
             if article.email_text:
-                form = Article_EForm(instance=article,
-                    initial={'email_text': article.email_text}
-                )
+                form = Article_EForm(instance=article, initial={'email_text': article.email_text})
                 form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
             else:
                 form = Article_EForm(instance=article,
                     initial={'byline': article.author.get_profile().byline,
-                             'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'
-                             }
-                )
+                             'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'})
                 form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
         else:
-            form = Article_RForm(instance=article,
-                initial={'byline': article.author.get_profile().byline}
-            )
+            form = Article_RForm(instance=article, initial={'byline': article.author.get_profile().byline})
     return render_to_response('story/article_form.html', 
                               { 
                                   'form': form,
