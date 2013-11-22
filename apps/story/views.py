@@ -105,9 +105,11 @@ def add_article(request):
                         attachment = article.docfile
                         send_published_article.delay(request.user.email, r, bcc, subject,
                                                         byline, email_text, story_text, attachment)
+                        time.sleep(1)
                     else:
                         send_published_article.delay(request.user.email, r, bcc, subject,
                                                         byline, email_text, story_text)
+                        time.sleep(1)
                 msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
             return redirect(article)
@@ -167,9 +169,11 @@ def edit_article(request, slug):
                         attachment = article.docfile
                         send_published_article.delay(request.user.email, r, bcc, subject,
                                                         byline, email_text, story_text, attachment)
+                        time.sleep(1)
                     else:
                         send_published_article.delay(request.user.email, r, bcc, subject,
                                                         byline, email_text, story_text)
+                        time.sleep(1)
                 msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
             return redirect(article)

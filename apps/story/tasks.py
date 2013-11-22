@@ -16,7 +16,6 @@ def send_published_article(sender, recipient, bcc, subject, byline, email_text, 
     if attachment:
         email.add_attachment(attachment)
     email.send()
-    time.sleep(1)
 
 @task()
 def report_errors():
