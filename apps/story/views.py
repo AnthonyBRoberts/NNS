@@ -1,5 +1,6 @@
 import os
 import redis
+import time
 import datetime
 from tools.killgremlins import killgremlins, replace_all
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -79,11 +80,6 @@ def add_article(request):
             article.text = cleaned_text
             article.save()
             form.save_m2m()
-            #if request.user.get_profile().user_type == 'Reporter':
-                #to_user = []
-                #for profile in UserProfile.objects.filter(user_type = 'Editor'):
-                    #to_user.append(profile.user.email)
-                #notification.send(to_user, "reporter_story_update", {"from_user": request.user})
             msg = "Article saved successfully"
             messages.success(request, msg, fail_silently=True)
             if article.is_published and article.send_now and article.publish_date <= datetime.datetime.today():
@@ -91,43 +87,39 @@ def add_article(request):
                 byline = article.byline
                 email_text = article.email_text
                 story_text = article.text 
-                docfile = article.docfile
                 bc_only = form.cleaned_data['broadcast_only']
-                if article.docfile is not None:
-                    attachment = docfile
-                    send_published_article.delay(bc_only,
-                                                 request.user.email,
-                                                 subject,
-                                                 byline,
-                                                 email_text,
-                                                 story_text,
-                                                 attachment)
+                bcc = ['nns.aroberts@gmail.com',]
+                recipients = []
+                for profile in UserProfile.objects.filter(user_type = 'Editor'):
+                    recipients.append(profile.user.email)
+                for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
+                    recipients.append(profile.user.email)
+                if bc_only:
+                    for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
+                        recipients.append(profile.user.email)
                 else:
-                    send_published_article.delay(bc_only,
-                                                 request.user.email,
-                                                 subject,
-                                                 byline,
-                                                 email_text,
-                                                 story_text)
+                    for profile in UserProfile.objects.filter(user_type = 'Client'):        
+                        recipients.append(profile.user.email)
+                for r in recipients:
+                    if article.docfile is not None:
+                        attachment = article.docfile
+                        send_published_article.delay(request.user.email, r, bcc, subject,
+                                                        byline, email_text, story_text, attachment)
+                    else:
+                        send_published_article.delay(request.user.email, r, bcc, subject,
+                                                        byline, email_text, story_text)
                 msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
-            form = Article_RForm(
-                initial={'byline': request.user.get_profile().byline}
-        )
+            form = Article_RForm(initial={'byline': request.user.get_profile().byline})
         elif request.user.get_profile().user_type == 'Editor':
-            form = Article_EForm(
-                initial={'byline': request.user.get_profile().byline,
-                         'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'
-                         }
-        )
+            form = Article_EForm(initial={'byline': request.user.get_profile().byline,
+                         'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'})
             form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
         else:
-            form = Article_RForm(
-                initial={'byline': request.user.get_profile().byline}
-        )
+            form = Article_RForm(initial={'byline': request.user.get_profile().byline})
     return render_to_response('story/article_form.html', 
                               { 'form': form },
                               context_instance=RequestContext(request))
@@ -154,57 +146,50 @@ def edit_article(request, slug):
             messages.success(request, msg, fail_silently=True)
             if article.is_published and article.send_now and article.publish_date <= datetime.datetime.today():
                 subject = article.title
-                email_text = article.email_text
-                story_text = smart_unicode(article.text)
                 byline = article.byline
+                email_text = article.email_text
+                story_text = article.text 
                 bc_only = form.cleaned_data['broadcast_only']
-                if article.docfile is not None:
-                    attachment = article.docfile
-                    send_published_article.delay(bc_only,
-                                                 request.user.email,
-                                                 subject,
-                                                 byline,
-                                                 email_text,
-                                                 story_text,
-                                                 attachment)
+                bcc = ['nns.aroberts@gmail.com',]
+                recipients = []
+                for profile in UserProfile.objects.filter(user_type = 'Editor'):
+                    recipients.append(profile.user.email)
+                for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
+                    recipients.append(profile.user.email)
+                if bc_only:
+                    for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
+                        recipients.append(profile.user.email)
                 else:
-                    send_published_article.delay(bc_only,
-                                                 request.user.email,
-                                                 subject,
-                                                 byline,
-                                                 email_text,
-                                                 story_text)
-                                                 
+                    for profile in UserProfile.objects.filter(user_type = 'Client'):        
+                        recipients.append(profile.user.email)
+                for r in recipients:
+                    if article.docfile is not None:
+                        attachment = article.docfile
+                        send_published_article.delay(request.user.email, r, bcc, subject,
+                                                        byline, email_text, story_text, attachment)
+                    else:
+                        send_published_article.delay(request.user.email, r, bcc, subject,
+                                                        byline, email_text, story_text)
                 msg = "Article published successfully"
-                messages.success(request, msg, fail_silently=True)   
+                messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
-            form = Article_RForm(instance=article,
-                initial={'byline': article.author.get_profile().byline}
-            )
+            form = Article_RForm(instance=article, initial={'byline': article.author.get_profile().byline})
         elif request.user.get_profile().user_type == 'Editor':
             if article.email_text:
-                form = Article_EForm(instance=article,
-                    initial={'email_text': article.email_text}
-                )
+                form = Article_EForm(instance=article, initial={'email_text': article.email_text})
                 form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
             else:
                 form = Article_EForm(instance=article,
                     initial={'byline': article.author.get_profile().byline,
-                             'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'
-                             }
-                )
+                             'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'})
                 form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
         else:
-            form = Article_RForm(instance=article,
-                initial={'byline': article.author.get_profile().byline}
-            )
+            form = Article_RForm(instance=article, initial={'byline': article.author.get_profile().byline})
     return render_to_response('story/article_form.html', 
                               { 
                                   'form': form,
                                   'article': article,
                               },
                               context_instance=RequestContext(request))
-
-
