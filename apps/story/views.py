@@ -86,7 +86,7 @@ def add_article(request):
                 subject = article.title
                 byline = article.byline
                 email_text = article.email_text
-                story_text = article.text 
+                story_text = article.text
                 bc_only = form.cleaned_data['broadcast_only']
                 bcc = ['nns.aroberts@gmail.com',]
                 recipients = []
@@ -100,13 +100,14 @@ def add_article(request):
                 else:
                     for profile in UserProfile.objects.filter(user_type = 'Client'):        
                         recipients.append(profile.user.email)
-                for r in recipients:
-                    if article.docfile is not None:
+                if article.docfile is not None:       
+                    for r in recipients:
                         attachment = article.docfile
                         send_published_article.delay(request.user.email, r, bcc, subject,
                                                         byline, email_text, story_text, attachment)
                         time.sleep(1)
-                    else:
+                else:
+                    for r in recipients:
                         send_published_article.delay(request.user.email, r, bcc, subject,
                                                         byline, email_text, story_text)
                         time.sleep(1)
@@ -164,13 +165,14 @@ def edit_article(request, slug):
                 else:
                     for profile in UserProfile.objects.filter(user_type = 'Client'):        
                         recipients.append(profile.user.email)
-                for r in recipients:
-                    if article.docfile is not None:
+                if article.docfile is not None:
+                    for r in recipients:
                         attachment = article.docfile
                         send_published_article.delay(request.user.email, r, bcc, subject,
                                                         byline, email_text, story_text, attachment)
                         time.sleep(1)
-                    else:
+                else:
+                    for r in recipients:
                         send_published_article.delay(request.user.email, r, bcc, subject,
                                                         byline, email_text, story_text)
                         time.sleep(1)
@@ -180,7 +182,7 @@ def edit_article(request, slug):
     else:
         if request.user.get_profile().user_type == 'Reporter':
             form = Article_RForm(instance=article, initial={'byline': article.author.get_profile().byline})
-        elif request.user.get_profile().user_type == 'Editor':
+        elif request.user.get_profile().user_type == 'Editor':  
             if article.email_text:
                 form = Article_EForm(instance=article, initial={'email_text': article.email_text})
                 form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
