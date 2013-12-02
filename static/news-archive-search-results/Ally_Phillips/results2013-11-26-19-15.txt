@@ -1,6 +1,0 @@
-pub number: 636
-search results: <p>n Staroscik.
-11th Grade?Sami Dush, Annika Gleason, Michael Hansen, Abby Hargens, Kellen Korinek, Casey Kro
-8th Grade?Rachel Baustert, Shelby Budde, Abby Hadenfeldt, Heather Hewitt, Emily Krolikowski, <span class="highlight">Ally Phillips</span>.
-7th Grade?Macy Baldwin, Sydnie Budde, Brandy Friedrichsen, Madison Hickok, Elizabeth Lindell, Grace McDonald, Nathaniel Ruhl, Samantha Simdom, Cydney Turek.
-1st Quarter B Honor Roll 12th Grade?Whitn</p>
