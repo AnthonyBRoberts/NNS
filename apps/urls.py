@@ -35,15 +35,9 @@ urlpatterns = patterns('',
     url(r'^admin/django-ses/', include('django_ses.urls')),
     url(r'^reporting/', include('django_ses.urls')),
     url(r'^story/', include('apps.story.urls')),
-    url(r'^reporters/', 'profiles.views.profile_list',
-        {
-            'template_name': 'profiles/reporter_list.html'
-        },
+    url(r'^reporters/', 'account.views.reporter_index',
         name='profiles_reporter_list'),
-    url(r'^editors/', 'profiles.views.profile_list',
-        {
-            'template_name': 'profiles/editor_list.html'
-        },
+    url(r'^editors/', 'account.views.editor_index',
         name='profiles_editor_list'),
     url(r'^profiles/', include('apps.account.urls')),
 )

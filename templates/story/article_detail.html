@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap_toolkit %}
-
+{% load url from future %}
 {% block storycontent %}
 
 {% load markup %}
@@ -31,12 +31,12 @@
 			<div class="well" align="center">  
     		{% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}  
         	<h3>Actions</h3>
-            	<a href="{% url story_article_edit object.slug %}"><button class="btn btn-large btn-block" type="button">Edit this article</button></a>
+            	<a href="{% url 'story_article_edit' object.slug %}"><button class="btn btn-large btn-block" type="button">Edit this article</button></a>
         	<h3>Go To:</h3>
-            	<p><a href="{% url story_article_index %}"><button class="btn btn-large btn-block" type="button">Published Articles</button></a></p>
+            	<p><a href="{% url 'story_article_index' %}"><button class="btn btn-large btn-block" type="button">Published Articles</button></a></p>
            	 <p><a href="/story/inprogress"><button class="btn btn-large btn-block" type="button">Articles in Progress</button></a></p>
         	{% else %}
-			<a href="{% url story_article_index %}"><button class="btn btn-large btn-block" type="button">All Stories</button></a>
+			<a href="{% url 'story_article_index' %}"><button class="btn btn-large btn-block" type="button">All Stories</button></a>
 			{% endif %}
     	</div>                
 	</div>

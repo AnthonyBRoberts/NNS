@@ -12,12 +12,12 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.encoding import smart_str, smart_unicode, force_unicode
-from django.views.generic.list_detail import object_list
 from notification import models as notification
 from story.models import Article
 from story.forms import *
-from story.tasks import send_published_article
+from story.tasks import create_email_batch
 from apps.account.models import UserProfile
+
 
 
 @login_required 
@@ -86,10 +86,10 @@ def add_article(request):
                 subject = article.title
                 byline = article.byline
                 email_text = article.email_text
-                story_text = article.text
+                story_text = article.text 
                 bc_only = form.cleaned_data['broadcast_only']
-                bcc = ['nns.aroberts@gmail.com',]
                 recipients = []
+                date_string = time.strftime("%Y-%m-%d-%H-%M")
                 for profile in UserProfile.objects.filter(user_type = 'Editor'):
                     recipients.append(profile.user.email)
                 for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
@@ -100,17 +100,13 @@ def add_article(request):
                 else:
                     for profile in UserProfile.objects.filter(user_type = 'Client'):        
                         recipients.append(profile.user.email)
-                if article.docfile is not None:       
-                    for r in recipients:
-                        attachment = article.docfile
-                        send_published_article.delay(request.user.email, r, bcc, subject,
-                                                        byline, email_text, story_text, attachment)
-                        time.sleep(1)
+                if article.docfile is not None:
+                    attachment = article.docfile
+                    create_email_batch.delay(date_string, request.user.email, recipients, subject,
+                                                    byline, email_text, story_text, attachment)
                 else:
-                    for r in recipients:
-                        send_published_article.delay(request.user.email, r, bcc, subject,
-                                                        byline, email_text, story_text)
-                        time.sleep(1)
+                    create_email_batch.delay(date_string, request.user.email, recipients, subject,
+                                                    byline, email_text, story_text)
                 msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
             return redirect(article)
@@ -153,8 +149,8 @@ def edit_article(request, slug):
                 email_text = article.email_text
                 story_text = article.text 
                 bc_only = form.cleaned_data['broadcast_only']
-                bcc = ['nns.aroberts@gmail.com',]
                 recipients = []
+                date_string = time.strftime("%Y-%m-%d-%H-%M")
                 for profile in UserProfile.objects.filter(user_type = 'Editor'):
                     recipients.append(profile.user.email)
                 for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
@@ -166,23 +162,19 @@ def edit_article(request, slug):
                     for profile in UserProfile.objects.filter(user_type = 'Client'):        
                         recipients.append(profile.user.email)
                 if article.docfile is not None:
-                    for r in recipients:
-                        attachment = article.docfile
-                        send_published_article.delay(request.user.email, r, bcc, subject,
-                                                        byline, email_text, story_text, attachment)
-                        time.sleep(1)
+                    attachment = article.docfile
+                    create_email_batch.delay(date_string, request.user.email, recipients, subject,
+                                                    byline, email_text, story_text, attachment)
                 else:
-                    for r in recipients:
-                        send_published_article.delay(request.user.email, r, bcc, subject,
-                                                        byline, email_text, story_text)
-                        time.sleep(1)
+                    create_email_batch.delay(date_string, request.user.email, recipients, subject,
+                                                    byline, email_text, story_text)
                 msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
             form = Article_RForm(instance=article, initial={'byline': article.author.get_profile().byline})
-        elif request.user.get_profile().user_type == 'Editor':  
+        elif request.user.get_profile().user_type == 'Editor':
             if article.email_text:
                 form = Article_EForm(instance=article, initial={'email_text': article.email_text})
                 form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))

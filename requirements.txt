@@ -1,4 +1,4 @@
-Django==1.4
+Django==1.5.4
 Fabric==1.4.3
 HireFire==0.1
 PyYAML==3.10
@@ -12,10 +12,11 @@ celery==3.0.15
 dj-database-url==0.2.1
 django-appconf==0.6
 django-bootstrap-toolkit==2.14.0
-django-celery==3.0.11
+django-celery==3.0.17
 django-datetime-widget==0.5.3a
 django-notification==1.1
-django-profiles==0.2
+django-localflavor
+-e git://github.com/AnthonyBRoberts/django-profiles#egg=django-profiles
 django-registration==0.8
 -e git://github.com/bitmazk/django-registration-email@3112a175a7f1fc220c6abedeb9f45094fb4ab355#egg=django_registration_email-dev
 django-ses==0.4.1
@@ -25,7 +26,6 @@ django-suit==0.2.4
 django-suit-redactor==0.0.2
 django-taggit==0.10a1
 django-templated-email==0.4.9
-django-tinymce==1.5.1
 docutils==0.10
 gevent==0.13.7
 greenlet==0.4.0
