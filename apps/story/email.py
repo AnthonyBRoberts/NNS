@@ -60,7 +60,7 @@ class EMail(object):
 def log_email(email, date_string):
     
     with open('static/email_logs/temp.txt', 'w') as tempFile:
-            tempFile.write(email + "\n")
+        tempFile.write(email + "\n")
     f = open('static/email_logs/temp.txt', 'r')
     temp = f.read()
     f.close()

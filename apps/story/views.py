@@ -15,7 +15,7 @@ from django.utils.encoding import smart_str, smart_unicode, force_unicode
 from notification import models as notification
 from story.models import Article
 from story.forms import *
-from story.tasks import send_published_article
+from story.tasks import create_email_batch
 from apps.account.models import UserProfile
 
 
@@ -106,10 +106,10 @@ def add_article(request):
                 for r in recipients:
                     if article.docfile is not None:
                         attachment = article.docfile
-                        send_published_article.delay(date_string, request.user.email, r, subject,
+                        create_email_batch.delay(date_string, request.user.email, r, subject,
                                                         byline, email_text, story_text, attachment)
                     else:
-                        send_published_article.delay(date_string, request.user.email, r, subject,
+                        create_email_batch.delay(date_string, request.user.email, r, subject,
                                                         byline, email_text, story_text)
                 msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
@@ -168,14 +168,13 @@ def edit_article(request, slug):
                 else:
                     for profile in UserProfile.objects.filter(user_type = 'Client'):        
                         recipients.append(profile.user.email)
-                for r in recipients:
-                    if article.docfile is not None:
-                        attachment = article.docfile
-                        send_published_article.delay(date_string, request.user.email, r, subject,
-                                                        byline, email_text, story_text, attachment)
-                    else:
-                        send_published_article.delay(date_string, request.user.email, r, subject,
-                                                        byline, email_text, story_text)
+                if article.docfile is not None:
+                    attachment = article.docfile
+                    create_email_batch.delay(date_string, request.user.email, recipients, subject,
+                                                    byline, email_text, story_text, attachment)
+                else:
+                    create_email_batch.delay(date_string, request.user.email, recipients, subject,
+                                                    byline, email_text, story_text)
                 msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
             return redirect(article)
