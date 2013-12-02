@@ -143,7 +143,7 @@ def get_results(start_date, end_date, date_info):
 		control2 = br.form.find_control("start_date")
 		control3 = br.form.find_control("end_date")
 		control4 = br.form.find_control("publication_filter")
-		control1.value = "Demetria Stephens"
+		control1.value = "Daniel Wheaton"
 		control2.value = start_date
 		control3.value = end_date
 		control4.value = [pub]
@@ -156,9 +156,9 @@ def get_results(start_date, end_date, date_info):
   
 week = timedelta(days=-7)
 today = datetime.today()
-end_date = today + (week*25)
+end_date = today + (week*1)
 start_date = end_date + week
-stop_search_week = today + (week*48)
+stop_search_week = today + (week*3)
 formatted_end_date = end_date.strftime("%m/%d/%Y")
 formatted_start_date = start_date.strftime("%m/%d/%Y")
 date_info = "Results for " + formatted_start_date + " to " + formatted_end_date + ".\n \n"
