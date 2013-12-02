@@ -103,14 +103,13 @@ def add_article(request):
                 else:
                     for profile in UserProfile.objects.filter(user_type = 'Client'):        
                         recipients.append(profile.user.email)
-                for r in recipients:
-                    if article.docfile is not None:
-                        attachment = article.docfile
-                        create_email_batch.delay(date_string, request.user.email, r, subject,
-                                                        byline, email_text, story_text, attachment)
-                    else:
-                        create_email_batch.delay(date_string, request.user.email, r, subject,
-                                                        byline, email_text, story_text)
+                if article.docfile is not None:
+                    attachment = article.docfile
+                    create_email_batch.delay(date_string, request.user.email, recipients, subject,
+                                                    byline, email_text, story_text, attachment)
+                else:
+                    create_email_batch.delay(date_string, request.user.email, recipients, subject,
+                                                    byline, email_text, story_text)
                 msg = "Article published successfully"
                 messages.success(request, msg, fail_silently=True)
             return redirect(article)
