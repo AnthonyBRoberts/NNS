@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     ),
     url(r'^accounts/register/$',
         register,
-        {'backend': 'registration.backends.simple.SimpleBackend',
+        {'backend': 'registration.backends.default.DefaultBackend',
         'template_name': 'registration/registration_form.html',
         'form_class': EmailRegistrationForm,
         'success_url': getattr(
