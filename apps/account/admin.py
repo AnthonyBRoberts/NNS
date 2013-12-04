@@ -59,19 +59,24 @@ class UserAdmin(UserAdmin):
     list_display = ('get_pub_name', 'get_pub_type', 'email', 'first_name', 'last_name', 'get_user_type', 'is_staff', )
     list_display_links = ('get_pub_name', 'get_pub_type', 'email', 'first_name', 'last_name', 'is_staff', 'get_user_type',)
     list_filter = ('is_staff', UserTypeFilter, PubTypeFilter, )
+    search_fields = ['email', 'first_name', 'last_name', 
+                    'userprofile__pub_name', 'userprofile__about', 'userprofile__user_type',]
 
 
     def get_user_type(self, user):
         return ('%s' % user.get_profile().user_type)
     get_user_type.short_description = "User Type"
+    get_user_type.admin_order_field = "userprofile__user_type"
 
     def get_pub_name(self, user):
         return ('%s' % user.get_profile().pub_name)
     get_pub_name.short_description = "News Organization Name"
+    get_pub_name.admin_order_field = "userprofile__pub_name"
 
     def get_pub_type(self, user):
         return ('%s' % user.get_profile().pub_type)
     get_pub_type.short_description = "News Organization Type"
+    get_pub_type.admin_order_field = "userprofile__pub_type"
 
     inlines = (UserProfileInline, )
     

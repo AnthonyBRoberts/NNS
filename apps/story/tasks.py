@@ -29,7 +29,7 @@ def send_published_article(date_string, sender, recipient, subject, byline, emai
     if attachment:
         email.add_attachment(attachment)
     email.send()
-    #log_email(recipient, date_string)
+
 
 @task()
 def report_errors():

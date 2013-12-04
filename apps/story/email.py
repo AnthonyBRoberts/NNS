@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from apps.account.models import UserProfile
 import time
 
+
 class EMail(object):
     """
     A wrapper around Django's EmailMultiAlternatives
@@ -68,4 +69,3 @@ def log_email(email, date_string):
         temp2 = f2.read()
     with open('static/email_logs/sent_emails-' + date_string + '.txt', 'w') as logFile:
         logFile.write(temp2 + temp)
-

@@ -90,9 +90,6 @@ def add_article(request):
                 bc_only = form.cleaned_data['broadcast_only']
                 recipients = []
                 date_string = time.strftime("%Y-%m-%d-%H-%M")
-                logFile = open('static/email_logs/sent_emails-' + date_string + '.txt', 'w')
-                logFile.write("Recipients for " + date_string + ":\n")
-                logFile.close()
                 for profile in UserProfile.objects.filter(user_type = 'Editor'):
                     recipients.append(profile.user.email)
                 for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
@@ -154,9 +151,6 @@ def edit_article(request, slug):
                 bc_only = form.cleaned_data['broadcast_only']
                 recipients = []
                 date_string = time.strftime("%Y-%m-%d-%H-%M")
-                logFile = open('static/email_logs/sent_emails-' + date_string + '.txt', 'w')
-                logFile.write("Recipients for " + date_string + ":\n")
-                logFile.close()
                 for profile in UserProfile.objects.filter(user_type = 'Editor'):
                     recipients.append(profile.user.email)
                 for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
