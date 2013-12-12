@@ -57,6 +57,7 @@ NNS_clients = {
 	"353": "WAYNE - HERALD - THURSDAY",
 	"579": "WEST POINT - NEWS - WEDNESDAY",
 	"718": "WILBER - REPUBLICAN - WEDNESDAY",
+	"836": "THEDFORD - THOMAS CO. HERALD - THURSDAY"
 }
 
 NNS_client_location_data = {
@@ -109,6 +110,7 @@ NNS_client_location_data = {
 	"579": [-96.711406,41.839635],
 	"718": [-96.962376,40.481838],
 	"36":  [-97.126457,41.254543],
+	"836": [-100.5750,41.9789] 
 }
 
 def replace_pub_number_with_client_name(text, client_dict):
@@ -123,41 +125,8 @@ def get_client_location(text, location_dict):
     	if text ==  i:
    			return j
 
-def write_text_to_file(pub, text, search_term, results_file):
-	client_name = replace_pub_number_with_client_name(pub, NNS_clients)
-	for t in text:
-		for child in t.children:
-			if search_term in child:
-				with open('../static/news-archive-search-results/temp.txt', 'w') as tempFile:
-					tempFile.write("Publication Name: " + client_name + "\n" + "search results: " + str(t) + "\n \n")
-				with open('../static/news-archive-search-results/temp.txt', 'r') as f:
-					temp = f.read()
-				with open(results_file, 'r') as f2:
-					temp2 = f2.read()
-				with open(results_file, 'w') as results:
-					results.write(temp2 + temp)
-
-def write_data_to_file(data, results_file):
-	with open('../static/news-archive-search-results/temp.txt', 'w') as outfile:
-		json.dump(data, outfile)
-	with open('../static/news-archive-search-results/temp.txt', 'r') as f:
-		temp = f.read()
-	with open(results_file, 'r') as f2:
-		temp2 = f2.read()
-	with open(results_file, 'w') as datafile:
-		data = temp2 + temp
-		json.dump(data, datafile)
-
-def create_results_file(date_info):
-	date_string = time.strftime("%Y-%m-%d-%H-%M")
-	file_location = '../static/news-archive-search-results/results_' + date_string + '.txt'
-	f = open(file_location, 'w')
-	f.write(date_info)
-	f.close()
-	return file_location
-
 def create_json_file():
-	json_data = []
+	json_data = {"type": "FeatureCollection", "features": []}
 	date_string = time.strftime("%Y-%m-%d-%H-%M")
 	file_location = '../static/news-archive-search-results/results' + date_string + '.json'
 	f = open(file_location, 'w')
@@ -172,14 +141,15 @@ def update_json_file(data, results_file):
 	contents = json.load(jsonFile)
 	jsonFile.close()
 
-	contents.append(data)
+	feature_list = contents["features"]
+	feature_list.append(data)
 
 	jsonFile = open(results_file, "w+")
 	jsonFile.write(json.dumps(contents))
 	jsonFile.close()
 
 
-def get_results(start_date, end_date):
+def get_results(start_date, end_date, results_jsonfile):
 
 	# Browser
 	br = mechanize.Browser()
@@ -220,17 +190,6 @@ def get_results(start_date, end_date):
 			publications.append(item.name)
 
 	reporter_list = ["Daniel Wheaton", "Ally Phillips", "Mary Rezac"]
-	#for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
-		#reporter_list.append(profile.user.email)
-
-	#results_file = create_results_file(date_info)
-	
-
-	data = {}
-	# key = date(formatted as a string), value = published_articles_list
-
-	published_articles_list = []
-	# List of published article tuples, formatted as (client_name, reporter, text)
 
 	for reporter in reporter_list:
 		for pub in publications:
@@ -251,14 +210,35 @@ def get_results(start_date, end_date):
 			for t in text:
 				for child in t.children:
 					if reporter in child:
-						client_name = replace_pub_number_with_client_name(pub, NNS_clients)
 						client_location = get_client_location(pub, NNS_client_location_data)
-						published_article = [client_name, client_location, reporter, str(t)]
-						published_articles_list.append(published_article)
-						print "Found " + client_name + " with article that includes " + reporter + " in the text."
-	data[start_date] = published_articles_list
-	#write_data_to_file(data)
-	return data
+						if client_location != None:
+							data = {
+									"type": "Feature",  
+									"properties": { "name": "", "text": "", "reporter": "", "date": "" }, 
+									"geometry": { "type": "Point", "coordinates": [] }, 
+									"id": "" 
+									}
+
+							client_name = replace_pub_number_with_client_name(pub, NNS_clients)
+							client_property = data["properties"]
+							client_property["name"] = client_name
+							client_property["text"] = str(t)
+							client_property["reporter"] = reporter
+							client_property["date"] = start_date
+
+							
+							location_property = data["geometry"]
+							location_property["coordinates"] = client_location
+
+							data["id"] = id_counter
+							
+							print "Found " + client_name + " with article that includes " + reporter + " in the text."
+
+							update_json_file(data, results_jsonfile)
+							global id_counter
+							id_counter += 1
+						else:
+							pass
 
 
 week = timedelta(days=-7)
@@ -270,15 +250,17 @@ stop_search_week = today + (week*14)
 formatted_end_date = end_date.strftime("%m/%d/%Y")
 formatted_start_date = start_date.strftime("%m/%d/%Y")
 date_info = "Results for " + formatted_start_date + " to " + formatted_end_date + ".\n \n"
+global id_counter = 1
 results_jsonfile = create_json_file()
 
+
 while start_date > stop_search_week:
-	print start_date
-	print end_date
-	results = get_results(formatted_start_date, formatted_end_date)
-	update_json_file(results, results_jsonfile)
+	print formatted_start_date
+	print formatted_end_date
+	results = get_results(formatted_start_date, formatted_end_date, results_jsonfile)
 	print "finished getting results for " + formatted_start_date + " to " + formatted_end_date + "."
 	start_date = start_date + week
 	end_date = end_date + week
 	formatted_end_date = end_date.strftime("%m/%d/%Y")
 	formatted_start_date = start_date.strftime("%m/%d/%Y")
+	

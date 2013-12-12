@@ -19,6 +19,11 @@ urlpatterns = patterns('',
         model=UserProfile,
         )
     ),
+    url(r'^map/$', ListView.as_view(
+        template_name="newsarchive_map.html",
+        model=UserProfile,
+        )
+    ),
     url(r'^accounts/register/$',
         register,
         {'backend': 'registration.backends.default.DefaultBackend',
