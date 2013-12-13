@@ -189,7 +189,7 @@ def get_results(start_date, end_date, results_jsonfile):
 		if not item.name == "all":
 			publications.append(item.name)
 
-	reporter_list = ["Daniel Wheaton", "Ally Phillips", "Mary Rezac"]
+	reporter_list = ["Demetria Stephens", "Shelby Friesz", "Joseph Moore", "Bethany Knipp"]
 
 	for reporter in reporter_list:
 		for pub in publications:
@@ -244,13 +244,13 @@ def get_results(start_date, end_date, results_jsonfile):
 week = timedelta(days=-7)
 day = timedelta(days=-1)
 today = datetime.today()
-end_date = today
+end_date = today + (week*27)
 start_date = end_date + week - day
-stop_search_week = today + (week*14)
+stop_search_week = today + (week*49)
 formatted_end_date = end_date.strftime("%m/%d/%Y")
 formatted_start_date = start_date.strftime("%m/%d/%Y")
 date_info = "Results for " + formatted_start_date + " to " + formatted_end_date + ".\n \n"
-global id_counter = 1
+id_counter = 1
 results_jsonfile = create_json_file()
 
 

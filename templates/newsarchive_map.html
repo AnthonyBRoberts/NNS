@@ -189,7 +189,6 @@
                   var dataset = []
                   d3.csv("{% static "data/data.csv" %}", function(data) {
                      dataset = data.map(function(d) { return [ +d["lon_0"], +d["lat_0"] ]; });
-                     console.log(dataset)
                   });
 
                   // EPSG:3338
