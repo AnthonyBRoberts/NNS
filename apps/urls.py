@@ -20,7 +20,7 @@ urlpatterns = patterns('',
         )
     ),
     url(r'^map/$', ListView.as_view(
-        template_name="newsarchive_map.html",
+        template_name="newsarchive_map_fall2013.html",
         model=UserProfile,
         )
     ),
