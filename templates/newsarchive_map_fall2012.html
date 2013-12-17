@@ -262,7 +262,7 @@
 
             
             <p><div id="scale"></div></p>
-            <p id="slidertext">All Stories published during the current semester, starting on September 4th, 2013</p>
+            <p id="slidertext">All Stories published during the current semester, starting on September 4th, 2012</p>
             <p>Use the slider to see published stories during a particular week. The leftmost position shows all published stories.</p>
 
             <script type="text/javascript">
@@ -273,10 +273,10 @@
                         value: 0, 
                         step: 1, 
                         slide: function(event, ui) {
-                            var weeks = [0,20130904,20130911,20130918,
-                                          20130925,20131002,20131009,20131016,
-                                          20131023,20131030,20131106,20131113,
-                                          20131120,20131127,20131204,20131211,20131218]
+                            var weeks = [0,20120904,20120911,20120918,
+                                          20120925,20121002,20121009,20121016,
+                                          20121023,20121030,20121106,20121113,
+                                          20121120,20121127,20121204,20121211,20121218]
                             
                             // handle case where slider at zero = show all events
                             if(ui.value == 0)
@@ -287,7 +287,7 @@
                                 
                                 // change the slider text to appropriate date
                                 d3.select("#slidertext")
-                                .text('All Stories published during the current semester, starting on September 4th, 2013');
+                                .text('All Stories published during the current semester, starting on September 4th, 2012');
                                 
                             }else{
                             

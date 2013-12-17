@@ -235,7 +235,7 @@
                   });
 
                   // Load in the published_stories data from the file
-                  d3.json("{% static "data/results2013-12-16-18-16.json" %}", function(collection) {
+                  d3.json("{% static "data/results2013-12-13-15-59.json" %}", function(collection) {
                       published_stories
                           .selectAll("path") //make a path and attach data
                           .data(collection.features)
@@ -262,21 +262,30 @@
 
             
             <p><div id="scale"></div></p>
-            <p id="slidertext">All Stories published during the current semester, starting on September 4th, 2013</p>
+            <p id="slidertext">All Stories published during the current semester, starting on January 6th, 2013</p>
             <p>Use the slider to see published stories during a particular week. The leftmost position shows all published stories.</p>
 
             <script type="text/javascript">
 
                         $("#scale").slider({
                         min: 0, 
-                        max: 16, 
+                        max: 22, 
                         value: 0, 
                         step: 1, 
                         slide: function(event, ui) {
-                            var weeks = [0,20130904,20130911,20130918,
-                                          20130925,20131002,20131009,20131016,
-                                          20131023,20131030,20131106,20131113,
-                                          20131120,20131127,20131204,20131211,20131218]
+                            
+                            //var weeks = [0,20130905,20130912,20130919,
+                            //              20130926,20131003,20131010,
+                            //              20131017,20131024,20131031,
+                            //              20131107,20131114,20131121,
+                            //              20131128,20131205];
+
+                            var weeks = [0,20130105,20130112,20130119,20130126,
+                                          20130202,20130209,20130216,20130223,
+                                          20130302,20130309,20130316,20130323,20130330,
+                                          20130406,20130413,20130420,
+                                          20130427,20130504,20130511,
+                                          20130518,20130525,20130601]
                             
                             // handle case where slider at zero = show all events
                             if(ui.value == 0)
@@ -287,7 +296,7 @@
                                 
                                 // change the slider text to appropriate date
                                 d3.select("#slidertext")
-                                .text('All Stories published during the current semester, starting on September 4th, 2013');
+                                .text('All Stories published during the current semester, starting on January 6th, 2013');
                                 
                             }else{
                             
