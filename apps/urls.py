@@ -6,19 +6,13 @@ from registration.views import register
 from registration_email.forms import EmailRegistrationForm
 from account.forms import *
 from account.models import UserProfile
+from story.models import Article
+from story.views import AboutView, FrontpageView
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', ListView.as_view(
-        template_name="welcome_content.html",
-        model=UserProfile,
-        )
-    ),
-    url(r'^about/$', ListView.as_view(
-        template_name="about.html",
-        model=UserProfile,
-        )
-    ),
+    url(r'^$', FrontpageView.as_view()),
+    url(r'^about/$', AboutView.as_view()),
     url(r'^map/$', ListView.as_view(
         template_name="newsarchive_map_fall2012.html",
         model=UserProfile,

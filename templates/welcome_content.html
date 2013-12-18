@@ -5,10 +5,7 @@
 <div class="row-fluid">
             <div class="span8">
             	<div>
-					<h1 align="center">Nebraska State Government News</h1>
-                    <h3 align="center">Direct from the source, delivered to your inbox</h3>
-    				<p>The Nebraska News Service is the state government news wire service provided by the University of Nebraska-Lincoln College of Journalism and Mass Communications. Our reporters cover a wide range of state government news, including the Nebraska Legislature, the governor’s office, state agencies, decisions by Nebraska's Supreme Court, and other news stories as they arise. NNS provides news and information in the form of stories, photos and video. Located in Lincoln, the political heart of the state, we are able to provide our clients with powerful, relevant stories, straight from the source. In turn, our reporters get real-life experience and exposure to the news world. We put particular emphasis on providing content that is relevant to our clients and the communities they serve. Our current client list includes more than 100 newspapers throughout the state with a combined circulation exceeding 280,000, 16 radio stations and six television stations.</p>
-                    <p>The Nebraska News Service is staffed by student reporters who submit a resume, cover letter and work samples as a condition for enrollment. The director is Mary Kay Quinlan.</p><br />
+                    {{ object.text|safe}}
                     <div class="row-fluid">
                     	<div class="span12">
                          <a href="/accounts/register/" style="text-decoration:none">
@@ -21,7 +18,8 @@
                     <div class="row-fluid">
                     	<div class="span8">
                     		<div class="well" align="center">
-                    			<img src="{% static "images/welcome/NNS_Fall2013web.jpg" %}" alt="Nebraska News Service Staff" />
+
+                    			<img src="/static/{{ object.docfile }}" alt="Nebraska News Service Staff" />
                     		</div> <!-- well -->
                     	</div> <!-- span8 -->
                     	<div class="span4">
