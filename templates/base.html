@@ -44,35 +44,35 @@
                         <div class="nav-collapse collapse navbar-responsive-collapse">
                             
                             <ul class="nav">
-                                {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
-                                <li>
-                                    <a href="/story">Stories</a>
-                                </li>
-                                <li>
-                                    <a href="/profiles/">Clients</a>
-                                </li>
-                                <li>
-                                    <a href="/profiles/{{ request.user.username }}">My Profile</a>
-                                </li>
-                                {% if user.get_profile.user_type == "Editor" %}
-                                <li>
-                                    <a href="/admin">Admin</a>
-                                </li>
-                                {% endif %}
-                                {% else %}
                                 <li>
                                     <a href="/about/">About NNS</a>
                                 </li>
                                 <li>
                                     <a href="/story">Stories</a>
                                 </li>
+                                {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
                                 <li>
-                                    <a href="/profiles/{{ request.user.username }}">My Profile</a>
+                                    <a href="/profiles/">Clients</a>
+                                </li>
+                                <li>
+                                    <a href="/reporters/">Reporters</a>
+                                </li>
+                                <li>
+                                    <a href="/editors/">Editors</a>
+                                </li>
+                                {% endif %}
+                                {% if user.get_profile.user_type == "Editor" %}
+
+                                <li>
+                                    <a href="/admin">Admin</a>
                                 </li>
                                 {% endif %}
                             </ul>
                             <ul class="nav pull-right">
                                 {% if user.get_profile %}
+                                <li>
+                                    <a href="/profiles/{{ request.user.username }}">My Profile</a>
+                                </li>
                                 {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
                                 	<li>
                                 		<a href="/accounts/logout/?next=/accounts/login/?next=/story/inprogress/">Logout</a>
@@ -105,17 +105,6 @@
                     <li>
                         <a href="/story/add/article">New Story</a>
                     </li>
-                    <li>
-                        <a href="/profiles/">Clients</a>
-                    </li>
-                    <li>
-                        <a href="/reporters/">Reporters</a>
-                    </li>
-                    {% if user.get_profile.user_type == "Editor" %}
-                    <li>
-                        <a href="/editors/">Editors</a>
-                    </li>
-                    {% endif %}
                 </ul>
                 {% endif %}
             {% bootstrap_messages %}
@@ -183,6 +172,12 @@
 					<div class="tab-pane active" id="tab11">
                         <p>
                             {% block unsubscribe %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="tab-pane active" id="tab1">
+                        <p>
+                            {% block map %}
                             {% endblock %}
                         </p>
                     </div>

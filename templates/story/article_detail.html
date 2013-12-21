@@ -15,12 +15,10 @@
         {% endif %}
 
         <h2>{{ object.title }}</h2>
+        <p>{{ object.byline }}</p>
+        <br />
+        <p>{{ object.text|safe }}</p>
 
-        <p>
-        
-        {{ object.text|safe}}
-        
-        </p>
         {% if object.docfile %}
         <p>
         <a href="{{ object.docfile.url }}">{{ object.docfile.name }}</a>

@@ -43,15 +43,15 @@
              			<div class="nav-collapse collapse navbar-responsive-collapse">
                             
                             <ul class="nav">
+                                <li>
+                                    <a href="/about/">About NNS</a>
+                                </li>
                                 {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
                                 <li>
                                     <a href="/story">Stories</a>
                                 </li>
                                 <li>
                                     <a href="/profiles/">Clients</a>
-                                </li>
-                                <li>
-                                    <a href="/profiles/{{ request.user.username }}">My Profile</a>
                                 </li>
                                 {% if user.get_profile.user_type == "Editor" %}
                                 <li>
@@ -60,18 +60,16 @@
                                 {% endif %}
                                 {% else %}
                                 <li>
-                                    <a href="/about/">About NNS</a>
-                                </li>
-                                <li>
                                     <a href="/story">Stories</a>
                                 </li>
-                                <li>
-                                    <a href="/profiles/{{ request.user.username }}">My Profile</a>
-                                </li>
+                                
                                 {% endif %}
                             </ul>
                             <ul class="nav pull-right">
                                 {% if user.get_profile %}
+                                <li>
+                                    <a href="/profiles/{{ request.user.username }}">My Profile</a>
+                                </li>
                                 {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
                                 	<li>
                                 		<a href="/accounts/logout/?next=/accounts/login/?next=/story/inprogress/">Logout</a>

@@ -1,186 +1,8 @@
-<!DOCTYPE html>
+{% extends "mapbase.html" %}
 {% load staticfiles %}
-{% load bootstrap_toolkit %}
-<html lang="en">
-<head>
-  <link href="{% static "favicon.ico" %}" title="Nebraska News Service" type="image/x-icon" rel="icon" />
-  <meta charset="utf-8">
-    <title>Nebraska News Service</title>
-  <meta name="description" content="The Nebraska state government news wire service provided by the University of Nebraska College of Journalism and Mass Communications">
-  <meta name="author" content="Anthony Roberts">
-  {% bootstrap_stylesheet_tag %}
-  <style type="text/css">
-        body {
-            padding-top: 20px;
-        }
-  </style>
-    <!--[if lt IE 9]>
-    <script src="{% static "js/html5.js" %}"></script>
-    <![endif]-->
-  <script src="{% static "js/jquery.min.js" %}"></script>   
-  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-  {% bootstrap_javascript_tag %}
-  <script src="{% static "js/d3/d3.v3.js" %}"></script>
-  <link href="{% static "css/checkbox_styles.css" %}" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="http://d3js.org/topojson.v1.min.js"></script>  
-  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-  <script>
-    $(function() {
-    $( "#slider" ).slider();
-    });
-  </script>
-  <style>
+{% block map_fall2013 %}
 
-    .graticule {
-      fill: none;
-      stroke: #777;
-      stroke-width: .5px;
-      stroke-opacity: .5
-    }
 
-    .land {
-      fill: #cccccc;
-    }
-
-    .boundary {
-      fill: none;
-      stroke: #FFF;
-      stroke-width: .5px;
-    }
-    .place,
-    .place-label {
-      fill: #444;
-    }
-    @import url("css/jquery-ui-1.8.17.custom.css");
-
-    body, .ui-widget {
-    }
-
-    svg {
-    width: 1040px;
-    height: 500px;
-    border: solid 1px #ccc;
-    background: #fff;
-    }
-
-    line {
-    stroke: brown;
-    stroke-dasharray: 4,2;
-    }
-
-    path {
-    fill: #ccc;
-    stroke: #fff;
-    }
-  </style>
-</head>
-<body>
-
-<div class="container" style="width:1080px">
-    <div class="row-fluid">
-        <div class="span12 column">
-          <div class="navbar">
-                <div class="navbar-inner" style="padding:0px">
-                    <div class="container-fluid" style="background-image:url({% static "images/welcome/NE_Legislature_1080x350.jpg" %})">
-                        <a href="/" class="brand"><img src="{% static "images/welcome/nns_logo.png" %}" alt="Nebraska News Service Logo" /></a>
-                        
-                        
-                    </div> <!-- container-fluid -->
-                </div> <!-- navbar-inner -->
-            </div> <!-- navbar -->
-            {% if user.is_authenticated %}
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="container-fluid">
-                  <div class="nav-collapse collapse navbar-responsive-collapse">
-                            
-                            <ul class="nav">
-                                {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
-                                <li>
-                                    <a href="/story">Stories</a>
-                                </li>
-                                <li>
-                                    <a href="/profiles/">Clients</a>
-                                </li>
-                                <li>
-                                    <a href="/profiles/{{ request.user.username }}">My Profile</a>
-                                </li>
-                                {% if user.get_profile.user_type == "Editor" %}
-                                <li>
-                                    <a href="/admin">Admin</a>
-                                </li>
-                                {% endif %}
-                                {% else %}
-                                <li>
-                                    <a href="/about/">About NNS</a>
-                                </li>
-                                <li>
-                                    <a href="/story">Stories</a>
-                                </li>
-                                <li>
-                                    <a href="/profiles/{{ request.user.username }}">My Profile</a>
-                                </li>
-                                {% endif %}
-                            </ul>
-                            <ul class="nav pull-right">
-                                {% if user.get_profile %}
-                                {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
-                                  <li>
-                                    <a href="/accounts/logout/?next=/accounts/login/?next=/story/inprogress/">Logout</a>
-                                    </li>
-                                {% else %}
-                                  <li>
-                                        <a href="/accounts/logout/?next=/accounts/login/?next=/story/">Logout</a>
-                                    </li>
-                                {% endif %}
-                                {% else %}
-                                  <li>
-                                        <a href="/accounts/logout/?next=/accounts/login/?next=profiles_profile_detail">Logout</a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                              
-                        </div> <!-- navbar-responsive-collapse -->  
-                    </div> <!-- container-fluid -->
-                </div> <!-- navbar-inner -->
-            </div> <!-- navbar -->
-            {% else %}
-            
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <div class="container-fluid">
-                        <div class="nav-collapse collapse navbar-responsive-collapse">
-                            <ul class="nav">
-                                <li>
-                                    <a href="/about/">About NNS</a>
-                                </li>
-                              {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
-                                <li>
-                                    <a href="/accounts/login/?next=/story/inprogress/">Login</a>
-                                </li>
-                                {% else %}
-                                <li>
-                                    <a href="/accounts/login/?next=/story/">Login</a>
-                                </li>
-                                {% endif %}
-                                <li>
-                                    <a href="/accounts/register/">Register</a>
-                                </li>
-                            </ul>
-                        </div> <!-- navbar-responsive-collapse -->  
-                    </div> <!-- container-fluid -->
-                </div> <!-- navbar-inner -->
-            </div> <!-- navbar -->
-            {% endif %}
-            <div class="well">
-              <h1 align="center">Nebraska News Service Print Publication Map</h1>
-              <h4 align="center">Source: <a href="https://newsarchive.nebpress.com/">Nebraska Press Association's News Archive</a></h3>
-                  <script src="http://d3js.org/d3.v3.min.js"></script>
-                  <script src="http://d3js.org/queue.v1.min.js"></script>
-                  <script src="http://d3js.org/topojson.v1.min.js"></script>
                   <script>
 
                   var width = 1040,
@@ -235,7 +57,7 @@
                   });
 
                   // Load in the published_stories data from the file
-                  d3.json("{% static "data/results2013-12-16-18-16.json" %}", function(collection) {
+                  d3.json("{% static "data/results2013-12-11-20-16.json" %}", function(collection) {
                       published_stories
                           .selectAll("path") //make a path and attach data
                           .data(collection.features)
@@ -262,81 +84,45 @@
 
             
             <p><div id="scale"></div></p>
-            <p id="slidertext">All Stories published during the current semester, starting on September 4th, 2013</p>
+            <p id="slidertext">All Stories published during the fall semester, starting on September 5th, 2013</p>
             <p>Use the slider to see published stories during a particular week. The leftmost position shows all published stories.</p>
 
             <script type="text/javascript">
 
                         $("#scale").slider({
                         min: 0, 
-                        max: 16, 
+                        max: 14, 
                         value: 0, 
                         step: 1, 
                         slide: function(event, ui) {
-                            var weeks = [0,20130904,20130911,20130918,
-                                          20130925,20131002,20131009,20131016,
-                                          20131023,20131030,20131106,20131113,
-                                          20131120,20131127,20131204,20131211,20131218]
+                            var weeks = [0,20130905,20130912,20130919,
+                                          20130926,20131003,20131010,20131017,
+                                          20131024,20131031,20131107,20131114,
+                                          20131121,20131128,20131205]
                             
-                            // handle case where slider at zero = show all events
                             if(ui.value == 0)
                             {
-                                // highlight all publishedstory
                                 d3.selectAll('.publishedstory')
                                 .style("display","block");
-                                
-                                // change the slider text to appropriate date
                                 d3.select("#slidertext")
-                                .text('All Stories published during the current semester, starting on September 4th, 2013');
-                                
+                                .text('All Stories published during the fall semester, starting on September 5th, 2013');
                             }else{
-                            
-                                // dim all publishedstory
                                 d3.selectAll('.publishedstory')
                                 .style("display","none");
-
-                                // get and format current slider value
-                                $tempvalue = ''+weeks[ui.value]; //look up which month the slider value corresponds to and convert to a string for printing
-                                $tempvalueclass = '._'+$tempvalue; //take month and convert to a class
-
-                                // highlight all explosions in the selected month by class
+                                $tempvalue = ''+weeks[ui.value]; 
+                                $tempvalueclass = '._'+$tempvalue; 
                                 d3.selectAll($tempvalueclass)
                                 .style("display","block");
-
-                                // change the slider text to appropriate date
                                 d3.select("#slidertext")
-                                .text('Stories published during the week starting on '+$tempvalue.substring(4,6)+'/'+$tempvalue.substring(6,8)+'/'+$tempvalue.substring(0,4));
-
-
-                            }//endelse
-                            
-                            
-                        }
-                        });
-
+                                .text('Stories published during the week starting on '
+                                    +$tempvalue.substring(4,6)+'/'
+                                    +$tempvalue.substring(6,8)+'/'
+                                    +$tempvalue.substring(0,4));
+                            } //end_else
+                        } //end slide function def
+                        }); //end slider class def
                 </script>
-
             </div>
 
-
-        </div> <!-- span12 column -->
-    </div> <!-- row-fluid -->
-</div> <!-- container-fluid -->
-
-<div class="container">
-    <p><hr></p>
-    <footer class="row">
-        <div class="span6">
-          <p><a href="mailto:nns.mkquinlan@gmail.com">Mary Kay Quinlan, Bureau Chief</a></p>
-        </div>
-        <div class="span6" style="text-align:right">
-          <a href="https://www.linkedin.com/in/anthonyroberts">
-          <p>Web Application Developer, Anthony Roberts</p>
-            </a>
-        </div>
-    </footer>
-</div> <!-- container -->
- 
-</body>
-</html>
+{% endblock %}
 

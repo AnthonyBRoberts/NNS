@@ -14,7 +14,17 @@ urlpatterns = patterns('',
     url(r'^$', FrontpageView.as_view()),
     url(r'^about/$', AboutView.as_view()),
     url(r'^map/$', ListView.as_view(
-        template_name="newsarchive_map_fall2012.html",
+        template_name="newsarchive_map_fall2013.html",
+        model=UserProfile,
+        )
+    ),
+    url(r'^map/fall2013/$', ListView.as_view(
+        template_name="newsarchive_map_fall2013.html",
+        model=UserProfile,
+        )
+    ),
+        url(r'^map/spring2013/$', ListView.as_view(
+        template_name="newsarchive_map_spring2013.html",
         model=UserProfile,
         )
     ),
