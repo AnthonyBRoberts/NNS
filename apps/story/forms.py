@@ -18,6 +18,7 @@ class ArticleForm(forms.ModelForm):
             'text': RedactorWidget(editor_options={'lang': 'en'}),
         }
 
+
 class Article_EForm(forms.ModelForm):
 
     broadcast_only = forms.BooleanField(label='Send to Broadcast Only', required=False)
@@ -36,11 +37,6 @@ class Article_EForm(forms.ModelForm):
             'text': RedactorWidget(editor_options={'lang': 'en'}),
         }
 
-    #def save(self, *args, **kwargs):
-        #s = self.instance.article
-        #if self.cleaned_data['broadcast_only']:
-            
-
 
 class Article_RForm(forms.ModelForm):
     class Meta:
@@ -54,4 +50,3 @@ class Article_RForm(forms.ModelForm):
         widgets = {
             'text': RedactorWidget(editor_options={'lang': 'en'})
         }
-
