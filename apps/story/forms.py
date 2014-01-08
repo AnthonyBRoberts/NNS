@@ -45,7 +45,7 @@ class Article_EForm(forms.ModelForm):
 class Article_RForm(forms.ModelForm):
     class Meta:
         model = Article
-        exclude = ['author', 'byline', 'slug', 'publish_date', 'email_text', 'is_published', 'send_now', 'docfile']
+        exclude = ['author', 'byline', 'slug', 'publish_date', 'email_text', 'is_published', 'send_now']
         dateTimeOptions = {
             'format': 'mm/dd/yyyy HH:ii P',
             'autoclose': 'true',
