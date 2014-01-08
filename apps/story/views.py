@@ -12,7 +12,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.encoding import smart_str, smart_unicode, force_unicode
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from notification import models as notification
 from story.models import Article
 from story.forms import *
@@ -21,12 +21,14 @@ from apps.account.models import UserProfile
 
 
 class FrontpageView(DetailView):
-    template_name="welcome_content.html"
+    template_name = "welcome_content.html"
     def get_object(self):
         return get_object_or_404(Article, slug="front-page")
     def get_context_data(self, **kwargs):
         context = super(FrontpageView, self).get_context_data(**kwargs)
         context['slug'] = "front-page"
+        queryset = UserProfile.objects.filter(user_type="Reporter")
+        context['reporter_list'] = queryset
         return context
 
 class AboutView(DetailView):

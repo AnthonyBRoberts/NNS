@@ -25,10 +25,8 @@
                     	<div class="span4">
                     		<div class="well" style="height:250px">
                                 <h3>NNS Staff:</h3>
-                                {% for p in object_list %}
-        							{% if p.user_type == 'Reporter' %}
-                                    <p>{{ p.user.get_full_name }}</p>
-                                    {% endif %}
+                                {% for r in reporter_list %}
+                                    <p>{{ r.user.get_full_name }}</p>
                                 {% endfor %}
                                 <p>Anthony Roberts, Technology Consultant</p>
                     		</div> <!-- well -->
