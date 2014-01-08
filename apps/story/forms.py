@@ -25,6 +25,10 @@ class Article_EForm(forms.ModelForm):
 
     class Meta:
         model = Article
+        fields = ('title', 'text', 'email_text', 'author', 'byline',
+                    'tags', 'docfile', 'publish_date', 'is_published', 
+                    'send_now', 'broadcast_only',
+                    )
         exclude = ['slug']
         dateTimeOptions = {
             'format': 'mm/dd/yyyy HH:ii P',
