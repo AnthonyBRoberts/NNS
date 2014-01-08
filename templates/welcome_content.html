@@ -1,5 +1,5 @@
 {% extends "welcome.html" %}
-{% load staticfiles %}
+{% load static from staticfiles %}
 {% block front_page_content %}
 
 <div class="row-fluid">
@@ -18,8 +18,8 @@
                     <div class="row-fluid">
                     	<div class="span8">
                     		<div class="well" align="center">
-
-                    			<img src="/static/{{ object.docfile }}" alt="Nebraska News Service Staff" />
+                                
+                    			<img src="{{STATIC_URL}}{{ object.docfile }}" alt="Nebraska News Service Staff" />
                     		</div> <!-- well -->
                     	</div> <!-- span8 -->
                     	<div class="span4">
