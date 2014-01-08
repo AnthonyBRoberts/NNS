@@ -20,7 +20,7 @@ class ArticleForm(forms.ModelForm):
 
 class Article_EForm(forms.ModelForm):
 
-    broadcast_only = forms.BooleanField(label='Send to broadcast only', required=False)
+    broadcast_only = forms.BooleanField(label='Send to Broadcast Only', required=False)
 
     class Meta:
         model = Article
