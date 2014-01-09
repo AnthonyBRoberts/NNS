@@ -95,7 +95,7 @@ def add_article(request):
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
-            article.publish_date = datetime.datetime.now()
+            # article.publish_date = datetime.datetime.now() #what? why am I setting the publish date to now?
             cleaned_text = replace_all(article.text)
             article.text = cleaned_text
             article.save()
