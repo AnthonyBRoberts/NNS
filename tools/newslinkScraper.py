@@ -1,6 +1,7 @@
 import mechanize
 import cookielib
 import time
+import json
 from datetime import datetime, date, timedelta
 from bs4 import BeautifulSoup
 #from account.models import UserProfile
@@ -58,11 +59,69 @@ NNS_clients = {
 	"718": "WILBER - REPUBLICAN - WEDNESDAY",
 }
 
+NNS_client_location_data = {
+	"791": [-99.859022,42.547421],
+	"663": [-99.899839,40.303959],
+	"94":  [-96.357246,41.454244],
+	"603": [-98.003537,40.866716],
+	"736": [-99.537342,42.583787],
+	"648": [-101.533660,40.050615],
+	"243": [-96.134383,41.545562],
+	"642": [-96.134383,41.545562],
+	"586": [-103.098787,41.667643],
+	"163": [-99.641312,41.404768],
+	"145": [-99.923179,41.291348],
+	"113": [-103.412297,42.683617],
+	"727": [-98.081696,41.983744],
+	"211": [-96.239294,41.278642],
+	"51":  [-99.860603,40.588632],
+	"418": [-97.177545,40.140917],
+	"747": [-97.285731,40.652095],
+	"453": [-97.732455,41.447638],
+	"841": [-100.159381,40.931560],
+	"894": [-101.726109,40.844405],
+	"322": [-96.244947,41.138898],
+	"855": [-101.020422,40.511278],
+	"419": [-97.586574,40.168345],
+	"710": [-101.642491,40.518398],
+	"922": [-103.659463,41.233693],
+	"492": [-96.472255,41.936110],
+	"844": [-97.052311,40.772010],
+	"985": [-98.066750,40.202000],
+	"225": [-96.780874,41.464285],
+	"386": [-96.466075,41.835133],
+	"675": [-98.929962,41.602553],
+	"713": [-96.153553,40.110603],
+	"570": [-97.787239,42.352729],
+	"573": [-98.913347,41.027700],
+	"806": [-97.060195,41.448916],
+	"754": [-97.096972,40.911216],
+	"350": [-99.748055,42.823639],
+	"261": [-98.067010,40.022415],
+	"85":  [-96.191639,40.370061],
+	"57":  [-96.222546,41.778008],
+	"103": [-97.833599,42.045297],
+	"368": [-101.013723,40.176241],
+	"479": [-100.550308,42.873686],
+	"228": [-98.034118,42.596437],
+	"48":  [-101.372019,40.417072],
+	"353": [-97.017019,42.235990],
+	"579": [-96.711406,41.839635],
+	"718": [-96.962376,40.481838],
+	"36":  [-97.126457,41.254543],
+}
+
 def replace_pub_number_with_client_name(text, client_dict):
 
     for i, j in client_dict.iteritems():
         text = text.replace(i, j)
     return text
+
+def get_client_location(text, location_dict):
+
+    for i, j in location_dict.iteritems():
+    	if text ==  i:
+   			return j
 
 def write_text_to_file(pub, text, search_term, results_file):
 	client_name = replace_pub_number_with_client_name(pub, NNS_clients)
@@ -78,17 +137,49 @@ def write_text_to_file(pub, text, search_term, results_file):
 				with open(results_file, 'w') as results:
 					results.write(temp2 + temp)
 
+def write_data_to_file(data, results_file):
+	with open('../static/news-archive-search-results/temp.txt', 'w') as outfile:
+		json.dump(data, outfile)
+	with open('../static/news-archive-search-results/temp.txt', 'r') as f:
+		temp = f.read()
+	with open(results_file, 'r') as f2:
+		temp2 = f2.read()
+	with open(results_file, 'w') as datafile:
+		data = temp2 + temp
+		json.dump(data, datafile)
 
 def create_results_file(date_info):
 	date_string = time.strftime("%Y-%m-%d-%H-%M")
-	file_location = '../static/news-archive-search-results/results' + date_string + '.txt'
+	file_location = '../static/news-archive-search-results/results_' + date_string + '.txt'
 	f = open(file_location, 'w')
 	f.write(date_info)
 	f.close()
 	return file_location
 
+def create_json_file():
+	json_data = []
+	date_string = time.strftime("%Y-%m-%d-%H-%M")
+	file_location = '../static/news-archive-search-results/results' + date_string + '.json'
+	f = open(file_location, 'w')
+	f.write(json.dumps(json_data))
+	f.close()
+	return file_location
 
-def get_results(start_date, end_date, date_info):
+
+def update_json_file(data, results_file):
+
+	jsonFile = open(results_file, "r")
+	contents = json.load(jsonFile)
+	jsonFile.close()
+
+	contents.append(data)
+
+	jsonFile = open(results_file, "w+")
+	jsonFile.write(json.dumps(contents))
+	jsonFile.close()
+
+
+def get_results(start_date, end_date):
 
 	# Browser
 	br = mechanize.Browser()
@@ -128,48 +219,66 @@ def get_results(start_date, end_date, date_info):
 		if not item.name == "all":
 			publications.append(item.name)
 
-	reporter_list = []
+	reporter_list = ["Daniel Wheaton", "Ally Phillips", "Mary Rezac"]
 	#for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
 		#reporter_list.append(profile.user.email)
 
-	results_file = create_results_file(date_info)
+	#results_file = create_results_file(date_info)
 	
 
-	for pub in publications:
-		br.open("https://newsarchive.nebpress.com/")
-		response1 = br.follow_link(text_regex=r"Guest Login")
-		br.form = list(br.forms())[0]
-		control1 = br.form.find_control("search_text")
-		control2 = br.form.find_control("start_date")
-		control3 = br.form.find_control("end_date")
-		control4 = br.form.find_control("publication_filter")
-		control1.value = "Daniel Wheaton"
-		control2.value = start_date
-		control3.value = end_date
-		control4.value = [pub]
-		response = br.submit()
-		soup = BeautifulSoup(response)
-		text = soup.find_all('p')
-		search_term = control1.value
-		write_text_to_file(pub, text, search_term, results_file)
+	data = {}
+	# key = date(formatted as a string), value = published_articles_list
 
-  
+	published_articles_list = []
+	# List of published article tuples, formatted as (client_name, reporter, text)
+
+	for reporter in reporter_list:
+		for pub in publications:
+			br.open("https://newsarchive.nebpress.com/")
+			response1 = br.follow_link(text_regex=r"Guest Login")
+			br.form = list(br.forms())[0]
+			control1 = br.form.find_control("search_text")
+			control2 = br.form.find_control("start_date")
+			control3 = br.form.find_control("end_date")
+			control4 = br.form.find_control("publication_filter")
+			control1.value = reporter
+			control2.value = start_date
+			control3.value = end_date
+			control4.value = [pub]
+			response = br.submit()
+			soup = BeautifulSoup(response)
+			text = soup.find_all('p')
+			for t in text:
+				for child in t.children:
+					if reporter in child:
+						client_name = replace_pub_number_with_client_name(pub, NNS_clients)
+						client_location = get_client_location(pub, NNS_client_location_data)
+						published_article = [client_name, client_location, reporter, str(t)]
+						published_articles_list.append(published_article)
+						print "Found " + client_name + " with article that includes " + reporter + " in the text."
+	data[start_date] = published_articles_list
+	#write_data_to_file(data)
+	return data
+
+
 week = timedelta(days=-7)
+day = timedelta(days=-1)
 today = datetime.today()
-end_date = today + (week*1)
-start_date = end_date + week
-stop_search_week = today + (week*3)
+end_date = today
+start_date = end_date + week - day
+stop_search_week = today + (week*14)
 formatted_end_date = end_date.strftime("%m/%d/%Y")
 formatted_start_date = start_date.strftime("%m/%d/%Y")
 date_info = "Results for " + formatted_start_date + " to " + formatted_end_date + ".\n \n"
+results_jsonfile = create_json_file()
 
 while start_date > stop_search_week:
 	print start_date
 	print end_date
-	get_results(formatted_start_date, formatted_end_date, date_info)
+	results = get_results(formatted_start_date, formatted_end_date)
+	update_json_file(results, results_jsonfile)
 	print "finished getting results for " + formatted_start_date + " to " + formatted_end_date + "."
 	start_date = start_date + week
 	end_date = end_date + week
 	formatted_end_date = end_date.strftime("%m/%d/%Y")
 	formatted_start_date = start_date.strftime("%m/%d/%Y")
-	date_info = "Results for " + formatted_start_date + " to " + formatted_end_date + ".\n \n"

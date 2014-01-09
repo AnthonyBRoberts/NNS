@@ -6,22 +6,31 @@ from registration.views import register
 from registration_email.forms import EmailRegistrationForm
 from account.forms import *
 from account.models import UserProfile
+from story.models import Article
+from story.views import AboutView, FrontpageView
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', ListView.as_view(
-        template_name="welcome_content.html",
+    url(r'^$', FrontpageView.as_view()),
+    url(r'^about/$', AboutView.as_view()),
+    url(r'^map/$', ListView.as_view(
+        template_name="newsarchive_map_fall2013.html",
         model=UserProfile,
         )
     ),
-    url(r'^about/$', ListView.as_view(
-        template_name="about.html",
+    url(r'^map/fall2013/$', ListView.as_view(
+        template_name="newsarchive_map_fall2013.html",
+        model=UserProfile,
+        )
+    ),
+        url(r'^map/spring2013/$', ListView.as_view(
+        template_name="newsarchive_map_spring2013.html",
         model=UserProfile,
         )
     ),
     url(r'^accounts/register/$',
         register,
-        {'backend': 'registration.backends.simple.SimpleBackend',
+        {'backend': 'registration.backends.default.DefaultBackend',
         'template_name': 'registration/registration_form.html',
         'form_class': EmailRegistrationForm,
         'success_url': getattr(
@@ -32,6 +41,7 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('registration_email.backends.default.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'reset/', include('password_reset.urls')),
     url(r'^admin/django-ses/', include('django_ses.urls')),
     url(r'^reporting/', include('django_ses.urls')),
     url(r'^story/', include('apps.story.urls')),

@@ -18,12 +18,17 @@ class ArticleForm(forms.ModelForm):
             'text': RedactorWidget(editor_options={'lang': 'en'}),
         }
 
+
 class Article_EForm(forms.ModelForm):
 
-    broadcast_only = forms.BooleanField(label='Send to broadcast only', required=False)
+    broadcast_only = forms.BooleanField(label='Send to Broadcast Only', required=False)
 
     class Meta:
         model = Article
+        fields = ('title', 'text', 'email_text', 'author', 'byline',
+                    'tags', 'docfile', 'publish_date', 'is_published', 
+                    'send_now', 'broadcast_only',
+                    )
         exclude = ['slug']
         dateTimeOptions = {
             'format': 'mm/dd/yyyy HH:ii P',
@@ -36,16 +41,12 @@ class Article_EForm(forms.ModelForm):
             'text': RedactorWidget(editor_options={'lang': 'en'}),
         }
 
-    #def save(self, *args, **kwargs):
-        #s = self.instance.article
-        #if self.cleaned_data['broadcast_only']:
-            
-
 
 class Article_RForm(forms.ModelForm):
     class Meta:
         model = Article
-        exclude = ['author', 'byline', 'slug', 'publish_date', 'email_text', 'is_published', 'send_now', 'docfile']
+        fields = ('title', 'text', 'tags', 'docfile')
+        exclude = ['author', 'byline', 'slug', 'publish_date', 'email_text', 'is_published', 'send_now']
         dateTimeOptions = {
             'format': 'mm/dd/yyyy HH:ii P',
             'autoclose': 'true',
@@ -54,4 +55,3 @@ class Article_RForm(forms.ModelForm):
         widgets = {
             'text': RedactorWidget(editor_options={'lang': 'en'})
         }
-
