@@ -5,7 +5,7 @@ import django.forms.widgets
 import django.db
 from models import *
 from suit_redactor.widgets import RedactorWidget
-
+from localflavor.us.forms import USStateField
 
 class ClientForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -15,6 +15,7 @@ class ClientForm(forms.ModelForm):
             self.initial['first_name'] = self.instance.user.first_name
             self.initial['last_name'] = self.instance.user.last_name
             self.initial['user_type'] = self.instance.user.get_profile().user_type
+            self.initial['state'] = "NE"
         except User.DoesNotExist:
             pass
         
@@ -31,6 +32,7 @@ class ClientForm(forms.ModelForm):
         password = forms.CharField(label='Password', help_text='')
         about = forms.CharField(label='Special Topics',
                                 help_text='Any special topics of interest to your audience?')
+        
         fields = ['pub_name','pub_type','first_name','last_name','email',
                   'phone','address','city','state','zipcode','pub_area',
                   'about','twitter','facebook','website']

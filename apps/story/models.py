@@ -16,9 +16,9 @@ class PublishedArticlesManager(models.Manager):
 class Article(models.Model):
     """Represents a story article"""
     
-    title = models.CharField(max_length=100, verbose_name="Headline")
-    slug = models.SlugField(max_length=100, unique=True)
-    text = models.CharField(max_length=10000, verbose_name="Story Text")
+    title = models.CharField(max_length=255, verbose_name="Headline")
+    slug = models.SlugField(max_length=255, unique=True)
+    text = models.CharField(max_length=50000, verbose_name="Story Text")
     email_text = models.CharField(max_length=10000, blank=True, null=True, verbose_name="Email Message Text")
     author = models.ForeignKey(User)
     byline = models.CharField(max_length=100, blank=True, null=True)

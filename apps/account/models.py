@@ -37,7 +37,7 @@ class UserProfile(models.Model):
     about = models.TextField(blank=True, null=True, verbose_name="Special Topics")
     address = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
-    state = USStateField()
+    state = USStateField(default="NE")
     zipcode = models.CharField(max_length=5, blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
     pub_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Publication Name")
