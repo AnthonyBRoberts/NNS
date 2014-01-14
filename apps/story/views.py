@@ -40,6 +40,15 @@ class AboutView(DetailView):
         context['slug'] = "about-us"
         return context
 
+class ReporterDocsView(DetailView):
+    template_name="reporterdocs.html"
+    def get_object(self):
+        return get_object_or_404(Article, slug="reporter-documentation")
+    def get_context_data(self, **kwargs):
+        context = super(ReporterDocsView, self).get_context_data(**kwargs)
+        context['slug'] = "reporter-documentation"
+        return context
+
 @login_required 
 def inprogress_index(request):
     """
@@ -95,40 +104,42 @@ def add_article(request):
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
-            # article.publish_date = datetime.datetime.now() #what? why am I setting the publish date to now?
+            if article.is_published:
+                article.publish_date = datetime.datetime.now()
             cleaned_text = replace_all(article.text)
             article.text = cleaned_text
             article.save()
             form.save_m2m()
             msg = "Article saved successfully"
             messages.success(request, msg, fail_silently=True)
-            if article.is_published and article.send_now and article.publish_date <= datetime.datetime.today():
-                subject = article.title
-                byline = article.byline
-                email_text = article.email_text
-                story_text = article.text 
-                bc_only = form.cleaned_data['broadcast_only']
-                recipients = []
-                date_string = time.strftime("%Y-%m-%d-%H-%M")
-                for profile in UserProfile.objects.filter(user_type = 'Editor'):
-                    recipients.append(profile.user.email)
-                for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
-                    recipients.append(profile.user.email)
-                if bc_only:
-                    for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
+            if request.user.get_profile().user_type == 'Editor':
+                if article.is_published and article.send_now:
+                    subject = article.title
+                    byline = article.byline
+                    email_text = article.email_text
+                    story_text = article.text 
+                    bc_only = form.cleaned_data['broadcast_only']
+                    recipients = []
+                    date_string = time.strftime("%Y-%m-%d-%H-%M")
+                    for profile in UserProfile.objects.filter(user_type = 'Editor'):
                         recipients.append(profile.user.email)
-                else:
-                    for profile in UserProfile.objects.filter(user_type = 'Client'):        
+                    for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
                         recipients.append(profile.user.email)
-                if article.docfile is not None:
-                    attachment = article.docfile
-                    create_email_batch.delay(date_string, request.user.email, recipients, subject,
-                                                    byline, email_text, story_text, attachment)
-                else:
-                    create_email_batch.delay(date_string, request.user.email, recipients, subject,
-                                                    byline, email_text, story_text)
-                msg = "Article published successfully"
-                messages.success(request, msg, fail_silently=True)
+                    if bc_only:
+                        for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
+                            recipients.append(profile.user.email)
+                    else:
+                        for profile in UserProfile.objects.filter(user_type = 'Client'):        
+                            recipients.append(profile.user.email)
+                    if article.docfile is not None:
+                        attachment = article.docfile
+                        create_email_batch.delay(date_string, request.user.email, recipients, subject,
+                                                        byline, email_text, story_text, attachment)
+                    else:
+                        create_email_batch.delay(date_string, request.user.email, recipients, subject,
+                                                        byline, email_text, story_text)
+                    msg = "Article published successfully"
+                    messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
@@ -163,33 +174,34 @@ def edit_article(request, slug):
             article = form.save()
             msg = "Article updated successfully"
             messages.success(request, msg, fail_silently=True)
-            if article.is_published and article.send_now and article.publish_date <= datetime.datetime.today():
-                subject = article.title
-                byline = article.byline
-                email_text = article.email_text
-                story_text = article.text 
-                bc_only = form.cleaned_data['broadcast_only']
-                recipients = []
-                date_string = time.strftime("%Y-%m-%d-%H-%M")
-                for profile in UserProfile.objects.filter(user_type = 'Editor'):
-                    recipients.append(profile.user.email)
-                for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
-                    recipients.append(profile.user.email)
-                if bc_only:
-                    for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
+            if request.user.get_profile().user_type == 'Editor':
+                if article.is_published and article.send_now:
+                    subject = article.title
+                    byline = article.byline
+                    email_text = article.email_text
+                    story_text = article.text
+                    bc_only = form.cleaned_data['broadcast_only']
+                    recipients = []
+                    date_string = time.strftime("%Y-%m-%d-%H-%M")
+                    for profile in UserProfile.objects.filter(user_type = 'Editor'):
                         recipients.append(profile.user.email)
-                else:
-                    for profile in UserProfile.objects.filter(user_type = 'Client'):        
+                    for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
                         recipients.append(profile.user.email)
-                if article.docfile is not None:
-                    attachment = article.docfile
-                    create_email_batch.delay(date_string, request.user.email, recipients, subject,
-                                                    byline, email_text, story_text, attachment)
-                else:
-                    create_email_batch.delay(date_string, request.user.email, recipients, subject,
-                                                    byline, email_text, story_text)
-                msg = "Article published successfully"
-                messages.success(request, msg, fail_silently=True)
+                    if bc_only:
+                        for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
+                            recipients.append(profile.user.email)
+                    else:
+                        for profile in UserProfile.objects.filter(user_type = 'Client'):        
+                            recipients.append(profile.user.email)
+                    if article.docfile is not None:
+                        attachment = article.docfile
+                        create_email_batch.delay(date_string, request.user.email, recipients, subject,
+                                                        byline, email_text, story_text, attachment)
+                    else:
+                        create_email_batch.delay(date_string, request.user.email, recipients, subject,
+                                                        byline, email_text, story_text)
+                    msg = "Article published successfully"
+                    messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':

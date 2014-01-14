@@ -64,6 +64,7 @@
             <div class="span3" align="left">
                 {% if profile.user.username == request.user.username %}
                     <div class="well" align="center">
+                        <p>
                         {% if profile.user_type == 'Reporter' %}
                             <a href="/profiles/reporter/edit">
                         {% elif profile.user_type == 'Editor' %}
@@ -72,8 +73,10 @@
                             <a href="/profiles/client/edit">
                         {% endif %}
 
-                        <button class="btn btn-large btn-block" type="button">Edit my profile</button></a>
-                        <p></p>
+                        <button class="btn btn-large btn-block" type="button">Edit my profile</button></a></p>
+                        {% if profile.user_type == 'Reporter' %}
+                        <p><a href="/reporterdocs"><button class="btn btn-large btn-block" type="button">Reporter Documentation</button></a></p>
+                        {% endif %}
                         <p><a href="{% url "auth_password_reset" %}"><button class="btn btn-large btn-block" type="button">{% trans "Change password" %}</button></a></p>
                         {% if request.user.is_superuser %}
                         <a href="/reporting/"><button class="btn btn-large btn-block" type="button">View SES Stats</button></a>
