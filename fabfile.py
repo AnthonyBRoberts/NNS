@@ -100,6 +100,7 @@ def testing():
 		for app in ["djcelery"]:
 			with settings(warn_only=True):
 				print "Migrating %s ..." % app
+				local("heroku run python manage.py schemamigration %s --settings=settings.prod" % (app))
 				local("heroku run python manage.py migrate %s --settings=settings.prod" % (app))
 
 		for app in enumerate_apps():
