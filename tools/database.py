@@ -22,7 +22,7 @@ def what_is_my_database_url(app_name):
 def remote_migrate(app_name):
     if os.path.exists(os.path.join("./apps", app_name, "migrations")):
         with settings(warn_only=True):
-            r = local("heroku run python manage.py schemamigration apps.%s --auto --settings=settings.dev" % app_name)
+            r = local("heroku run python manage.py schemamigration apps.%s --auto --settings=settings.dev" % app_name capture=True)
             r = local("heroku run python manage.py migrate apps.%s --settings=settings.prod" % (app_name), capture=True)
             if r.find("django.db.utils.DatabaseError") != -1:
                 print "Normal migration failed. Running a fake migration..."
