@@ -1,15 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-    "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
-<head>
-    <title>Nebraska News Service</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load bootstrap_toolkit %}
+{% load url from future %}
+{% load staticfiles %}
+{% block 500error %}
+
     <h1>Page unavailable</h1>
 
     <p>Sorry, but the requested page is unavailable due to a
     server hiccup.</p>
 
     <p>The Nebraska News Service has been notified, please try the back button or check back later.</p>
-</body>
-</html>
+
+{% endblock %}
