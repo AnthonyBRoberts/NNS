@@ -28,6 +28,15 @@ def remote_migrate(app_name):
                 print "Normal migration failed. Running a fake migration..."
                 local("heroku run python manage.py migrate apps.%s --settings=settings.prod --fake" % (app_name))
 
+def testing_migrate(app_name):
+    if os.path.exists(os.path.join("./apps", app_name, "migrations")):
+        with settings(warn_only=True):
+            r = local("heroku run python manage.py schemamigration apps.%s --app nns-test-server --auto --settings=settings.prod" % (app_name), capture=True)
+            r = local("heroku run python manage.py migrate apps.%s --app nns-test-server --settings=settings.prod" % (app_name), capture=True)
+            if r.find("django.db.utils.DatabaseError") != -1:
+                print "Normal migration failed. Running a fake migration..."
+                local("heroku run python manage.py migrate apps.%s --app nns-test-server --settings=settings.prod --fake" % (app_name))
+
 def local_migrate(app_name):
     #TODO: figure out if there are actual models within the app
     if not os.path.exists(os.path.join("./apps", app_name, "models.py")):
