@@ -119,18 +119,27 @@ def add_article(request):
                     email_text = article.email_text
                     story_text = article.text 
                     bc_only = form.cleaned_data['broadcast_only']
+                    add_email_only = form.cleaned_data['add_recipients_only']
+                    add_email_list = form.cleaned_data['add_recipients']
                     recipients = []
                     date_string = time.strftime("%Y-%m-%d-%H-%M")
-                    for profile in UserProfile.objects.filter(user_type = 'Editor'):
-                        recipients.append(profile.user.email)
-                    for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
-                        recipients.append(profile.user.email)
-                    if bc_only:
-                        for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
+                    if add_email_only:
+                        for r in add_email_list:
+                            recipients.append(r)
+                    else: 
+                        for profile in UserProfile.objects.filter(user_type = 'Editor'):
                             recipients.append(profile.user.email)
-                    else:
-                        for profile in UserProfile.objects.filter(user_type = 'Client'):        
+                        for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
                             recipients.append(profile.user.email)
+                        if bc_only:
+                            for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
+                                recipients.append(profile.user.email)
+                        else:
+                            for profile in UserProfile.objects.filter(user_type = 'Client'):        
+                                recipients.append(profile.user.email)
+                        if add_email_list:
+                            for r in add_email_list:
+                                recipients.append(r)
                     if article.docfile is not None:
                         attachment = article.docfile
                         create_email_batch.delay(date_string, request.user.email, recipients, subject,
@@ -181,18 +190,27 @@ def edit_article(request, slug):
                     email_text = article.email_text
                     story_text = article.text
                     bc_only = form.cleaned_data['broadcast_only']
+                    add_email_only = form.cleaned_data['add_recipients_only']
+                    add_email_list = form.cleaned_data['add_recipients']
                     recipients = []
                     date_string = time.strftime("%Y-%m-%d-%H-%M")
-                    for profile in UserProfile.objects.filter(user_type = 'Editor'):
-                        recipients.append(profile.user.email)
-                    for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
-                        recipients.append(profile.user.email)
-                    if bc_only:
-                        for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
+                    if add_email_only:
+                        for r in add_email_list:
+                            recipients.append(r)
+                    else: 
+                        for profile in UserProfile.objects.filter(user_type = 'Editor'):
                             recipients.append(profile.user.email)
-                    else:
-                        for profile in UserProfile.objects.filter(user_type = 'Client'):        
+                        for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
                             recipients.append(profile.user.email)
+                        if bc_only:
+                            for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
+                                recipients.append(profile.user.email)
+                        else:
+                            for profile in UserProfile.objects.filter(user_type = 'Client'):        
+                                recipients.append(profile.user.email)
+                        if add_email_list:
+                            for r in add_email_list:
+                                recipients.append(r)
                     if article.docfile is not None:
                         attachment = article.docfile
                         create_email_batch.delay(date_string, request.user.email, recipients, subject,
