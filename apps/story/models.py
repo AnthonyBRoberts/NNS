@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+from django.db.models.signals import post_save
 from tinymce import models as tinymce_models
 from taggit.managers import TaggableManager
 from tools.killgremlins import killgremlins
+from notifications import notify
 import datetime
 
 
@@ -46,3 +48,11 @@ class Article(models.Model):
     @models.permalink 
     def get_absolute_url(self):
         return ('story_article_detail', (), { 'slug': self.slug })
+
+
+
+
+def my_handler(sender, instance, created, **kwargs):
+    notify.send(instance, verb='was saved')
+
+post_save.connect(my_handler, sender=Article)

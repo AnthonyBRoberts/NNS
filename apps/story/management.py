@@ -12,4 +12,3 @@ if "notification" in settings.INSTALLED_APPS:
     signals.post_syncdb.connect(create_notice_types, sender=notification)
 else:
     print "Skipping creation of NoticeTypes as notification app not found"
-
