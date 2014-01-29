@@ -3,7 +3,6 @@ from django.core.files.storage import default_storage
 from django.core.mail.message import EmailMessage, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.http import HttpResponse
-from apps.account.models import UserProfile
 import time
 
 
@@ -56,16 +55,3 @@ class EMail(object):
         if self._attachment:
             msg.attach(self._attachment.name, self._attachment.read())
         msg.send()
-
-
-def log_email(email, date_string):
-    
-    with open('static/email_logs/temp.txt', 'w') as tempFile:
-        tempFile.write(email + "\n")
-    f = open('static/email_logs/temp.txt', 'r')
-    temp = f.read()
-    f.close()
-    with open('static/email_logs/sent_emails-' + date_string + '.txt', 'r') as f2:
-        temp2 = f2.read()
-    with open('static/email_logs/sent_emails-' + date_string + '.txt', 'w') as logFile:
-        logFile.write(temp2 + temp)
