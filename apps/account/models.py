@@ -1,6 +1,7 @@
 import datetime
 import phonenumbers
 from django import forms
+from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
@@ -9,6 +10,8 @@ from localflavor.us.us_states import STATE_CHOICES
 from django.dispatch import receiver
 from django.utils import timezone
 from registration.signals import *
+from notifications import notify
+from story.tasks import new_client_alert
 
 USER_TYPES = (
     ('Editor', 'Editor'),
@@ -80,4 +83,16 @@ def create_profile(sender, **kwargs):
         up = UserProfile(user=user)
         up.save()  
 
+def alert_editor_of_newclient(sender, **kwargs):
+    user = kwargs['instance']
+    if kwargs['created']:
+        subject = 'New Client Signup'
+        client_email = user.email
+        recipients = []
+        for profile in UserProfile.objects.filter(user_type = 'Editor'):
+            recipients.append(profile.user.email)
+        new_client_alert.delay(settings.DEFAULT_FROM_EMAIL, recipients, subject, client_email)
+
 post_save.connect(create_profile, sender=User)
+post_save.connect(alert_editor_of_newclient, sender=User)
+

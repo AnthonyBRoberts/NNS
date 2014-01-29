@@ -31,6 +31,19 @@ def send_published_article(date_string, sender, recipient, subject, byline, emai
     email.send()
 
 
+@task(name='send-email')
+def new_client_alert(sender, recipients, subject, text):
+    """
+    Task for sending email on new client sign-up
+    """    
+    for r in recipients:
+        email = EMail(subject, r)
+        ctx = {'subject': subject, 'text': text}
+        email.text('../templates/templated_email/newclientalert.txt', ctx)
+        email.html('../templates/templated_email/newclientalert.html', ctx)  
+        email.send()
+
+
 @task()
 def report_errors():
         logging.error("reporting errors")
