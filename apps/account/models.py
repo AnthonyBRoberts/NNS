@@ -11,7 +11,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from registration.signals import *
 from notifications import notify
-from story.tasks import new_client_alert
+from account.tasks import new_client_alert
 
 USER_TYPES = (
     ('Editor', 'Editor'),
