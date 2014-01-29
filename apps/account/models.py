@@ -82,7 +82,7 @@ def create_profile(sender, **kwargs):
     if kwargs['created']:
         up = UserProfile(user=user)
         up.save()  
-
+"""
 def alert_editor_of_newclient(sender, **kwargs):
     user = kwargs['instance']
     if kwargs['created']:
@@ -93,6 +93,7 @@ def alert_editor_of_newclient(sender, **kwargs):
             recipients.append(profile.user.email)
         new_client_alert.delay(settings.DEFAULT_FROM_EMAIL, recipients, subject, client_email)
 
-post_save.connect(create_profile, sender=User)
-post_save.connect(alert_editor_of_newclient, sender=User)
 
+post_save.connect(alert_editor_of_newclient, sender=User)
+"""
+post_save.connect(create_profile, sender=User)
