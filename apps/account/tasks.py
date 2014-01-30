@@ -1,5 +1,5 @@
 from celery import task
-from story.email import EMail, log_email
+from story.email import EMail
 
 @task(name='new_client_alert')
 def new_client_alert(sender, recipients, subject, text):
