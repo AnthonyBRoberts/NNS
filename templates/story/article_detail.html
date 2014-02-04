@@ -15,7 +15,7 @@
         {% endif %}
 
         <h2>{{ object.title }}</h2>
-        <p>{{ object.byline }}</p>
+        <p>By: {{ object.author.get_full_name }}</p>
         <br />
         <p>{{ object.text|safe }}</p>
 

@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     url(r'^(?P<username>\w+)/$',
         'profiles.views.profile_detail',
         name='profiles_profile_detail'),
-    url('^client/create', 'profiles.views.create_profile',
+    url('^client/create', 'account.views.create_profile',
         {
           'form_class': ClientForm,
           'success_url': 'profiles/client/edit/',

@@ -15,6 +15,7 @@ import django.shortcuts
 import django.template
 import django.views.generic.list
 from account.models import *
+from account.signals import user_activated
 
 def unsubscribe(request, form_class, success_url=None,
                 template_name='profiles/unsubscribe.html'):

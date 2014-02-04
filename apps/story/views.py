@@ -16,7 +16,7 @@ from django.views.generic import DetailView, ListView
 from notification import models as notification
 from story.models import Article
 from story.forms import *
-from story.tasks import create_email_batch
+from story.tasks import create_email_batch, alert_editor
 from apps.account.models import UserProfile
 
 
@@ -86,7 +86,7 @@ def story_index(request):
         'lines': show_lines, 
     }))
 
- 
+
 @login_required 
 def add_article(request):
     """
@@ -148,6 +148,15 @@ def add_article(request):
                         create_email_batch.delay(date_string, request.user.email, recipients, subject,
                                                         byline, email_text, story_text)
                     msg = "Article published successfully"
+                    messages.success(request, msg, fail_silently=True)
+            elif request.user.get_profile().user_type == 'Reporter':
+                ready_for_editor = form.cleaned_data['ready_for_editor']
+                if ready_for_editor:
+                    subject = article.title + ' is ready for an editor'
+                    byline = request.user.get_profile().byline
+                    story_text = article.text 
+                    alert_editor.delay(request.user.email, subject, byline, story_text)
+                    msg = "Editor has been notified."
                     messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:
@@ -219,6 +228,15 @@ def edit_article(request, slug):
                         create_email_batch.delay(date_string, request.user.email, recipients, subject,
                                                         byline, email_text, story_text)
                     msg = "Article published successfully"
+                    messages.success(request, msg, fail_silently=True)
+            elif request.user.get_profile().user_type == 'Reporter':
+                ready_for_editor = form.cleaned_data['ready_for_editor']
+                if ready_for_editor:
+                    subject = article.title + ' is ready for an editor'
+                    byline = request.user.get_profile().byline
+                    story_text = article.text 
+                    alert_editor.delay(request.user.email, subject, byline, story_text)
+                    msg = "Editor has been notified."
                     messages.success(request, msg, fail_silently=True)
             return redirect(article)
     else:

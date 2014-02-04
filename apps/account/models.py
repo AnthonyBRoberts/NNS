@@ -9,7 +9,7 @@ from localflavor.us.models import USStateField
 from localflavor.us.us_states import STATE_CHOICES
 from django.dispatch import receiver
 from django.utils import timezone
-from registration.signals import *
+from registration.signals import user_activated
 from notifications import notify
 from account.tasks import new_client_alert
 
@@ -77,12 +77,15 @@ class UserProfile(models.Model):
     get_absolute_url = models.permalink(get_absolute_url)
 
 
+@receiver(post_save, sender=User)
 def create_profile(sender, **kwargs):
     user = kwargs['instance']
     if kwargs['created']:
         up = UserProfile(user=user)
         up.save()  
 
+
+@receiver(post_save, sender=User)
 def alert_editor_of_newclient(sender, **kwargs):
     user = kwargs['instance']
     if kwargs['created']:
@@ -93,5 +96,4 @@ def alert_editor_of_newclient(sender, **kwargs):
             recipients.append(profile.user.email)
         new_client_alert.delay(settings.DEFAULT_FROM_EMAIL, recipients, subject, client_email)
 
-post_save.connect(create_profile, sender=User)
-post_save.connect(alert_editor_of_newclient, sender=User)
+

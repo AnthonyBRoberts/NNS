@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>{{ report_subject }}</title>
+    <title>{{ subject }}</title>
     <style type="text/css">
              
                         .ExternalClass {width:100%;} 
@@ -71,16 +71,13 @@ alink="#FF0000" link="#FF0000" bgcolor="#FFFFFF" text="#000000" yahoo="fix">
 
         <table cellpadding="12" cellspacing="12" border="1" width="600" bordercolor="#999999" bgcolor="#CCCCCC" >
             <tr>
-
-                <td bgcolor="#ffffff"><h2>{{ report_subject }}</h2></td>
+                <td bgcolor="#ffffff"><h2>{{ subject }}</h2></td>
             </tr>
             <tr>
                 <td bgcolor="#EEEEEE">
-                  <p>Here's the list of email addresses that "{{ story_title }}" was sent to.
-                    <br />
-                  {% for email in email_addresses %}
-                	<p>{{ forloop.counter }}: {{ email }}</p>
-                  {% endfor %}
+                  <h2>{{ subject }}</h2> 
+                    <p>{{ byline|safe }}</p>
+                  {{ text|safe }}
                 </td>
             </tr>
         </table>  

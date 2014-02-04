@@ -1,10 +1,9 @@
 from celery import task
-from story.email import EMail, log_email
-from django.conf import settings
-import logging
-import datetime
-import time
+from story.email import EMail
 from apps.account.models import UserProfile
+import logging
+import time
+
 
 
 @task(name='email-batch')
@@ -14,20 +13,10 @@ def create_email_batch(date_string, sender, recipients, subject, byline, email_t
     Runs when an article is saved and both is_published & send_now==True
     """
     
-    email_addresses = []
     for r in recipients:
         send_published_article.delay(date_string, sender, r, subject,
                                                         byline, email_text, story_text, attachment)
-        email_addresses.append(r)
         time.sleep(2)
-    editors = []
-    for profile in UserProfile.objects.filter(user_type = 'Editor'):
-        editors.append(profile.user.email)
-    report_subject = 'Email report for ' + date_string
-    story_title = subject
-    email_report.delay(settings.DEFAULT_FROM_EMAIL, editors, report_subject, story_title, email_addresses)
-    return
-
 
 
 @task(name='send-email')
@@ -43,17 +32,19 @@ def send_published_article(date_string, sender, recipient, subject, byline, emai
         email.add_attachment(attachment)
     email.send()
 
-
-@task(name='email_report')
-def email_report(sender, recipients, report_subject, story_title, email_addresses):
+@task(name='alert_editor')
+def alert_editor(sender, subject, byline, text):
     """
-    Task for sending email report to editors with list of email addresses to which stories are sent
+    Task for sending email on stories marked as ready_for_editor in a submitted reporter form.
     """
+    recipients = []
+    for profile in UserProfile.objects.filter(user_type = 'Editor'):
+                            recipients.append(profile.user.email)    
     for r in recipients:
-        email = EMail(report_subject, r)
-        ctx = {'report_subject': report_subject, 'story_title': story_title, 'email_addresses': email_addresses}
-        email.text('../templates/templated_email/emailreport.txt', ctx)
-        email.html('../templates/templated_email/emailreport.html', ctx)
+        email = EMail(subject, r)
+        ctx = {'subject': subject, 'byline': byline, 'text': text}
+        email.text('../templates/templated_email/ready_for_editor.txt', ctx)
+        email.html('../templates/templated_email/ready_for_editor.html', ctx)  
         email.send()
 
 

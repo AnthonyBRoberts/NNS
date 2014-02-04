@@ -74,9 +74,12 @@ class Article_EForm(forms.ModelForm):
 
 
 class Article_RForm(forms.ModelForm):
+
+    ready_for_editor = forms.BooleanField(label='Ready for editor', required=False)
+
     class Meta:
         model = Article
-        fields = ('title', 'text', 'tags', 'docfile')
+        fields = ('title', 'text', 'tags', 'docfile', 'ready_for_editor')
         exclude = ['author', 'byline', 'slug', 'publish_date', 'email_text', 'is_published', 'send_now']
         dateTimeOptions = {
             'format': 'mm/dd/yyyy HH:ii P',
