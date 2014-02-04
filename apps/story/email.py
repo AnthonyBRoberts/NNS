@@ -3,7 +3,6 @@ from django.core.files.storage import default_storage
 from django.core.mail.message import EmailMessage, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.http import HttpResponse
-from apps.account.models import UserProfile
 import time
 
 

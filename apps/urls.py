@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib import admin
 from registration.views import register
 from registration_email.forms import EmailRegistrationForm
+import notifications
 from account.forms import *
 from account.models import UserProfile
 from story.models import Article
@@ -51,6 +52,7 @@ urlpatterns = patterns('',
     url(r'^editors/', 'account.views.editor_index',
         name='profiles_editor_list'),
     url(r'^profiles/', include('apps.account.urls')),
+    ('^inbox/notifications/', include(notifications.urls)),
 )
 
 if getattr(settings,"DEBUG"):
