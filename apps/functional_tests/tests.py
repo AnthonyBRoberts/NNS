@@ -1,10 +1,12 @@
 from pyvirtualdisplay import Display
 from pyvirtualdisplay.smartdisplay import SmartDisplay
 from easyprocess import EasyProcess
+from django.test import LiveServerTestCase
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import unittest
 
-class NewCientTest(unittest.TestCase):
+class NewCientTest(LiveServerTestCase):
 	display = Display(visible=0, size=(1920, 1080))
 
 	def setUp(self):
@@ -19,7 +21,7 @@ class NewCientTest(unittest.TestCase):
 
 	def test_new_client_registration(self):
 		# Rod visits nebraskanewsservice.net, and is interested in being a client.
-		self.browser.get('http://0.0.0.0:5000')
+		self.browser.get(self.live_server_url)
 
 		# Rod says, "yup, there's NNS in the title"
 
@@ -37,7 +39,3 @@ class NewCientTest(unittest.TestCase):
 
 		# Rod clicks the link to activate his account.
 
-
-
-if __name__ == '__main__':
-	unittest.main()
