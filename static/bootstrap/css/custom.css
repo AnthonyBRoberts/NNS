@@ -1,0 +1,14 @@
+@import url(bootstrap.css);
+
+input.specialtopics {
+  width: 500px;
+  height: 200px;
+}
+
+input.circarea {
+  width: 610px;
+}
+
+input.email {
+  width: 500px;
+}

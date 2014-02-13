@@ -8,6 +8,7 @@ from models import *
 from suit_redactor.widgets import RedactorWidget
 from localflavor.us.forms import USStateField, USStateSelect
 from registration_email.forms import *
+from bootstrap_toolkit.widgets import BootstrapTextInput
 
 class ClientForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -68,8 +69,21 @@ class ClientSignupForm(EmailRegistrationForm):
     state = USStateField(initial="Nebraska", required=True)
     zipcode = forms.CharField(max_length=5, required=True)
     phone = forms.CharField(max_length=15, required=True)
-    pub_area = forms.CharField(max_length=100, required=True, label="Circulation Area")
-    about = forms.CharField(required=False, label="Special Topics")
+    pub_area = forms.CharField(
+        max_length=100, 
+        required=True, 
+        label="Circulation Area",
+        widget=BootstrapTextInput(attrs={
+            'class':'circarea',
+            })
+        )
+    about = forms.CharField(
+        required=False, 
+        label="Special Topics of interest to your audience.",
+        widget=BootstrapTextInput(attrs={
+            'class':'specialtopics',
+            })
+        )
     twitter = forms.CharField(max_length=150, required=False)
     facebook = forms.CharField(max_length=150, required=False)
     website = forms.URLField(max_length=200, required=False)
