@@ -1,5 +1,6 @@
 {% extends "registration/registration_base.html" %}
 {% load url from future %}
+{% load bootstrap_toolkit %}
 {% load i18n %}
 
 {% block masthead %}
@@ -14,23 +15,93 @@
 <form method="post" action=".">
     {% csrf_token %}
     {{ form.non_field_errors }}
-    <div class="row-fluid">
-    	<div class="span9">
-    		{% for field in form %}
-    		<div class="fieldWrapper">
-        		{{ field.errors }}
-        		{{ field.label_tag }}
-        		{{ field }}
-    		</div>
-    		{% endfor %}
-        </div>
-        <div class="span3" align="center">
-    		<div class="well">
-        		<p><a href="/about/">Click here for our privacy policy and terms of service.</a></p>
-    		</div>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span10 well">
+                <h4>Sign up as a client with your email and a password</h4>
+                <div class="row-fluid">
+                    <div class="fieldWrapper span10">
+                    {{ form.email|as_bootstrap }}
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="fieldWrapper span4">
+                    {{ form.password1|as_bootstrap }}
+                    </div>
+                    <div class="fieldWrapper span4">
+                    {{ form.password2|as_bootstrap }}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <p>&nbsp;</p>
-    <p><input type="submit" value="{% trans "Register" %}" class="btn btn-large btn-primary"></p>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span10 well">
+                <h4>Please provide some basic information about your news organization</h4>
+                <div class="row-fluid">
+                    <div class="fieldWrapper span4">
+                        {{ form.pub_name|as_bootstrap }}
+                    </div>
+                    <div class="fieldWrapper span4">
+                        {{ form.pub_type|as_bootstrap }}
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="fieldWrapper span4">
+                        {{ form.first_name|as_bootstrap }}
+                    </div>
+                    <div class="fieldWrapper span4">
+                        {{ form.last_name|as_bootstrap }}
+                    </div>
+                    <div class="fieldWrapper span4">
+                        {{ form.phone|as_bootstrap }}
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="fieldWrapper span4">
+                        {{ form.address|as_bootstrap }}
+                    </div>
+                    <div class="fieldWrapper span4">
+                        {{ form.pub_area|as_bootstrap }}
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="fieldWrapper span4">
+                        {{ form.city|as_bootstrap }}
+                    </div>
+                    <div class="fieldWrapper span4">
+                        {{ form.state|as_bootstrap }}
+                    </div>
+                    <div class="fieldWrapper span4">
+                        {{ form.zipcode|as_bootstrap }}
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="fieldWrapper span4">
+                        {{ form.twitter|as_bootstrap }}
+                    </div>
+                    <div class="fieldWrapper span4">
+                        {{ form.facebook|as_bootstrap }}
+                    </div>
+                    <div class="fieldWrapper span4">
+                        {{ form.website|as_bootstrap }}
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="fieldWrapper span4">
+                        {{ form.about|as_bootstrap }}
+                    </div>
+                </div>
+                <p>&nbsp;</p>
+                <p><input type="submit" value="{% trans "Register" %}" class="btn btn-large btn-primary"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="span9" align="right">
+    		<p><a href="/about/">Click here for our privacy policy and terms of service.</a></p>
+    </div>
+    </div>
 </form>
 {% endblock %}

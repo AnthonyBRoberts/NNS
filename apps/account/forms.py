@@ -1,11 +1,13 @@
 import django
 import django.contrib
+from django import forms
 import django.forms.fields
 import django.forms.widgets
 import django.db
 from models import *
 from suit_redactor.widgets import RedactorWidget
-from localflavor.us.forms import USStateField
+from localflavor.us.forms import USStateField, USStateSelect
+from registration_email.forms import *
 
 class ClientForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -55,6 +57,22 @@ class ClientForm(forms.ModelForm):
         p.save()
         
 
+class ClientSignupForm(EmailRegistrationForm):        
+
+    pub_name = forms.CharField(label='News organization name', required=True)
+    pub_type = forms.ChoiceField(choices=PUB_TYPES, label='News media type', required=True)
+    first_name = forms.CharField(label='First name', required=True)
+    last_name = forms.CharField(label='Last name', required=True)
+    address = forms.CharField(max_length=100, required=True)
+    city = forms.CharField(max_length=100, required=True)
+    state = USStateField(initial="Nebraska", required=True)
+    zipcode = forms.CharField(max_length=5, required=True)
+    phone = forms.CharField(max_length=15, required=True)
+    pub_area = forms.CharField(max_length=100, required=True, label="Circulation Area")
+    about = forms.CharField(required=False, label="Special Topics")
+    twitter = forms.CharField(max_length=150, required=False)
+    facebook = forms.CharField(max_length=150, required=False)
+    website = forms.URLField(max_length=200, required=False)
 
 
 class ReporterForm(forms.ModelForm):

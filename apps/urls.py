@@ -34,7 +34,7 @@ urlpatterns = patterns('',
         register,
         {'backend': 'registration.backends.default.DefaultBackend',
         'template_name': 'registration/registration_form.html',
-        'form_class': EmailRegistrationForm,
+        'form_class': ClientSignupForm,
         'success_url': getattr(
             settings, 'REGISTRATION_EMAIL_REGISTER_SUCCESS_URL', None),
         },
