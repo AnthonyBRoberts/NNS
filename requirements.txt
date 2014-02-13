@@ -19,8 +19,8 @@ django-localflavor==1.0
 django-notification==1.1
 django-notifications-hq
 django-password-reset==0.5.1
-django-profiles==0.2
-django-registration==0.8
+-e git+https://github.com/AnthonyBRoberts/django-profiles.git#egg=django-profiles
+-e git+https://github.com/AnthonyBRoberts/django-registration-1.5.git#egg=django-registration
 -e git://github.com/bitmazk/django-registration-email@3112a175a7f1fc220c6abedeb9f45094fb4ab355#egg=django_registration_email-dev
 django-ses==0.4.1
 django-staticfiles==1.2.1
