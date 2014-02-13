@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 import django.http
-from django.conf.urls import *
+from django.conf.urls import patterns, url
 from account.models import *
 from account.forms import *
 
