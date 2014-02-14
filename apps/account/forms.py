@@ -83,7 +83,7 @@ class ClientSignupForm(EmailRegistrationForm):
     last_name = forms.CharField(label='Last name', required=True)
     address = forms.CharField(max_length=100, required=True)
     city = forms.CharField(max_length=100, required=True)
-    state = USStateField(initial="Nebraska", required=True)
+    state = USStateField(initial="NE", required=True)
     zipcode = forms.CharField(max_length=5, required=True)
     phone = forms.CharField(max_length=15, required=True)
     pub_area = forms.CharField(
