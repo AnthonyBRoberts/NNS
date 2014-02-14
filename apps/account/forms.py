@@ -79,14 +79,26 @@ class ClientSignupForm(EmailRegistrationForm):
         )
     about = forms.CharField(
         required=False, 
-        label="Special Topics of interest to your audience.",
+        label="Special Topics of interest to your audience. (optional)",
         widget=BootstrapTextInput(attrs={
             'class':'specialtopics',
             })
         )
-    twitter = forms.CharField(max_length=150, required=False)
-    facebook = forms.CharField(max_length=150, required=False)
-    website = forms.URLField(max_length=200, required=False)
+    twitter = forms.CharField(
+        max_length=150, 
+        required=False,
+        label="Twitter (optional)"
+        )
+    facebook = forms.CharField(
+        max_length=150, 
+        required=False,
+        label="Facebook (optional)"
+        )
+    website = forms.URLField(
+        max_length=200, 
+        required=False,
+        label="Website (optional)"
+        )
 
 
 class ReporterForm(forms.ModelForm):
