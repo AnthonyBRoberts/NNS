@@ -9,7 +9,7 @@ from localflavor.us.models import USStateField
 from localflavor.us.us_states import STATE_CHOICES
 from django.dispatch import receiver
 from django.utils import timezone
-from registration.signals import user_activated
+from registration.signals import user_activated, user_registered
 from notifications import notify
 from account.tasks import new_client_alert
 
@@ -85,15 +85,32 @@ def create_profile(sender, **kwargs):
         up.save()  
 
 
-@receiver(post_save, sender=User)
-def alert_editor_of_newclient(sender, **kwargs):
-    user = kwargs['instance']
-    if kwargs['created']:
-        subject = 'New Client Signup'
-        client_email = user.email
-        recipients = []
-        for profile in UserProfile.objects.filter(user_type = 'Editor'):
-            recipients.append(profile.user.email)
-        new_client_alert.delay(settings.DEFAULT_FROM_EMAIL, recipients, subject, client_email)
+@receiver(user_activated)
+def alert_editor_of_newclient(sender, user, request, **kwargs):
+    subject = 'New Client Signup'
+    client_email = user.email
+    recipients = []
+    for profile in UserProfile.objects.filter(user_type = 'Editor'):
+        recipients.append(profile.user.email)
+    new_client_alert.delay(settings.DEFAULT_FROM_EMAIL, recipients, subject, client_email)
 
+@receiver(user_registered)
+def user_registered_handler(sender, user, request, **kwargs):
+    user.first_name = request.POST.get('first_name')
+    user.last_name = request.POST.get('last_name')
+    profile = user.get_profile()
+    profile.about = request.POST.get('about')
+    profile.address = request.POST.get('address')
+    profile.city = request.POST.get('city')
+    profile.state = request.POST.get('state')
+    profile.zipcode = request.POST.get('zipcode')
+    profile.phone = request.POST.get('phone')
+    profile.pub_name = request.POST.get('pub_name')
+    profile.pub_type = request.POST.get('pub_type')
+    profile.pub_area = request.POST.get('pub_area')
+    profile.twitter = request.POST.get('twitter')
+    profile.facebook = request.POST.get('facebook')
+    profile.website = request.POST.get('website')
+    user.save()
+    profile.save()
 
