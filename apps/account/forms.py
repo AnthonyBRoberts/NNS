@@ -60,6 +60,23 @@ class ClientForm(forms.ModelForm):
 
 class ClientSignupForm(EmailRegistrationForm):        
 
+    email = forms.EmailField(
+        max_length=256,
+        required=True,
+        widget=forms.TextInput(attrs={'class':'email'}),
+        label="Email"
+    )
+    password1 = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={'class':'password'}, render_value=False),
+        label="Password"
+    )
+    password2 = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={'class':'password'}, render_value=False),
+        label="Password (repeat)"
+        )
+    your_name = forms.CharField(required=False)
     pub_name = forms.CharField(label='News organization name', required=True)
     pub_type = forms.ChoiceField(choices=PUB_TYPES, label='News media type', required=True)
     first_name = forms.CharField(label='First name', required=True)
@@ -70,8 +87,8 @@ class ClientSignupForm(EmailRegistrationForm):
     zipcode = forms.CharField(max_length=5, required=True)
     phone = forms.CharField(max_length=15, required=True)
     pub_area = forms.CharField(
-        max_length=100, 
-        required=True, 
+        max_length=100,
+        required=True,
         label="Circulation Area",
         widget=BootstrapTextInput(attrs={
             'class':'circarea',
@@ -85,17 +102,17 @@ class ClientSignupForm(EmailRegistrationForm):
             })
         )
     twitter = forms.CharField(
-        max_length=150, 
+        max_length=150,
         required=False,
         label="Twitter (optional)"
         )
     facebook = forms.CharField(
-        max_length=150, 
+        max_length=150,
         required=False,
         label="Facebook (optional)"
         )
     website = forms.URLField(
-        max_length=200, 
+        max_length=200,
         required=False,
         label="Website (optional)"
         )

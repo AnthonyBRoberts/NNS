@@ -1,14 +1,23 @@
 @import url(bootstrap.css);
 
+input,
+textarea,
+.uneditable-input {
+  width: 285px;
+}
+
 input.specialtopics {
-  width: 500px;
-  height: 200px;
+  width: 625px;
 }
 
 input.circarea {
-  width: 610px;
+  width: 625px;
 }
 
 input.email {
-  width: 500px;
+  width: 465px;
+}
+
+input.password {
+  width: 210px;
 }
