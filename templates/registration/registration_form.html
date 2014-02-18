@@ -43,18 +43,21 @@
             <div class="span12 well">
                 <h4>Please provide some basic information about your news organization</h4>
                 <div class="row-fluid">
-                    <div class="fieldWrapper span4">
+                    <div class="fieldWrapper span3">
                         {{ form.pub_name|as_bootstrap }}
                     </div>
-                    <div class="fieldWrapper span4">
+                    <div class="fieldWrapper span3">
                         {{ form.pub_type|as_bootstrap }}
+                    </div>
+                    <div class="fieldWrapper span5 circarea">
+                        {{ form.pub_area|as_bootstrap }}
                     </div>
                 </div>
                 <div class="row-fluid">
-                    <div class="fieldWrapper span4">
+                    <div class="fieldWrapper span3">
                         {{ form.first_name|as_bootstrap }}
                     </div>
-                    <div class="fieldWrapper span4">
+                    <div class="fieldWrapper span3">
                         {{ form.last_name|as_bootstrap }}
                     </div>
                     <div class="fieldWrapper span4">
@@ -62,21 +65,16 @@
                     </div>
                 </div>
                 <div class="row-fluid">
-                    <div class="fieldWrapper span4">
+                    <div class="fieldWrapper span3">
                         {{ form.address|as_bootstrap }}
                     </div>
-                    <div class="fieldWrapper span4 circarea">
-                        {{ form.pub_area|as_bootstrap }}
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="fieldWrapper span4">
+                    <div class="fieldWrapper span3">
                         {{ form.city|as_bootstrap }}
                     </div>
-                    <div class="fieldWrapper span4">
+                    <div class="fieldWrapper span3">
                         {{ form.state|as_bootstrap }}
                     </div>
-                    <div class="fieldWrapper span4">
+                    <div class="fieldWrapper span2">
                         {{ form.zipcode|as_bootstrap }}
                     </div>
                 </div>

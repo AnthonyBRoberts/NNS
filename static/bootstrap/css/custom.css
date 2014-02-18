@@ -3,7 +3,7 @@
 input,
 textarea,
 .uneditable-input {
-  width: 285px;
+  width: 206px;
 }
 
 input.specialtopics {
@@ -11,7 +11,7 @@ input.specialtopics {
 }
 
 input.circarea {
-  width: 625px;
+  width: 325px;
 }
 
 input.email {
@@ -20,4 +20,12 @@ input.email {
 
 input.password {
   width: 210px;
+}
+
+input.zipcode {
+  width: 60px;
+}
+
+input.website {
+  width: 280px;
 }
