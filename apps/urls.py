@@ -12,8 +12,8 @@ from story.views import AboutView, FrontpageView, ReporterDocsView
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', FrontpageView.as_view()),
-    url(r'^about/$', AboutView.as_view()),
+    url(r'^$', FrontpageView.as_view(), name='index'),
+    url(r'^about/$', AboutView.as_view(), name='about'),
     url(r'^reporterdocs/$', ReporterDocsView.as_view()),
     url(r'^map/$', ListView.as_view(
         template_name="newsarchive_map_fall2013.html",
