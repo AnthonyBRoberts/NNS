@@ -156,6 +156,14 @@ class ClientSigninTest(FunctionalTest):
 
 class ClientSiteUsageTest(FunctionalTest):
 
+	def log_in(self):
+		self.browser.get(self.test_server)
+		self.browser.find_element_by_link_text('Login').click()
+		self.browser.find_element_by_id('id_username').send_keys('anthony@lincolnultimate.com')
+		self.browser.find_element_by_id('id_password').send_keys('anthony')
+		self.browser.find_element_by_id('id_password').send_keys(Keys.RETURN)
+
+
 	def test_client_can_visit_aboutus_without_logging_in(self):
 		
 		# Rod reads the About NNS page
@@ -168,11 +176,7 @@ class ClientSiteUsageTest(FunctionalTest):
 	def test_client_can_read_published_stories(self):
 
 		# Rod logs into the site
-		self.browser.get(self.test_server)
-		self.browser.find_element_by_link_text('Login').click()
-		self.browser.find_element_by_id('id_username').send_keys('anthony@lincolnultimate.com')
-		self.browser.find_element_by_id('id_password').send_keys('anthony')
-		self.browser.find_element_by_id('id_password').send_keys(Keys.RETURN)
+		log_in(self)
 
 		# Rod clicks the Stories button in the nav, goes to the Published Stories list
 		self.browser.find_element_by_xpath('/html/body/div[1]/div/div/div[2]/div/div/div/ul[1]/li[2]/a').click()
@@ -259,3 +263,4 @@ class ReporterSiteUsageTest(FunctionalTest):
 		# Joe clicks the My Profile button, to see if this is his account.
 		self.browser.find_element_by_link_text('My Profile').click()
 		self.assertIn('Welcome Joseph Moore', self.browser.find_element_by_tag_name('h3').text)
+
