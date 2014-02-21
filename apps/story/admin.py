@@ -8,7 +8,6 @@ from suit_redactor.widgets import RedactorWidget
 from django.db.models import *
 from models import Article
 from apps.account.models import UserProfile
-from tinymce.widgets import TinyMCE
 from taggit.models import Tag, TaggedItem
 
 

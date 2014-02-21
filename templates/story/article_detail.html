@@ -3,7 +3,6 @@
 {% load url from future %}
 {% block storycontent %}
 
-{% load markup %}
 {% if not object.is_published and user.get_profile.user_type == 'Client' %}
         <h3>You do not have permission to view this page</h3>
 {% else %}

@@ -1,63 +1,7 @@
-from pyvirtualdisplay import Display
-from pyvirtualdisplay.smartdisplay import SmartDisplay
-from easyprocess import EasyProcess
-from django.test import LiveServerTestCase
+from .base import FunctionalTest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
-import unittest
-from unittest import skip
-import sys
-
-def log_out(self):
-	if self.browser.find_element_by_link_text('Logout'):
-		self.browser.find_element_by_link_text('Logout').click()
-
-
-class FunctionalTest(LiveServerTestCase):
-	display = Display(visible=0, size=(1920, 1080))
-	fixtures = ['testdata.json']
-
-	@classmethod
-	def setUpClass(cls):
-		for arg in sys.argv:
-			if 'liveserver' in arg:
-				cls.test_server = 'http://' + arg.split('=')[1]
-				return
-		LiveServerTestCase.setUpClass()
-		cls.test_server = cls.live_server_url
-
-	@classmethod
-	def tearDownClass(cls):
-		if cls.test_server == cls.live_server_url:
-			LiveServerTestCase.tearDownClass()
-
-	def setUp(self):
-		self.display.start()
-		self.browser = webdriver.Firefox()
-		self.browser.implicitly_wait(3)
-
-	def tearDown(self):
-		self.browser.quit()
-		self.display.stop()
-
-
-class LayoutAndStylingTest(FunctionalTest):
-
-	def test_home_page_layout(self):
-
-		# Rod visits nebraskanewsservice.net.
-		self.browser.get(self.test_server)
-		self.browser.set_window_size(1280, 900)
-
-		# Rod says, "yup, there's NNS in the title, the big register button, and centered page layout"
-		self.assertIn('Nebraska News Service', self.browser.title)
-		self.assertIn('Register for the Nebraska News Service', 
-						self.browser.find_element_by_xpath('//*[@id="tab1"]/div/div[1]/div/div[1]/div/a/div/h3').text)
-		banner = self.browser.find_element_by_class_name('navbar-inner')
-		self.assertAlmostEqual(
-			banner.location['x'] + banner.size['width'] / 2, 640, delta=10)
-
 
 class NewCientRegistrationTest(FunctionalTest):
 
@@ -156,13 +100,14 @@ class ClientSigninTest(FunctionalTest):
 
 class ClientSiteUsageTest(FunctionalTest):
 
-	def log_in(self):
-		self.browser.get(self.test_server)
-		self.browser.find_element_by_link_text('Login').click()
-		self.browser.find_element_by_id('id_username').send_keys('anthony@lincolnultimate.com')
-		self.browser.find_element_by_id('id_password').send_keys('anthony')
-		self.browser.find_element_by_id('id_password').send_keys(Keys.RETURN)
+	def test_client_can_login_and_view_profile(self):
 
+		# Rod logs into the site
+		self.log_in_client()
+
+		# Rod clicks the My Profile button, to see if this is his account.
+		self.browser.find_element_by_link_text('My Profile').click()
+		self.assertIn('Welcome Anthony Roberts', self.browser.find_element_by_tag_name('h3').text)
 
 	def test_client_can_visit_aboutus_without_logging_in(self):
 		
@@ -176,7 +121,7 @@ class ClientSiteUsageTest(FunctionalTest):
 	def test_client_can_read_published_stories(self):
 
 		# Rod logs into the site
-		log_in(self)
+		self.log_in_client()
 
 		# Rod clicks the Stories button in the nav, goes to the Published Stories list
 		self.browser.find_element_by_xpath('/html/body/div[1]/div/div/div[2]/div/div/div/ul[1]/li[2]/a').click()
@@ -187,11 +132,7 @@ class ClientSiteUsageTest(FunctionalTest):
 	def test_client_cant_read_stories_inprogress(self):
 
 		# Rod logs into the site
-		self.browser.get(self.test_server)
-		self.browser.find_element_by_link_text('Login').click()
-		self.browser.find_element_by_id('id_username').send_keys('anthony@lincolnultimate.com')
-		self.browser.find_element_by_id('id_password').send_keys('anthony')
-		self.browser.find_element_by_id('id_password').send_keys(Keys.RETURN)
+		self.log_in_client()
 
 		# Rod tries to visit the inprogress list, but he's not allowed there.
 		self.browser.get(self.test_server + '/story/inprogress/')
@@ -206,11 +147,7 @@ class ClientSiteUsageTest(FunctionalTest):
 	def test_client_cant_read_user_list_pages(self):
 
 		# Rod logs into the site
-		self.browser.get(self.test_server)
-		self.browser.find_element_by_link_text('Login').click()
-		self.browser.find_element_by_id('id_username').send_keys('anthony@lincolnultimate.com')
-		self.browser.find_element_by_id('id_password').send_keys('anthony')
-		self.browser.find_element_by_id('id_password').send_keys(Keys.RETURN)
+		self.log_in_client()
 
 		# Rod tries to visit the client list, but he's not allowed there.
 		self.browser.get(self.test_server + '/profiles/')
@@ -230,11 +167,7 @@ class ClientSiteUsageTest(FunctionalTest):
 	def test_client_cant_add_or_edit_stories(self):
 
 		# Rod logs into the site
-		self.browser.get(self.test_server)
-		self.browser.find_element_by_link_text('Login').click()
-		self.browser.find_element_by_id('id_username').send_keys('anthony@lincolnultimate.com')
-		self.browser.find_element_by_id('id_password').send_keys('anthony')
-		self.browser.find_element_by_id('id_password').send_keys(Keys.RETURN)
+		self.log_in_client()
 
 		# Rod tries to create a new story, but he's not allowed to do that.
 		self.browser.get(self.test_server + '/story/add/article')
@@ -247,20 +180,3 @@ class ClientSiteUsageTest(FunctionalTest):
 						self.browser.find_element_by_tag_name('h3').text)
 
 		# self.fail('Say FAIL one more god-damn time, I dare you mutha-fucka!')
-
-
-class ReporterSiteUsageTest(FunctionalTest):
-
-	def test_reporter_can_login(self):
-
-		# Joe logs into the site
-		self.browser.get(self.test_server)
-		self.browser.find_element_by_link_text('Login').click()
-		self.browser.find_element_by_id('id_username').send_keys('nns.jmoore@gmail.com')
-		self.browser.find_element_by_id('id_password').send_keys('jmoore')
-		self.browser.find_element_by_id('id_password').send_keys(Keys.RETURN)
-
-		# Joe clicks the My Profile button, to see if this is his account.
-		self.browser.find_element_by_link_text('My Profile').click()
-		self.assertIn('Welcome Joseph Moore', self.browser.find_element_by_tag_name('h3').text)
-
