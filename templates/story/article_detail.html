@@ -4,6 +4,10 @@
 {% block storycontent %}
 
 {% load markup %}
+{% if not object.is_published and user.get_profile.user_type == 'Client' %}
+        <h3>You do not have permission to view this page</h3>
+{% else %}
+
 {% if messages %}
 	<div class="messages"></div>
 {% endif %}
@@ -11,6 +15,7 @@
 	<div class="row-fluid">
     	<div class="span9">
         {% if not object.is_published %}
+
         <div class="text-error">Note: This story has not been published yet.</div>
         {% endif %}
 
@@ -39,5 +44,5 @@
     	</div>                
 	</div>
 </div>
-    
+{% endif %}   
 {% endblock %}
