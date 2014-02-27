@@ -181,6 +181,13 @@
                             {% endblock %}
                         </p>
                     </div>
+                    <div class="tab-pane active" id="tab1">
+                        <p>
+                            {% block register_complete %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    
                 </div> <!-- tab-content -->
             </div> <!-- tabbable -->
             
@@ -217,7 +224,7 @@
                 
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
-                        <p>{% block content %}{% endblock %}</p>
+                        <p>{% block login %}{% endblock %}</p>
                     </div>
                     <div class="tab-pane active" id="tab1">
                         <p>{% block register %}{% endblock %}</p>

@@ -18,7 +18,11 @@
                         {% for line in lines %}
 
                             <tr>
+                                {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
+                                <td><a href="{% url 'story_article_edit' line.slug %}">{{ line.title }}</a></td>
+                                {% else %}
                                 <td><a href="{% url 'story_article_detail' line.slug %}">{{ line.title }}</a></td>
+                                {% endif %}
                                 <td>
                                 	{{ line.author.get_full_name }}
                                 </td>

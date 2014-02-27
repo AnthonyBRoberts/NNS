@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 from django.db.models.signals import post_save
 from taggit.managers import TaggableManager
@@ -36,7 +37,6 @@ class Article(models.Model):
         return self.title
     
     def save(self, *args, **kwargs):
-        #self.text = self.text.decode('cp1252')
         if not self.slug:
             y = self.publish_date.strftime("%Y")
             m = self.publish_date.strftime("%b").lower()
@@ -44,6 +44,5 @@ class Article(models.Model):
             self.slug = slugify(self.title) + "-" + d  + "-" + m  + "-" + y
         super(Article, self).save(*args, **kwargs)
 
-    @models.permalink 
     def get_absolute_url(self):
-        return ('story_article_detail', (), { 'slug': self.slug })
+        return reverse('story_article_detail', kwargs={'slug': self.slug})

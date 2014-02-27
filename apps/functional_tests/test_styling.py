@@ -2,9 +2,9 @@ from .base import FunctionalTest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
+from django.test.utils import IgnoreDeprecationWarningsMixin
 
-
-class LayoutAndStylingTest(FunctionalTest):
+class LayoutAndStylingTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 
 	def test_home_page_layout(self):
 

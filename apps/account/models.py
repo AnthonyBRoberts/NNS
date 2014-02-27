@@ -113,4 +113,3 @@ def user_registered_handler(sender, user, request, **kwargs):
     profile.website = request.POST.get('website')
     user.save()
     profile.save()
-

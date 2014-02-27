@@ -26,8 +26,14 @@ class ClientForm(forms.ModelForm):
                              help_text='Where we will send new stories')
     first_name = forms.CharField(label='First name')
     last_name = forms.CharField(label='Last name')
-    pub_name = forms.CharField(label='News organization name')
-    pub_type = forms.ChoiceField(choices=PUB_TYPES, label='News media type')
+    pub_name = forms.CharField(label='News organization name', required=True)
+    pub_type = forms.ChoiceField(choices=PUB_TYPES, label='News media type', required=True)
+    phone = forms.CharField(max_length=15, required=True)
+    address = forms.CharField(max_length=100, required=True)
+    city = forms.CharField(max_length=100, required=True)
+    state = forms.CharField(widget=USStateSelect(), required=True)
+    zipcode = forms.CharField(max_length=5, required=True)
+    pub_area = forms.CharField(max_length=100, required=True, label="Circulation or Broadcast Area")
     subscribe = forms.BooleanField(label='Subscribe to NNS Emails', required=False, initial=True)
     
     class Meta:

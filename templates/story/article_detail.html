@@ -19,9 +19,9 @@
         {% endif %}
 
         <h2>{{ object.title }}</h2>
-        <p>By: {{ object.author.get_full_name }}</p>
+        <p name="author">By: {{ object.author.get_full_name }}</p>
         <br />
-        <p>{{ object.text|safe }}</p>
+        <p name="story_text">{{ object.text|safe }}</p>
 
         {% if object.docfile %}
         <p>
