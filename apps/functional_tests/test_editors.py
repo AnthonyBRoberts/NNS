@@ -1,6 +1,7 @@
 from .base import FunctionalTest
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
 from django.test.utils import IgnoreDeprecationWarningsMixin
 
 class EditorViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
@@ -122,6 +123,131 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 					self.assertIn('This is an added paragraph to the published test story.', p.text)
 		except:
 			self.fail('The text did not get added to the story')
+
+	def test_editor_can_add_new_story(self):
+
+		# Anthony logs into the site
+		self.log_in_editor()
+
+		# Anthony clicks on the add story button
+		self.browser.get(self.test_server + '/story/add/article')
+
+		# Anthony clicks submit without filling out the form, which fials
+		self.browser.find_element_by_name('submit').click()
+		self.assertIn('This field is required.', self.browser.find_elements_by_class_name('help-block')[0].text)
+
+		# Anthony adds title, text, and author to story form
+		self.browser.find_element_by_name('title').send_keys('Add new story test title')
+		self.browser.find_element_by_class_name('redactor_editor').send_keys('Add new story test text')
+		author = Select(self.browser.find_element_by_id('id_author'))
+		author.select_by_visible_text('anthony')
+
+		# Anthony clicks save.
+		self.browser.find_element_by_name('submit').click()
+
+		# Anthony sees two success messages.
+		self.assertIn('Article saved successfully', self.browser.find_elements_by_class_name('alert-success')[0].text)
+		self.assertIn('Add new story test title', self.browser.find_element_by_tag_name('h2').text)
+
+
+	def test_editor_can_send_story_to_all_clients_on_add_new_story(self):
+
+		# Anthony logs into the site
+		self.log_in_editor()
+
+		# Anthony clicks on the add story button
+		self.browser.get(self.test_server + '/story/add/article')
+
+		# Anthony clicks submit without filling out the form, which fials
+		self.browser.find_element_by_name('submit').click()
+
+		# Anthony adds title, text, and author to story form
+		self.browser.find_element_by_name('title').send_keys('Add new story test title')
+		self.browser.find_element_by_class_name('redactor_editor').send_keys('Add new story test text')
+		author = Select(self.browser.find_element_by_id('id_author'))
+		author.select_by_visible_text('anthony')
+
+		# Anthony clicks publsih story and send now, then clicks save.
+		self.browser.find_element_by_name('is_published').click()
+		self.browser.find_element_by_name('send_now').click()
+		self.browser.find_element_by_name('submit').click()
+
+		# Anthony sees two success messages.
+		self.assertIn('Article saved successfully', self.browser.find_elements_by_class_name('alert-success')[0].text)
+		self.assertIn('Article published successfully', self.browser.find_elements_by_class_name('alert-success')[1].text)
+		self.assertIn('Add new story test title', self.browser.find_element_by_tag_name('h2').text)
+
+	def test_editor_can_send_story_to_all_clients(self):
+
+		# Anthony logs into the site
+		self.log_in_editor()
+
+		self.browser.get(self.test_server + '/story/inprogress/')
+		# Anthony clicks on the Front Page story's title
+
+		self.browser.find_element_by_link_text('Front Page').click()
+		self.assertIn('Edit Story Front Page', self.browser.find_element_by_tag_name('h1').text)
+
+		# Anthony clicks publsih story and send now, then clicks save.
+		self.browser.find_element_by_name('is_published').click()
+		self.browser.find_element_by_name('send_now').click()
+		self.browser.find_element_by_name('submit').click()
+
+		# Anthony sees two success messages.
+		self.assertIn('Article updated successfully', self.browser.find_elements_by_class_name('alert-success')[0].text)
+		self.assertIn('Article published successfully', self.browser.find_elements_by_class_name('alert-success')[1].text)
+		self.assertIn('Front Page', self.browser.find_element_by_tag_name('h2').text)
+
+	def test_editor_can_send_story_to_only_addition_recipients(self):
+
+		# Anthony logs into the site
+		self.log_in_editor()
+
+		self.browser.get(self.test_server + '/story/inprogress/')
+		# Anthony clicks on the Front Page story's title
+
+		self.browser.find_element_by_link_text('About Us').click()
+		self.assertIn('Edit Story About Us', self.browser.find_element_by_tag_name('h1').text)
+
+		# Anthony clicks publsih story and send now, then clicks save.
+		self.browser.find_element_by_name('is_published').click()
+		self.browser.find_element_by_name('send_now').click()
+		self.browser.find_element_by_name('add_recipients_only').click()
+		self.browser.find_element_by_name('submit').click()
+
+		# Oops, Anthony forgot to add an email to the recipient list
+		self.assertIsNotNone(self.browser.find_elements_by_class_name('alert-error'))
+
+		# Anthony adds an email address to the field
+		self.browser.find_element_by_name('add_recipients').send_keys('nns.aroberts@gmail.com')
+		self.browser.find_element_by_name('submit').click()
+
+		# Anthony sees two success messages.
+		self.assertIn('Article updated successfully', self.browser.find_elements_by_class_name('alert-success')[0].text)
+		self.assertIn('Article published successfully', self.browser.find_elements_by_class_name('alert-success')[1].text)
+		self.assertIn('About Us', self.browser.find_element_by_tag_name('h2').text)
+
+	def test_editor_can_send_story_to_only_broadcasters(self):
+
+		# Anthony logs into the site
+		self.log_in_editor()
+
+		self.browser.get(self.test_server + '/story/inprogress/')
+		# Anthony clicks on the Front Page story's title
+
+		self.browser.find_element_by_link_text('About Us').click()
+		self.assertIn('Edit Story About Us', self.browser.find_element_by_tag_name('h1').text)
+
+		# Anthony clicks publsih story and send now, then clicks save.
+		self.browser.find_element_by_name('is_published').click()
+		self.browser.find_element_by_name('send_now').click()
+		self.browser.find_element_by_name('broadcast_only').click()
+		self.browser.find_element_by_name('submit').click()
+
+		# Anthony sees two success messages.
+		self.assertIn('Article updated successfully', self.browser.find_elements_by_class_name('alert-success')[0].text)
+		self.assertIn('Article published successfully', self.browser.find_elements_by_class_name('alert-success')[1].text)
+		self.assertIn('About Us', self.browser.find_element_by_tag_name('h2').text)
 
 class EditorProfileTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 

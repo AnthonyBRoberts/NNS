@@ -16,7 +16,7 @@ from django.views.generic import DetailView, ListView
 from notification import models as notification
 from story.models import Article
 from story.forms import *
-from story.tasks import create_email_batch, alert_editor
+from story.management import send_article, notify_editor
 from apps.account.models import UserProfile
 
 
@@ -55,7 +55,7 @@ def inprogress_index(request):
     Stories in progress view, a list of all stories in progress
     """
     inprogress_list = Article.objects.filter(is_published=False).order_by('-publish_date')
-    paginator = Paginator(inprogress_list, 15)
+    paginator = Paginator(inprogress_list, 10)
     page = request.GET.get('page')
     try:
         show_lines = paginator.page(page)
@@ -74,7 +74,7 @@ def story_index(request):
     Story index view, a list of all published stories
     """
     story_list = Article.objects.filter(is_published=True).order_by('-publish_date')
-    paginator = Paginator(story_list, 15)
+    paginator = Paginator(story_list, 10)
     page = request.GET.get('page')
     try:
         show_lines = paginator.page(page)
@@ -90,7 +90,8 @@ def story_index(request):
 @login_required 
 def add_article(request):
     """
-    Create new article
+    Command for sending articles comes from management.py
+
     """
     if request.method == 'POST':
         if request.user.get_profile().user_type == 'Reporter':
@@ -114,48 +115,13 @@ def add_article(request):
             messages.success(request, msg, fail_silently=True)
             if request.user.get_profile().user_type == 'Editor':
                 if article.is_published and article.send_now:
-                    subject = article.title
-                    byline = article.byline
-                    email_text = article.email_text
-                    story_text = article.text 
-                    bc_only = form.cleaned_data['broadcast_only']
-                    add_email_only = form.cleaned_data['add_recipients_only']
-                    add_email_list = form.cleaned_data['add_recipients']
-                    recipients = []
-                    date_string = time.strftime("%Y-%m-%d-%H-%M")
-                    if add_email_only:
-                        for r in add_email_list:
-                            recipients.append(r)
-                    else: 
-                        for profile in UserProfile.objects.filter(user_type = 'Editor'):
-                            recipients.append(profile.user.email)
-                        for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
-                            recipients.append(profile.user.email)
-                        if bc_only:
-                            for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
-                                recipients.append(profile.user.email)
-                        else:
-                            for profile in UserProfile.objects.filter(user_type = 'Client'):        
-                                recipients.append(profile.user.email)
-                        if add_email_list:
-                            for r in add_email_list:
-                                recipients.append(r)
-                    if article.docfile is not None:
-                        attachment = article.docfile
-                        create_email_batch.delay(date_string, request.user.email, recipients, subject,
-                                                        byline, email_text, story_text, attachment)
-                    else:
-                        create_email_batch.delay(date_string, request.user.email, recipients, subject,
-                                                        byline, email_text, story_text)
+                    send_article(article, form)
                     msg = "Article published successfully"
                     messages.success(request, msg, fail_silently=True)
             elif request.user.get_profile().user_type == 'Reporter':
                 ready_for_editor = form.cleaned_data['ready_for_editor']
                 if ready_for_editor:
-                    subject = article.title + ' is ready for an editor'
-                    byline = request.user.get_profile().byline
-                    story_text = article.text 
-                    alert_editor.delay(request.user.email, subject, byline, story_text)
+                    notify_editor(article)
                     msg = "Editor has been notified."
                     messages.success(request, msg, fail_silently=True)
             return redirect(article)
@@ -168,6 +134,7 @@ def add_article(request):
             form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
         else:
             form = Article_RForm(initial={'byline': request.user.get_profile().byline})
+            form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
     return render_to_response('story/article_form.html', 
                               { 'form': form },
                               context_instance=RequestContext(request))
@@ -194,48 +161,13 @@ def edit_article(request, slug):
             messages.success(request, msg, fail_silently=True)
             if request.user.get_profile().user_type == 'Editor':
                 if article.is_published and article.send_now:
-                    subject = article.title
-                    byline = article.byline
-                    email_text = article.email_text
-                    story_text = article.text
-                    bc_only = form.cleaned_data['broadcast_only']
-                    add_email_only = form.cleaned_data['add_recipients_only']
-                    add_email_list = form.cleaned_data['add_recipients']
-                    recipients = []
-                    date_string = time.strftime("%Y-%m-%d-%H-%M")
-                    if add_email_only:
-                        for r in add_email_list:
-                            recipients.append(r)
-                    else: 
-                        for profile in UserProfile.objects.filter(user_type = 'Editor'):
-                            recipients.append(profile.user.email)
-                        for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
-                            recipients.append(profile.user.email)
-                        if bc_only:
-                            for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
-                                recipients.append(profile.user.email)
-                        else:
-                            for profile in UserProfile.objects.filter(user_type = 'Client'):        
-                                recipients.append(profile.user.email)
-                        if add_email_list:
-                            for r in add_email_list:
-                                recipients.append(r)
-                    if article.docfile is not None:
-                        attachment = article.docfile
-                        create_email_batch.delay(date_string, request.user.email, recipients, subject,
-                                                        byline, email_text, story_text, attachment)
-                    else:
-                        create_email_batch.delay(date_string, request.user.email, recipients, subject,
-                                                        byline, email_text, story_text)
+                    send_article(article, form)
                     msg = "Article published successfully"
                     messages.success(request, msg, fail_silently=True)
             elif request.user.get_profile().user_type == 'Reporter':
                 ready_for_editor = form.cleaned_data['ready_for_editor']
                 if ready_for_editor:
-                    subject = article.title + ' is ready for an editor'
-                    byline = request.user.get_profile().byline
-                    story_text = article.text 
-                    alert_editor.delay(request.user.email, subject, byline, story_text)
+                    notify_editor(article)
                     msg = "Editor has been notified."
                     messages.success(request, msg, fail_silently=True)
             return redirect(article)

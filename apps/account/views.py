@@ -10,6 +10,7 @@ import django.contrib.auth.decorators
 import django.contrib.auth.models
 import django.core.exceptions
 import django.core.urlresolvers
+from django.core.urlresolvers import reverse
 import django.http
 import django.shortcuts
 import django.template
@@ -19,10 +20,8 @@ from account.signals import user_activated
 
 def unsubscribe(request, form_class, success_url=None,
                 template_name='profiles/unsubscribe.html'):
-    try:
-        profile_obj = request.user.get_profile()
-    except ObjectDoesNotExist:
-        return HttpResponseRedirect(reverse('profiles_create_profile'))
+
+    profile_obj = request.user.get_profile()
     
     if success_url is None:
         success_url = reverse('profiles_profile_detail',

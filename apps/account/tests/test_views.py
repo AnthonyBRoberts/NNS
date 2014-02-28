@@ -5,6 +5,7 @@ from django.test.client import RequestFactory
 from django.shortcuts import get_object_or_404
 from django.test import TestCase
 from account.views import client_index, reporter_index, editor_index, unsubscribe
+from account.forms import UnsubscribeForm
 
 class AccountViewsTests(TestCase):
 	fixtures = ['../../functional_tests/fixtures/testdata.json']
@@ -14,7 +15,6 @@ class AccountViewsTests(TestCase):
 		self.factory = RequestFactory()
 		self.user = User.objects.get(username='jmoore')
 		self.client = User.objects.get(email='anthony@lincolnultimate.com')
-		)
 
 	def test_client_list_view(self):
 		request = self.factory.get(reverse('profiles_profile_list'))
@@ -37,7 +37,11 @@ class AccountViewsTests(TestCase):
 	def test_unsubscribe_view(self):
 		request = self.factory.get(reverse('unsubscribe'))
 		request.user = self.client
-		response = unsubscribe(request)
+		response = unsubscribe(request, UnsubscribeForm)
 		self.assertEqual(response.status_code, 200)
-		self.fail('test this shit, yo')
 
+	def test_unsubscribe_view_post(self):
+		request = self.factory.get(reverse('unsubscribe'))
+		request.user = self.client
+		response = unsubscribe(request, UnsubscribeForm)
+		self.assertTemplateUsed('profiles/unsubscribe.html')

@@ -43,3 +43,6 @@ settings/dev.py
 settings/prod.py
 settings/static.py
 
+#remove test data
+testdata/*
+

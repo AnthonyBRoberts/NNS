@@ -32,8 +32,8 @@ def send_published_article(date_string, sender, recipient, subject, byline, emai
         email.add_attachment(attachment)
     email.send()
 
-@task(name='alert_editor')
-def alert_editor(sender, subject, byline, text):
+@task(name='email_editor')
+def email_editor(sender, subject, byline, text):
     """
     Task for sending email on stories marked as ready_for_editor in a submitted reporter form.
     """
