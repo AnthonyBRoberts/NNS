@@ -256,13 +256,10 @@ class EditorProfileTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		# Anthony logs into the site
 		self.log_in_editor()
 
-		# Anthony clicks the My Profile button, to see if this is his account.
-		self.browser.find_element_by_link_text('My Profile').click()
-		self.assertIn('Welcome Anthony', self.browser.find_element_by_tag_name('h3').text)
-
-		# Anthony clicks the Edit my profile button, to edit his account info.
-		self.browser.find_element_by_link_text('Edit my profile').click()
-		self.assertIn('Edit Profile', self.browser.find_element_by_tag_name('h2').text)
+		# Anthony clicks the Account Settings button, to see if this is his account.
+		self.browser.find_element_by_link_text('Account Settings').click()
+		self.assertIn('Anthony', self.browser.find_element_by_name('first_name').get_attribute('value'))
+		self.assertIn('Roberts, Technology Consultant', self.browser.find_element_by_name('last_name').get_attribute('value'))
 
 		# Anthony changes some information
 		self.browser.find_element_by_id('id_phone').clear()
@@ -285,18 +282,16 @@ class EditorProfileTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 
 		# Anthony logs into the site
 		self.log_in_editor()
-		self.browser.find_element_by_link_text('My Profile').click()
+		self.browser.find_element_by_link_text('Account Settings').click()
 
 		# Anthony decides to try to delete some required info, which he's not allowed to do.
-		self.browser.find_element_by_link_text('Edit my profile').click()
 		self.browser.find_element_by_id('id_email').clear()
 		self.browser.find_element_by_name('submit').click()
 		self.assertIn('Primary email', self.browser.find_element_by_class_name('error').text)
 
-		#Anthony clicks on Stories, then goes back to My Profile, then tries to edit the form again.
+		#Anthony clicks on Stories, then goes back to Account Settings, then tries to edit the form again.
 		self.browser.find_element_by_link_text('Stories').click()
-		self.browser.find_element_by_link_text('My Profile').click()
-		self.browser.find_element_by_link_text('Edit my profile').click()
+		self.browser.find_element_by_link_text('Account Settings').click()
 		self.browser.find_element_by_id('id_first_name').clear()
 		self.browser.find_element_by_name('submit').click()
 		self.assertIn('First name', self.browser.find_element_by_class_name('error').text)

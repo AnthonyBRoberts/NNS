@@ -73,24 +73,25 @@
 								{% endif %}
 							</ul>
 							<ul class="nav pull-right">
-								{% if user.get_profile %}
-								<li>
-									<a href="/profiles/{{ request.user.username }}">My Profile</a>
-								</li>
 								{% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
-									<li>
-										<a href="/accounts/logout/?next=/accounts/login/?next=/story/inprogress/">Logout</a>
-									</li>
-								{% else %}
-									<li>
-										<a href="/accounts/logout/?next=/accounts/login/?next=/story/">Logout</a>
-									</li>
-								{% endif %}
-								{% else %}
-									<li>
-										<a href="/accounts/logout/?next=/accounts/login/?next=profiles_profile_detail">Logout</a>
-									</li>
-								{% endif %}
+                                    <li>
+                                        <a href="/profiles/reporter/edit">Account Settings</a>
+                                    </li>
+                                    <li>
+                                        <a href="/accounts/logout/?next=/accounts/login/?next=/story/inprogress/">Logout</a>
+                                    </li>
+                                {% elif user.get_profile.user_type == 'Client'%}
+                                    <li>
+                                        <a href="/profiles/client/edit">Account Settings</a>
+                                    </li>
+                                	<li>
+                                        <a href="/accounts/logout/?next=/accounts/login/?next=/story/">Logout</a>
+                                    </li>
+                                {% else %}
+                                	<li>
+                                        <a href="/accounts/logout/?next=/accounts/login/?next=profiles_profile_detail">Logout</a>
+                                    </li>
+                                {% endif %}
 							</ul>
 							  
 						</div> <!-- navbar-responsive-collapse -->	

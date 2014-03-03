@@ -111,13 +111,10 @@ class ClientProfileTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		# Rod logs into the site
 		self.log_in_client()
 
-		# Rod clicks the My Profile button, to see if this is his account.
-		self.browser.find_element_by_link_text('My Profile').click()
-		self.assertIn('Welcome Anthony Roberts', self.browser.find_element_by_tag_name('h3').text)
-
-		# Rod clicks the Edit my profile button, to edit his account info.
-		self.browser.find_element_by_link_text('Edit my profile').click()
-		self.assertIn('Edit Profile', self.browser.find_element_by_tag_name('h2').text)
+		# Rod clicks the Account Settings button, to see if this is his account.
+		self.browser.find_element_by_link_text('Account Settings').click()
+		self.assertIn('Anthony', self.browser.find_element_by_name('first_name').get_attribute('value'))
+		self.assertIn('Roberts', self.browser.find_element_by_name('last_name').get_attribute('value'))
 
 		# Rod changes some information
 		self.browser.find_element_by_id('id_facebook').send_keys('ainsworthnews')
@@ -150,19 +147,17 @@ class ClientProfileTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 
 		# Rod logs into the site
 		self.log_in_client()
-		self.browser.find_element_by_link_text('My Profile').click()
+		self.browser.find_element_by_link_text('Account Settings').click()
 
 		# Rod decides to try to delete some required info, which he's not allowed to do.
-		self.browser.find_element_by_link_text('Edit my profile').click()
 		self.browser.find_element_by_id('id_pub_area').send_keys('Northern Central Nebraska')
 		self.browser.find_element_by_id('id_phone').clear()
 		self.browser.find_element_by_name('submit').click()
 		self.assertIn('Phone', self.browser.find_element_by_class_name('error').text)
 
-		#Rod clicks on Stories, then goes back to My Profile, then tries to edit the form again.
+		#Rod clicks on Stories, then goes back to Account Settings, then tries to edit the form again.
 		self.browser.find_element_by_link_text('Stories').click()
-		self.browser.find_element_by_link_text('My Profile').click()
-		self.browser.find_element_by_link_text('Edit my profile').click()
+		self.browser.find_element_by_link_text('Account Settings').click()
 		self.browser.find_element_by_id('id_pub_area').clear()
 		self.browser.find_element_by_name('submit').click()
 		self.assertIn('Circulation or Broadcast Area', self.browser.find_element_by_class_name('error').text)
@@ -257,8 +252,7 @@ class ClientContentTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 
 		# Rod logs into the site
 		self.log_in_client()
-		self.browser.find_element_by_link_text('My Profile').click()
-		self.browser.find_element_by_link_text('Edit my profile').click()
+		self.browser.find_element_by_link_text('Account Settings').click()
 		self.browser.find_element_by_link_text('Unsubscribe from NNS emails').click()
 		self.browser.find_element_by_id('id_unsubscribe').click()
 		self.browser.find_element_by_name('submit').click()

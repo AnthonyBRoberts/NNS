@@ -134,7 +134,6 @@ def add_article(request):
             form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
         else:
             form = Article_RForm(initial={'byline': request.user.get_profile().byline})
-            form.fields['author'].queryset = UserProfile.objects.filter(Q(user_type = 'Reporter') | Q(user_type = 'Editor'))
     return render_to_response('story/article_form.html', 
                               { 'form': form },
                               context_instance=RequestContext(request))
