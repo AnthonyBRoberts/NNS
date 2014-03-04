@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load bootstrap_toolkit %}
+{% load url from future %}
+{% load staticfiles %}
+{% block extra_head %} 
+    {{ form.media }}
+  	<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+{% endblock %}
+{% block newstory %}
+
+    <div class="well">
+        {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
+        {% if article %}
+            <h1>Edit Media Item: {{ article }}</h1>
+        {% else %}
+            <h1>Create new media item</h1>
+        {% endif %}
+
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+                        {{ form|as_bootstrap }}
+
+            <input class="btn btn-large btn-primary" type="submit" name="submit" value="Save">
+            {% if article %}
+            <a class="btn btn-large" href="{% url 'media_list' %}">Cancel</a>
+            {% else %}
+            <a class="btn btn-large" href="/story/media">Cancel</a>
+            {% endif %}
+
+        </form>
+        {% else %}
+        <h3>You do not have permission to view this page</h3>
+        {% endif %}
+    </div>
+    
+    
+{% endblock %}

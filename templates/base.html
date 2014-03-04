@@ -106,6 +106,12 @@
                     <li>
                         <a href="/story/add/article">New Story</a>
                     </li>
+                    <li>
+                        <a href="/story/media">Media Items</a>
+                    </li>
+                    <li>
+                        <a href="/story/add/media">New Media Item</a>
+                    </li>
                 </ul>
                 {% endif %}
             {% bootstrap_messages %}
@@ -176,15 +182,21 @@
                             {% endblock %}
                         </p>
                     </div>
-                    <div class="tab-pane active" id="tab1">
+                    <div class="tab-pane active" id="tab12">
                         <p>
                             {% block map %}
                             {% endblock %}
                         </p>
                     </div>
-                    <div class="tab-pane active" id="tab1">
+                    <div class="tab-pane active" id="tab13">
                         <p>
                             {% block register_complete %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    <div class="tab-pane active" id="tab13">
+                        <p>
+                            {% block media_list %}
                             {% endblock %}
                         </p>
                     </div>

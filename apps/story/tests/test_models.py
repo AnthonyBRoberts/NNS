@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test.client import RequestFactory
 from django.test import TestCase
-from story.models import Article
+from story.models import Article, MediaItem
 
 class StoryModelTest(TestCase):
 	fixtures = ['testdata.json']
@@ -35,3 +35,27 @@ class StoryModelTest(TestCase):
 		self.assertIn('Some new text for the story', story.text)
 		# make sure the slug doesn't change when you change the title.
 		self.assertIn('test-new-story-12-feb-2014', story.slug)
+
+class MediaItemTest(TestCase):
+	fixtures = ['testdata.json']
+
+	def setUp(self):
+		# Every test needs access to the request factory.
+		self.factory = RequestFactory()
+		self.author = User.objects.get(username='jmoore')
+
+	def test_can_create_story_with_slug(self):
+		media = MediaItem.objects.create(author=self.author, title='MediaItem Model Unit Test Story')
+		self.assertIn('mediaitem-model-unit-test-story', media.slug)
+
+	def test_media_unicode(self):
+		mock_article = Mock(spec=MediaItem)
+		mock_article.author=self.author
+		mock_article.title='test unicode test'
+		self.assertEqual(MediaItem.__unicode__(mock_article), 'test unicode test')
+
+	def test_media_get_absolute_url(self):
+		media = MediaItem.objects.create(author=self.author, title='MediaItem Model Unit Test Story')
+		self.assertIsNotNone(media.get_absolute_url())
+
+	
