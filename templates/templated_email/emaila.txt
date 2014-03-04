@@ -2,9 +2,23 @@ Nebraska News Service
 
 {{ email_text|striptags }}
 
+
+{% if mediaitems %}
+Links to media items:
+
+{% for m in mediaitems %}
+{{ m }}
+
+
+{% endfor %}
+{% endif %}
+
 Here's the story published on the {% now "jS \o\f F, Y" %}:
 
+
 {{ byline }}
+
+
 
 {{ story_text|striptags }}
 

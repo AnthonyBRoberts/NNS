@@ -20,14 +20,18 @@ def notify_editor(article):
 	byline = article.author.get_profile().byline
 	story_text = article.text 
 	email_editor.delay(article.author.email, subject, byline, story_text)
-	
+
 
 def send_article(article, form):
 	subject = article.title
 	byline = article.byline
 	email_text = article.email_text
 	story_text = article.text
-	author_email = article.author.email 
+	author_email = article.author.email
+	media = article.mediaitems.all()
+	mediaitems = []
+	for m in media:
+		mediaitems.append(m.docfile.url)
 	bc_only = form.cleaned_data['broadcast_only']
 	add_email_only = form.cleaned_data['add_recipients_only']
 	add_email_list = form.cleaned_data['add_recipients']
@@ -53,7 +57,7 @@ def send_article(article, form):
 	if article.docfile is not None:
 		attachment = article.docfile
 		create_email_batch.delay(date_string, author_email, recipients, subject,
-										byline, email_text, story_text, attachment)
+										byline, email_text, story_text, attachment, mediaitems)
 	else:
 		create_email_batch.delay(date_string, author_email, recipients, subject,
-										byline, email_text, story_text)
+										byline, email_text, story_text, mediaitems)

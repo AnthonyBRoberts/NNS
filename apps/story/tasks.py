@@ -7,7 +7,7 @@ import time
 
 
 @task(name='email-batch')
-def create_email_batch(date_string, sender, recipients, subject, byline, email_text, story_text, attachment=None):
+def create_email_batch(date_string, sender, recipients, subject, byline, email_text, story_text, mediaitems=None, attachment=None):
     """
     Task for emailing published articles.
     Runs when an article is saved and both is_published & send_now==True
@@ -15,17 +15,17 @@ def create_email_batch(date_string, sender, recipients, subject, byline, email_t
     
     for r in recipients:
         send_published_article.delay(date_string, sender, r, subject,
-                                                        byline, email_text, story_text, attachment)
+                                                        byline, email_text, story_text, attachment, mediaitems)
         time.sleep(2)
 
 
 @task(name='send-email')
-def send_published_article(date_string, sender, recipient, subject, byline, email_text, story_text, attachment=None):
+def send_published_article(date_string, sender, recipient, subject, byline, email_text, story_text, mediaitems=None, attachment=None):
     """
     Task for sending each email, gets called by create_email_batch
     """
     email = EMail(subject, recipient)
-    ctx = {'subject': subject, 'story_text': story_text, 'email_text': email_text, 'byline': byline}
+    ctx = {'subject': subject, 'story_text': story_text, 'email_text': email_text, 'byline': byline, 'mediaitems': mediaitems}
     email.text('../templates/templated_email/emaila.txt', ctx)
     email.html('../templates/templated_email/emaila.html', ctx)
     if attachment:

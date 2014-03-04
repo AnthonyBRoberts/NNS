@@ -62,7 +62,7 @@ class Article(models.Model):
 	objects = models.Manager()
 	published = PublishedArticlesManager()
 	docfile = models.FileField(upload_to='docs/%Y/%m/%d/', blank=True, null=True, verbose_name="Add Attachment")
-	mediaitems = models.ManyToManyField(MediaItem)
+	mediaitems = models.ManyToManyField(MediaItem, blank=True, null=True)
 	tags = TaggableManager(blank=True)
 
 	def __unicode__(self):
