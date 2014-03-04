@@ -57,7 +57,7 @@ class Article_EForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = ('title', 'text', 'email_text', 'author', 'byline',
-                    'tags', 'docfile', 'publish_date', 'is_published', 
+                    'tags', 'docfile', 'mediaitems', 'publish_date', 'is_published', 
                     'send_now', 'broadcast_only', 'add_recipients_only', 'add_recipients'
                     )
         exclude = ['slug']
@@ -80,7 +80,7 @@ class Article_RForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = ('title', 'text', 'tags', 'docfile', 'ready_for_editor')
-        exclude = ['author', 'byline', 'slug', 'publish_date', 'email_text', 'is_published', 'send_now']
+        exclude = ['author', 'byline', 'slug', 'publish_date', 'email_text', 'is_published', 'send_now', 'media']
         dateTimeOptions = {
             'format': 'mm/dd/yyyy HH:ii P',
             'autoclose': 'true',

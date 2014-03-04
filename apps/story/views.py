@@ -152,7 +152,7 @@ def add_article(request):
         else:
             form = Article_RForm(initial={'byline': request.user.get_profile().byline})
     return render_to_response('story/article_form.html', 
-                              { 'form': form },
+                              { 'article_form': form },
                               context_instance=RequestContext(request))
 
 @login_required 
@@ -203,7 +203,7 @@ def edit_article(request, slug):
             form = Article_RForm(instance=article, initial={'byline': article.author.get_profile().byline})
     return render_to_response('story/article_form.html', 
                               { 
-                                  'form': form,
+                                  'article_form': form,
                                   'article': article,
                               },
                               context_instance=RequestContext(request))
