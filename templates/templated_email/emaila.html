@@ -78,7 +78,7 @@ alink="#FF0000" link="#FF0000" bgcolor="#FFFFFF" text="#000000" yahoo="fix">
                 <td bgcolor="#ffffff"><p>{{ email_text|safe }}</p>
                   <p></p>
                   <p>Media Links</p>
-                  {% for key, values in mediaitems.items %} 
+                  {% for key, value in mediaitems.items %} 
                     <p><a href="{{ value }}">{{ key }}</a></p>
                     <p></p>
                   {% endfor %}
