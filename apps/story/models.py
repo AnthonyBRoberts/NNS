@@ -11,18 +11,18 @@ import datetime
 class MediaItem(models.Model):
 	"""Represents a story article"""
 	
-	title = models.CharField(max_length=255, verbose_name="Headline")
+	title = models.CharField(max_length=255, verbose_name="Media Title")
 	slug = models.SlugField(max_length=255, unique=True)
-	text = models.CharField(max_length=40000, verbose_name="Story Text")
+	text = models.CharField(max_length=40000, verbose_name="Media Description")
 	email_text = models.CharField(max_length=10000, blank=True, null=True, verbose_name="Email Message Text")
 	author = models.ForeignKey(User)
 	byline = models.CharField(max_length=100, blank=True, null=True)
-	is_published = models.BooleanField(default=False, verbose_name="Publish Story")
+	is_published = models.BooleanField(default=False, verbose_name="Publish Media")
 	send_now = models.BooleanField(default=False, verbose_name="Send Now?")
 	created_on = models.DateTimeField(auto_now_add=True)
 	publish_date = models.DateTimeField(default=datetime.datetime.now())
 	objects = models.Manager()
-	docfile = models.FileField(upload_to='docs/%Y/%m/%d/', blank=True, null=True, verbose_name="Add Attachment")
+	docfile = models.FileField(upload_to='docs/%Y/%m/%d/', blank=True, null=True, verbose_name="Upload Media File")
 	tags = TaggableManager(blank=True)
 
 	def __unicode__(self):
