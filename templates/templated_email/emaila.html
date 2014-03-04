@@ -72,15 +72,18 @@ alink="#FF0000" link="#FF0000" bgcolor="#FFFFFF" text="#000000" yahoo="fix">
         <table cellpadding="12" cellspacing="12" border="1" width="600" bordercolor="#999999" bgcolor="#CCCCCC" >
             <tr>
                 <td bgcolor="#ffffff"><p>{{ email_text|safe }}</p>
-                  {% if mediaitems %}
+            </tr>
+            {% if mediaitems %}
+            <tr>
+                <td bgcolor="#ffffff"><p>{{ email_text|safe }}</p>
+                  <p></p>
                   <p>Media Links</p>
-                  {% for m in mediaitems %} 
-                    <p><a href="{{ m }}">{{ m }}</a></p>
+                  {% for key, values in mediaitems.items %} 
+                    <p><a href="{{ value }}">{{ key }}</a></p>
                     <p></p>
                   {% endfor %}
-                  {% endif %}
-
             </tr>
+            {% endif %}
             <tr>
                 <td bgcolor="#EEEEEE">
                 	<h2>{{ subject }}</h2> 

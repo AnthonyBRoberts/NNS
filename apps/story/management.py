@@ -29,9 +29,9 @@ def send_article(article, form):
 	story_text = article.text
 	author_email = article.author.email
 	media = article.mediaitems.all()
-	mediaitems = []
+	mediaitems = {}
 	for m in media:
-		mediaitems.append(m.docfile.url)
+		mediaitems[m.title] = m.docfile.url
 	bc_only = form.cleaned_data['broadcast_only']
 	add_email_only = form.cleaned_data['add_recipients_only']
 	add_email_list = form.cleaned_data['add_recipients']
