@@ -73,11 +73,11 @@ alink="#FF0000" link="#FF0000" bgcolor="#FFFFFF" text="#000000" yahoo="fix">
             <tr>
                 <td bgcolor="#ffffff"><p>{{ email_text|safe }}</p></td>
                 
-                <td bgcolor="#ffffff">
+                
                   {% for m in mediaitems %}
-                    <a href="{{ m }}">{{ m }}</a>
+                    <p><a href="{{ m }}">{{ m }}</a></p>
                   {% endfor %}
-                  </td>
+
             </tr>
             <tr>
                 <td bgcolor="#EEEEEE">
