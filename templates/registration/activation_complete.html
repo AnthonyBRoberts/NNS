@@ -8,8 +8,8 @@
 <h2>{% trans "Activation complete" %}</h2>
 {% endblock %}
 
-{% block content %}
-<p>{% trans "You may now login with your username and password." %}</p>
+{% block activation_complete %}
+<p name='activated_message'>{% trans "You may now login with your username and password." %}</p>
 {% if not user.is_authenticated %}
     <a href="{% url "auth_login" %}">{% trans "Login now" %}</a>
 {% else %}

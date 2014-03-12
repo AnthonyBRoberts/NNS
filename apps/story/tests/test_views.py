@@ -5,6 +5,7 @@ from django.test.client import RequestFactory
 from django.shortcuts import get_object_or_404
 from django.test import TestCase
 from story.views import *
+from story.tasks import *
 
 class StoryViewsTests(TestCase):
 	fixtures = ['../../functional_tests/fixtures/testdata.json']

@@ -4,8 +4,10 @@ from django.test.utils import IgnoreDeprecationWarningsMixin
 from django.test.client import RequestFactory
 from django.shortcuts import get_object_or_404
 from django.test import TestCase
-from account.views import client_index, reporter_index, editor_index, unsubscribe
+from profiles.views import edit_profile
+from account.views import client_index, reporter_index, editor_index
 from account.forms import UnsubscribeForm
+from account.tasks import *
 
 class AccountViewsTests(TestCase):
 	fixtures = ['../../functional_tests/fixtures/testdata.json']
@@ -37,11 +39,11 @@ class AccountViewsTests(TestCase):
 	def test_unsubscribe_view(self):
 		request = self.factory.get(reverse('unsubscribe'))
 		request.user = self.client
-		response = unsubscribe(request, UnsubscribeForm)
+		response = edit_profile(request, UnsubscribeForm)
 		self.assertEqual(response.status_code, 200)
 
 	def test_unsubscribe_view_post(self):
 		request = self.factory.get(reverse('unsubscribe'))
 		request.user = self.client
-		response = unsubscribe(request, UnsubscribeForm)
+		response = edit_profile(request, UnsubscribeForm)
 		self.assertTemplateUsed('profiles/unsubscribe.html')

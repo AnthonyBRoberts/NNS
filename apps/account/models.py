@@ -1,7 +1,6 @@
 import datetime
 import phonenumbers
 from django import forms
-from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
@@ -87,12 +86,11 @@ def create_profile(sender, **kwargs):
 
 @receiver(user_activated)
 def alert_editor_of_newclient(sender, user, request, **kwargs):
-    subject = 'New Client Signup'
     client_email = user.email
     recipients = []
     for profile in UserProfile.objects.filter(user_type = 'Editor'):
         recipients.append(profile.user.email)
-    new_client_alert.delay(settings.DEFAULT_FROM_EMAIL, recipients, subject, client_email)
+    new_client_alert.delay(recipients, client_email)
 
 @receiver(user_registered)
 def user_registered_handler(sender, user, request, **kwargs):
@@ -113,3 +111,4 @@ def user_registered_handler(sender, user, request, **kwargs):
     profile.website = request.POST.get('website')
     user.save()
     profile.save()
+

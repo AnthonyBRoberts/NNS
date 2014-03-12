@@ -22,21 +22,7 @@ class MultiEmailField(forms.Field):
 
         for email in value:
             validate_email(email.strip(' '))
-
-class ArticleForm(forms.ModelForm):
-    class Meta:
-        model = Article
-        exclude = ['author', 'slug']
-        dateTimeOptions = {
-            'format': 'mm/dd/yyyy HH:ii P',
-            'autoclose': 'true',
-            'showMeridian': 'false',
-        }
-        widgets = {
-            'email_text': RedactorWidget(editor_options={'lang': 'en'}),
-            'text': RedactorWidget(editor_options={'lang': 'en'}),
-        }
-
+            
 
 class Article_EForm(forms.ModelForm):
 

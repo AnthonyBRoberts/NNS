@@ -46,8 +46,3 @@ def email_editor(sender, subject, byline, text):
         email.text('../templates/templated_email/ready_for_editor.txt', ctx)
         email.html('../templates/templated_email/ready_for_editor.html', ctx)  
         email.send()
-
-
-@task()
-def report_errors():
-        logging.error("reporting errors")

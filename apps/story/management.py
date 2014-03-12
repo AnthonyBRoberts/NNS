@@ -28,10 +28,13 @@ def send_article(article, form):
 	email_text = article.email_text
 	story_text = article.text
 	author_email = article.author.email
-	media = article.mediaitems.all()
-	mediaitems = {}
-	for m in media:
-		mediaitems[m.title] = m.docfile.url
+	try:
+		media = article.mediaitems.all()
+		mediaitems = {}
+		for m in media:
+			mediaitems[m.title] = m.docfile.url
+	except:
+		mediaitems = {}
 	bc_only = form.cleaned_data['broadcast_only']
 	add_email_only = form.cleaned_data['add_recipients_only']
 	add_email_list = form.cleaned_data['add_recipients']

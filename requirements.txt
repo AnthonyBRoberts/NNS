@@ -1,36 +1,42 @@
-Django==1.5.4
+Django==1.6.2
+EasyProcess==0.1.6
 Fabric==1.4.3
 HireFire==0.1
+PIL==1.1.7
+PyVirtualDisplay==0.1.2
 PyYAML==3.10
 South==0.7.6
 amqp==1.0.13
 anyjson==0.3.3
 argparse==1.2.1
+backports.ssl-match-hostname==3.4.0.2
 beautifulsoup4==4.3.2
 billiard==2.7.3.34
-boto==2.5.2
+boto==2.25.0
 celery==3.0.24
+coverage==3.7.1
 dj-database-url==0.2.1
 django-appconf==0.6
+django-async-messages==0.3
 django-bootstrap-toolkit==2.14.0
 django-celery==3.0.17
 django-datetime-widget==0.5.3a
 django-localflavor==1.0
+django-model-utils==2.0
 django-notification==1.1
-django-notifications-hq
+django-notifications-hq==0.6.0
 django-password-reset==0.5.1
--e git://github.com/AnthonyBRoberts/django-profiles.git#egg=django-profiles
--e git://github.com/AnthonyBRoberts/django-registration-1.5.git#egg=django-registration
--e git://github.com/AnthonyBRoberts/django-ses.git#egg=django-ses
--e git://github.com/AnthonyBRoberts/django-registration-email.git@nns_version#egg=django-registration-email
+-e git+https://github.com/AnthonyBRoberts/django-registration-1.5.git@2f6d49cbe0afe2eb23c4c06c926958800625f175#egg=django_registration-master
+-e git://github.com/AnthonyBRoberts/django-registration-email.git@dd040f41cbc3a31d44cc019682e5d252c924bb0a#egg=django_registration_email-origin/nns_version
+-e git://github.com/AnthonyBRoberts/django-ses.git@cc6d953c17a41ad0774f95c864acfef81af43b5e#egg=django_ses-master
 django-staticfiles==1.2.1
 django-storages==1.1.5
-django-suit==0.2.4
+django-suit==0.2.6
 django-suit-redactor==0.0.2
-django-taggit==0.10a1
+django-taggit==0.11.2
 django-templated-email==0.4.9
-django-tinymce==1.5.1
 docutils==0.10
+flower==0.6.0
 gevent==0.13.7
 greenlet==0.4.0
 gunicorn==0.14.6
@@ -41,13 +47,21 @@ mock==1.0b1
 newrelic==1.11.0.55
 paramiko==1.10.1
 phonenumbers==5.5b1
+-e git+https://github.com/AnthonyBRoberts/django-profiles.git@38b6992aabb21162c344273d219858bbcd990451#egg=profiles-master
 psycopg2==2.4.5
 pycrypto==2.6
+pyscreenshot==0.3.2
 python-dateutil==2.1
 pytz==2013.7
 redis==2.7.1
+selenium==2.39.0
 simplejson==2.2.1
 six==1.4.1
 ssh==1.8.0
+stevedore==0.14.1
+tornado==3.2
 unittest2==0.5.1
+virtualenv==1.11.2
+virtualenv-clone==0.2.4
+virtualenvwrapper==4.2
 wsgiref==0.1.2

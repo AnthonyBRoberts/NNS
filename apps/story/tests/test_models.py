@@ -6,7 +6,7 @@ from django.test import TestCase
 from story.models import Article, MediaItem
 
 class StoryModelTest(TestCase):
-	fixtures = ['testdata.json']
+	fixtures = ['../../functional_tests/fixtures/testdata.json']
 
 	def setUp(self):
 		# Every test needs access to the request factory.

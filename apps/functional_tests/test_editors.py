@@ -1,10 +1,10 @@
-from .base import FunctionalTest
+from .base import EditorTests
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from django.test.utils import IgnoreDeprecationWarningsMixin
 
-class EditorViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
+class EditorViewsTest(IgnoreDeprecationWarningsMixin, EditorTests):
 
 	def test_editor_can_view_user_lists(self):
 
@@ -43,7 +43,7 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		self.browser.find_element_by_xpath('//*[@id="tab1"]/table/tbody/tr[2]/td[1]/a').click()
 
 		# ToDo: This only works locally, on server this story doesn't exist.
-		self.assertIn('Edit Story', self.browser.find_element_by_tag_name('h1').text)
+		self.assertIn('Edit Story', self.browser.find_element_by_tag_name('h2').text)
 
 		# Anthony clicks Published Stories Tab again
 		self.browser.find_element_by_link_text('Published Stories').click()
@@ -51,7 +51,7 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		# Anthony clicks on the second story's title
 		# ToDo: This only works locally, on server this story doesn't exist.
 		self.browser.find_element_by_xpath('//*[@id="tab1"]/table/tbody/tr[3]/td[1]/a').click()
-		self.assertIn('Edit Story', self.browser.find_element_by_tag_name('h1').text)
+		self.assertIn('Edit Story', self.browser.find_element_by_tag_name('h2').text)
 
 		# Anthony tries to save the story without a title, but can't 
 		self.browser.find_element_by_id('id_title').clear()
@@ -94,14 +94,14 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		# Anthony clicks on the Front Page story's title
 
 		self.browser.find_element_by_link_text('Front Page').click()
-		self.assertIn('Edit Story Front Page', self.browser.find_element_by_tag_name('h1').text)
+		self.assertIn('Edit Story Front Page', self.browser.find_element_by_tag_name('h2').text)
 
 		# Anthony clicks Stories in progress Tab again
 		self.browser.find_element_by_link_text('Stories in progress').click()
 
 		# Anthony clicks on the second story's title
 		self.browser.find_element_by_link_text('About Us').click()
-		self.assertIn('Edit Story About Us', self.browser.find_element_by_tag_name('h1').text)
+		self.assertIn('Edit Story About Us', self.browser.find_element_by_tag_name('h2').text)
 
 		# Anthony tries to save the story without a title, but can't 
 		self.browser.find_element_by_id('id_title').clear()
@@ -166,6 +166,9 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		self.browser.find_element_by_class_name('redactor_editor').send_keys('Add new story test text')
 		author = Select(self.browser.find_element_by_id('id_author'))
 		author.select_by_visible_text('anthony')
+		mediaitem = Select(self.browser.find_element_by_id('id_mediaitems'))
+		mediaitem.select_by_visible_text('Make some media 1')
+		mediaitem.select_by_visible_text('New Media Item')
 
 		# Anthony clicks publsih story and send now, then clicks save.
 		self.browser.find_element_by_name('is_published').click()
@@ -186,7 +189,7 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		# Anthony clicks on the Front Page story's title
 
 		self.browser.find_element_by_link_text('Front Page').click()
-		self.assertIn('Edit Story Front Page', self.browser.find_element_by_tag_name('h1').text)
+		self.assertIn('Edit Story Front Page', self.browser.find_element_by_tag_name('h2').text)
 
 		# Anthony clicks publsih story and send now, then clicks save.
 		self.browser.find_element_by_name('is_published').click()
@@ -207,7 +210,7 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		# Anthony clicks on the Front Page story's title
 
 		self.browser.find_element_by_link_text('About Us').click()
-		self.assertIn('Edit Story About Us', self.browser.find_element_by_tag_name('h1').text)
+		self.assertIn('Edit Story About Us', self.browser.find_element_by_tag_name('h2').text)
 
 		# Anthony clicks publsih story and send now, then clicks save.
 		self.browser.find_element_by_name('is_published').click()
@@ -236,7 +239,7 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		# Anthony clicks on the Front Page story's title
 
 		self.browser.find_element_by_link_text('About Us').click()
-		self.assertIn('Edit Story About Us', self.browser.find_element_by_tag_name('h1').text)
+		self.assertIn('Edit Story About Us', self.browser.find_element_by_tag_name('h2').text)
 
 		# Anthony clicks publsih story and send now, then clicks save.
 		self.browser.find_element_by_name('is_published').click()
@@ -249,7 +252,59 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		self.assertIn('Article published successfully', self.browser.find_elements_by_class_name('alert-success')[1].text)
 		self.assertIn('About Us', self.browser.find_element_by_tag_name('h2').text)
 
-class EditorProfileTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
+	def test_editor_can_create_new_media_item(self):
+
+		# Anthony logs into the site
+		self.log_in_editor()
+
+		# Anthony goes to the add new story page
+		self.browser.get(self.test_server + '/story/add/media')
+
+		# Anthony tries to save the media item without a title, but can't 
+		self.browser.find_element_by_id('id_title').clear()
+		self.browser.find_element_by_name('submit').click()
+		self.assertIn('This field is required.', self.browser.find_element_by_class_name('help-block').text)
+
+		# Anthony makes some changes and saves.
+		self.browser.find_element_by_id('id_title').send_keys('Functional Test Add Media Title')
+		self.browser.find_element_by_class_name('redactor_editor').send_keys('This is an added paragraph to the create new story test.')
+		author = Select(self.browser.find_element_by_id('id_author'))
+		author.select_by_visible_text('anthony')
+		self.browser.find_element_by_id('id_tags').send_keys(', Tags, Media')
+
+		self.browser.find_element_by_name('submit').click()
+
+		# Anthony sees two success messages, saved and editor notified
+		self.assertIn('Media saved successfully', 
+						self.browser.find_elements_by_class_name('alert-success')[0].text)
+		self.assertIsNotNone(self.browser.find_element_by_link_text('Functional Test Add Media Title'))
+
+	def test_editor_can_edit_and_send_media_items(self):
+
+		# Anthony logs into the site
+		self.log_in_editor()
+
+		# Anthony goes to the media list and clicks on the first media item in the list
+		self.browser.get(self.test_server + '/story/media')
+		self.browser.find_element_by_link_text('Make some media 2').click()
+		self.assertIsNotNone(self.browser.find_element_by_id('id_title'))
+
+		# Anthony makes some changes and saves.
+		self.browser.find_element_by_id('id_title').send_keys('Functional Test Add Media Title 2')
+		self.browser.find_element_by_class_name('redactor_editor').send_keys('This is an added paragraph to the create new media test.')
+		self.browser.find_element_by_id('id_tags').send_keys(', Anthonys_new_tag')
+		self.browser.find_element_by_id('id_is_published').click()
+		self.browser.find_element_by_id('id_send_now').click()
+		self.browser.find_element_by_name('submit').click()
+
+		# Anthony sees two success messages, saved and editor notified
+		#for text in self.browser.find_elements_by_tag_name()
+		self.assertIsNotNone(self.browser.find_element_by_class_name('alert-success'))
+		#self.assertIn('Media published successfully', 
+						#self.browser.find_elements_by_class_name('alert-success')[1].text)
+
+
+class EditorProfileTest(IgnoreDeprecationWarningsMixin, EditorTests):
 
 	def test_editor_can_view_and_edit_profile(self):
 

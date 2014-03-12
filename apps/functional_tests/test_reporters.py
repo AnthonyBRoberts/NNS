@@ -42,7 +42,7 @@ class ReporterViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		self.browser.find_element_by_xpath('//*[@id="tab1"]/table/tbody/tr[2]/td[1]/a').click()
 
 		# ToDo: This only works locally, on server this story doesn't exist.
-		self.assertIn('Edit Story', self.browser.find_element_by_tag_name('h1').text)
+		self.assertIn('Edit Story', self.browser.find_element_by_tag_name('h2').text)
 
 		# Joe clicks Published Stories Tab again
 		self.browser.find_element_by_link_text('Published Stories').click()
@@ -50,7 +50,7 @@ class ReporterViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		# Joe clicks on the second story's title
 		# ToDo: This only works locally, on server this story doesn't exist.
 		self.browser.find_element_by_xpath('//*[@id="tab1"]/table/tbody/tr[3]/td[1]/a').click()
-		self.assertIn('Edit Story', self.browser.find_element_by_tag_name('h1').text)
+		self.assertIn('Edit Story', self.browser.find_element_by_tag_name('h2').text)
 
 		# Joe tries to save the story without a title, but can't 
 		self.browser.find_element_by_id('id_title').clear()
@@ -93,14 +93,14 @@ class ReporterViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		# Joe clicks on the Front Page story's title
 
 		self.browser.find_element_by_link_text('Front Page').click()
-		self.assertIn('Edit Story Front Page', self.browser.find_element_by_tag_name('h1').text)
+		self.assertIn('Edit Story Front Page', self.browser.find_element_by_tag_name('h2').text)
 
 		# Joe clicks Stories in progress Tab again
 		self.browser.find_element_by_link_text('Stories in progress').click()
 
 		# Joe clicks on the second story's title
 		self.browser.find_element_by_link_text('About Us').click()
-		self.assertIn('Edit Story About Us', self.browser.find_element_by_tag_name('h1').text)
+		self.assertIn('Edit Story About Us', self.browser.find_element_by_tag_name('h2').text)
 
 		# Joe tries to save the story without a title, but can't 
 		self.browser.find_element_by_id('id_title').clear()
@@ -222,31 +222,40 @@ class ReporterViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		self.assertIn('This field is required.', self.browser.find_element_by_class_name('help-block').text)
 
 		# Joe makes some changes and saves.
-		self.browser.find_element_by_id('id_title').send_keys('Functional Test Add Story Title')
+		self.browser.find_element_by_id('id_title').send_keys('Functional Test Add Media Title')
 		self.browser.find_element_by_class_name('redactor_editor').send_keys('This is an added paragraph to the create new story test.')
 		self.browser.find_element_by_id('id_tags').send_keys(', Joes_new_tag')
 		self.browser.find_element_by_name('ready_for_editor').click()
 		self.browser.find_element_by_name('submit').click()
 
 		# Joe sees two success messages, saved and editor notified
-		self.assertIn('Article saved successfully', 
+		self.assertIn('Media saved successfully', 
 						self.browser.find_elements_by_class_name('alert-success')[0].text)
 		self.assertIn('Editor has been notified', 
 						self.browser.find_elements_by_class_name('alert-success')[1].text)
 
-		# Joe sees his changes to the story, and a note that it's not published yet.
-		self.assertIn('Note: This story has not been published yet.', 
-						self.browser.find_element_by_class_name('text-error').text)
-		self.assertIn('Functional Test Add Story Title', 
-						self.browser.find_element_by_tag_name('h2').text)
+	def test_reporter_can_edit_media_items_and_notify_editor(self):
 
-		ptext = self.browser.find_elements_by_tag_name('p')
-		try:
-			for p in ptext:
-				if 'This is an added paragraph to the create new story test.' in p.text:
-					self.assertIn('This is an added paragraph to the create new story test.', p.text)
-		except:
-			self.fail('The text did not get added to the story')
+		# Joe logs into the site
+		self.log_in_reporter()
+
+		# Joe goes to the media list and clicks on the first media item in the list
+		self.browser.get(self.test_server + '/story/media')
+		self.browser.find_element_by_xpath('//*[@id="tab13"]/table/tbody/tr[2]/td[1]/a').click()
+		self.assertIsNotNone(self.browser.find_element_by_id('id_title'))
+
+		# Joe makes some changes and saves.
+		self.browser.find_element_by_id('id_title').send_keys('Functional Test Add Media Title')
+		self.browser.find_element_by_class_name('redactor_editor').send_keys('This is an added paragraph to the create new story test.')
+		self.browser.find_element_by_id('id_tags').send_keys(', Joes_new_tag')
+		self.browser.find_element_by_name('ready_for_editor').click()
+		self.browser.find_element_by_name('submit').click()
+
+		# Joe sees two success messages, saved and editor notified
+		self.assertIn('Media updated successfully', 
+						self.browser.find_elements_by_class_name('alert-success')[0].text)
+		self.assertIn('Editor has been notified', 
+						self.browser.find_elements_by_class_name('alert-success')[1].text)
 
 class ReporterProfileTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 

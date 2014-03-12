@@ -3,6 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from django.contrib.auth.models import User
+from registration.models import RegistrationProfile
+from account.models import UserProfile
 from django.test.utils import IgnoreDeprecationWarningsMixin
 
 class NewCientRegistrationTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
@@ -65,7 +67,12 @@ class NewCientRegistrationTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		self.assertEqual('Thank you for becoming a client of the Nebraska News Service', reg_success_message[0].text)
 
 		# Rod clicks the link to activate his account.
-		# ToDo: get the activation key and go to the activation url for this new account.
+		profile = RegistrationProfile.objects.get(user__email='selenium1@gmail.com')
+		activation_key = profile.activation_key
+		self.browser.get(self.test_server + '/accounts/activate/' + activation_key)
+		self.assertIn('You may now login with your username and password.',
+					   self.browser.find_element_by_name('activated_message').text)
+
 
 
 class ClientSigninTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
@@ -104,6 +111,7 @@ class ClientSigninTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		#self.assertIn('Published Stories', self.browser.find_element_by_tag_name('h2').text)
 		self.assertIn('Published Stories', self.browser.find_element_by_tag_name('h2').text)
 
+
 class ClientProfileTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 
 	def test_client_can_view_and_edit_profile(self):
@@ -139,9 +147,10 @@ class ClientProfileTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 			self.browser.find_element_by_name('submit').click()
 		
 		# Rod sees his profile with the new data.
-		self.assertIn('Welcome Anthony Roberts', self.browser.find_element_by_tag_name('h3').text)
-		self.assertIn('ainsworthnews', self.browser.find_element_by_xpath('//*[@id="tab5"]/div/div[1]/ul[2]/li[2]').text)
-		self.assertIn('Northern Central Nebraska', self.browser.find_element_by_xpath('//*[@id="tab5"]/div/div[1]/ul[1]/li[5]').text)
+		self.assertIn('Edit Account Settings and Contact Information:', self.browser.find_element_by_tag_name('h2').text)
+		self.assertIn('Anthony', self.browser.find_element_by_name('first_name').get_attribute('value'))
+		self.assertIn('ainsworthnews', self.browser.find_element_by_name('facebook').get_attribute('value'))
+		self.assertIn('Northern Central Nebraska', self.browser.find_element_by_name('pub_area').get_attribute('value'))
 
 	def test_client_cant_delete_required_profile_data(self):
 
@@ -161,6 +170,21 @@ class ClientProfileTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 		self.browser.find_element_by_id('id_pub_area').clear()
 		self.browser.find_element_by_name('submit').click()
 		self.assertIn('Circulation or Broadcast Area', self.browser.find_element_by_class_name('error').text)
+
+	def test_client_can_unsubscribe(self):
+
+		# Rod logs into the site
+		self.log_in_client()
+		self.browser.find_element_by_link_text('Account Settings').click()
+		self.browser.find_element_by_link_text('Unsubscribe from NNS emails').click()
+		self.browser.find_element_by_class_name('checkbox').click()
+		self.browser.find_element_by_name('submit').click()
+		self.assertIn('Note: This account has been unsubscribed from email list.', 
+					   self.browser.find_element_by_class_name('text-error').text)
+		profile = UserProfile.objects.get(user__email='anthony@lincolnultimate.com')
+		self.assertEqual('InactiveClient', profile.user_type)
+
+
 
 class ClientContentTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 

@@ -80,7 +80,7 @@
                                     <li>
                                         <a href="/accounts/logout/?next=/accounts/login/?next=/story/inprogress/">Logout</a>
                                     </li>
-                                {% elif user.get_profile.user_type == 'Client'%}
+                                {% elif user.get_profile.user_type == 'Client' or user.get_profile.user_type == 'InactiveClient'%}
                                     <li>
                                         <a href="/profiles/client/edit">Account Settings</a>
                                     </li>
@@ -148,6 +148,9 @@
 			</div>
 			<div class="tab-pane active" id="tab7">
 				{% block register_complete %}{% endblock %}
+			</div>
+			<div class="tab-pane active" id="tab7">
+				{% block activation_complete %}{% endblock %}
 			</div>
 			</div> <!-- tab-content -->
 			</div> <!-- tabbable -->

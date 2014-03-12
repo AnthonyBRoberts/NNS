@@ -76,7 +76,7 @@
                                     <li>
                                         <a href="/accounts/logout/?next=/accounts/login/?next=/story/inprogress/">Logout</a>
                                     </li>
-                                {% elif user.get_profile.user_type == 'Client'%}
+                                {% elif user.get_profile.user_type == 'Client' or user.get_profile.user_type == 'InactiveClient'%}
                                     <li>
                                         <a href="/profiles/client/edit">Account Settings</a>
                                     </li>
@@ -200,6 +200,13 @@
                             {% endblock %}
                         </p>
                     </div>
+                    <div class="tab-pane active" id="tab14">
+                        <p>
+                            {% block content %}
+                            {% endblock %}
+                        </p>
+                    </div>
+                    
                     
                 </div> <!-- tab-content -->
             </div> <!-- tabbable -->

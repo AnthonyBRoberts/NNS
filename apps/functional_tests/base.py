@@ -52,3 +52,12 @@ class FunctionalTest(LiveServerTestCase):
 		self.browser.find_element_by_id('id_username').send_keys('nns.aroberts@gmail.com')
 		self.browser.find_element_by_id('id_password').send_keys('anthony')
 		self.browser.find_element_by_id('id_password').send_keys(Keys.RETURN)
+
+class EditorTests(FunctionalTest):
+
+	def log_in_editor(self):
+		self.browser.get(self.test_server)
+		self.browser.find_element_by_link_text('Login').click()
+		self.browser.find_element_by_id('id_username').send_keys('nns.aroberts@gmail.com')
+		self.browser.find_element_by_id('id_password').send_keys('anthony')
+		self.browser.find_element_by_id('id_password').send_keys(Keys.RETURN)

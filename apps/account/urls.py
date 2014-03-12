@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url('^client/edit', 'profiles.views.edit_profile',
         {
             'form_class': ClientForm,
+            'success_url': '/profiles/client/edit/',
         },
         name='edit_client_profile'),
     url('^unsubscribe', 'profiles.views.edit_profile',
