@@ -26,9 +26,9 @@ django-model-utils==2.0
 django-notification==1.1
 django-notifications-hq==0.6.0
 django-password-reset==0.5.1
--e git+https://github.com/AnthonyBRoberts/django-registration-1.5.git@2f6d49cbe0afe2eb23c4c06c926958800625f175#egg=django_registration-master
--e git://github.com/AnthonyBRoberts/django-registration-email.git@dd040f41cbc3a31d44cc019682e5d252c924bb0a#egg=django_registration_email-origin/nns_version
--e git://github.com/AnthonyBRoberts/django-ses.git@cc6d953c17a41ad0774f95c864acfef81af43b5e#egg=django_ses-master
+-e git+https://github.com/AnthonyBRoberts/django-registration-1.5.git#egg=django_registration-master
+-e git://github.com/AnthonyBRoberts/django-registration-email.git#egg=django_registration_email
+-e git://github.com/AnthonyBRoberts/django-ses.git#egg=django_ses-master
 django-staticfiles==1.2.1
 django-storages==1.1.5
 django-suit==0.2.6
@@ -47,7 +47,7 @@ mock==1.0b1
 newrelic==1.11.0.55
 paramiko==1.10.1
 phonenumbers==5.5b1
--e git+https://github.com/AnthonyBRoberts/django-profiles.git@38b6992aabb21162c344273d219858bbcd990451#egg=profiles-master
+-e git+https://github.com/AnthonyBRoberts/django-profiles.git#egg=profiles-master
 psycopg2==2.4.5
 pycrypto==2.6
 pyscreenshot==0.3.2
