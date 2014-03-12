@@ -2,8 +2,6 @@ Django==1.6.2
 EasyProcess==0.1.6
 Fabric==1.4.3
 HireFire==0.1
-PIL==1.1.7
-PyVirtualDisplay==0.1.2
 PyYAML==3.10
 South==0.7.6
 amqp==1.0.13
@@ -14,7 +12,6 @@ beautifulsoup4==4.3.2
 billiard==2.7.3.34
 boto==2.25.0
 celery==3.0.24
-coverage==3.7.1
 dj-database-url==0.2.1
 django-appconf==0.6
 django-async-messages==0.3
@@ -27,7 +24,7 @@ django-notification==1.1
 django-notifications-hq==0.6.0
 django-password-reset==0.5.1
 -e git+https://github.com/AnthonyBRoberts/django-registration-1.5.git#egg=django_registration-master
--e git://github.com/AnthonyBRoberts/django-registration-email.git#egg=django_registration_email
+-e git+https://github.com/AnthonyBRoberts/django-registration-email.git@nns_version#egg=django_registration_email
 -e git://github.com/AnthonyBRoberts/django-ses.git#egg=django_ses-master
 django-staticfiles==1.2.1
 django-storages==1.1.5
@@ -54,14 +51,11 @@ pyscreenshot==0.3.2
 python-dateutil==2.1
 pytz==2013.7
 redis==2.7.1
-selenium==2.39.0
 simplejson==2.2.1
 six==1.4.1
 ssh==1.8.0
 stevedore==0.14.1
-tornado==3.2
 unittest2==0.5.1
 virtualenv==1.11.2
 virtualenv-clone==0.2.4
-virtualenvwrapper==4.2
 wsgiref==0.1.2
