@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load bootstrap_toolkit %}
+{% load url from future %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+{% block storycontent %}
+
+{% if not object.is_published and user.get_profile.user_type == 'Client' %}
+        <h3>You do not have permission to view this page</h3>
+{% else %}
+
+{% if messages %}
+	<div class="messages"></div>
+{% endif %}
+<div class="container-fluid">
+	<div class="row-fluid">
+        {% if not object.is_published %}
+        <div class="text-error">Note: This story has not been published yet.</div>
+        {% endif %}
+        <div class="span12">
+        <h2>{{ object.title }}</h2>
+        </div>
+        <div class="span6">
+        <p name="author">By: {{ object.author.get_full_name }}</p>
+        <p name="story_text">{{ object.text|safe }}</p>
+        {% if object.docfile %}
+        <p><a href="{{ object.docfile.url }}">{{ object.docfile.name }}</a></p>
+        {% endif %}
+        </div>
+        <div class="span3">
+            <p>
+                <br />
+                <a href="{% url 'media_edit' object.slug %}">
+                    <button class="btn btn-large btn-block" type="button">Edit Media</button>
+                </a>
+            </p>
+        </div>
+        <div class="span9">
+        {% if object.docfile %}
+        <img src="{{ object.docfile.url }}" />
+        {% endif %}
+        </div>
+    </div>
+</div>
+ 
+
+            	
+
+
+        	
+</div>
+{% endif %}   
+{% endblock %}

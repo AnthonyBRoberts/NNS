@@ -168,7 +168,7 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, EditorTests):
 		author.select_by_visible_text('anthony')
 		mediaitem = Select(self.browser.find_element_by_id('id_mediaitems'))
 		mediaitem.select_by_visible_text('Make some media 1')
-		mediaitem.select_by_visible_text('New Media Item')
+		mediaitem.select_by_visible_text('Another Media Item')
 
 		# Anthony clicks publsih story and send now, then clicks save.
 		self.browser.find_element_by_name('is_published').click()
@@ -277,17 +277,42 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, EditorTests):
 		# Anthony sees two success messages, saved and editor notified
 		self.assertIn('Media saved successfully', 
 						self.browser.find_elements_by_class_name('alert-success')[0].text)
-		self.assertIsNotNone(self.browser.find_element_by_link_text('Functional Test Add Media Title'))
+		self.assertIn('Functional Test Add Media Title',
+						self.browser.find_element_by_tag_name('h2').text)
 
-	def test_editor_can_edit_and_send_media_items(self):
+	def test_editor_can_edit_and_send_published_media_items(self):
 
 		# Anthony logs into the site
 		self.log_in_editor()
 
 		# Anthony goes to the media list and clicks on the first media item in the list
 		self.browser.get(self.test_server + '/story/media')
-		self.browser.find_element_by_link_text('Make some media 2').click()
-		self.assertIsNotNone(self.browser.find_element_by_id('id_title'))
+		self.browser.find_element_by_link_text('test new media item error text 2').click()
+		self.assertIn('test new media item error text 2', self.browser.find_element_by_name('title').get_attribute('value'))
+
+		# Anthony makes some changes and saves.
+		self.browser.find_element_by_id('id_title').send_keys('Functional Test Add Media Title 2')
+		self.browser.find_element_by_class_name('redactor_editor').send_keys('This is an added paragraph to the create new media test.')
+		self.browser.find_element_by_id('id_tags').send_keys(', Anthonys_new_tag')
+		self.browser.find_element_by_name('send_now').click()
+		self.browser.find_element_by_name('submit').click()
+
+		# Anthony sees two success messages, updated and published
+		self.assertIn('Media updated successfully', 
+					self.browser.find_elements_by_class_name('alert-success')[0].text)
+		self.assertIn('Media published successfully', 
+					self.browser.find_elements_by_class_name('alert-success')[1].text)
+
+	def test_editor_can_edit_and_send_media_items_inprogress(self):
+
+		# Anthony logs into the site
+		self.log_in_editor()
+
+		# Anthony goes to the media list and clicks on the first media item in the list
+		self.browser.get(self.test_server + '/story/media/inprogress')
+		self.browser.find_element_by_link_text('test new media item error text').click()
+		self.assertIn('test new media item error text', self.browser.find_element_by_name('title').get_attribute('value'))
+
 
 		# Anthony makes some changes and saves.
 		self.browser.find_element_by_id('id_title').send_keys('Functional Test Add Media Title 2')
@@ -297,11 +322,11 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, EditorTests):
 		self.browser.find_element_by_id('id_send_now').click()
 		self.browser.find_element_by_name('submit').click()
 
-		# Anthony sees two success messages, saved and editor notified
-		#for text in self.browser.find_elements_by_tag_name()
-		self.assertIsNotNone(self.browser.find_element_by_class_name('alert-success'))
-		#self.assertIn('Media published successfully', 
-						#self.browser.find_elements_by_class_name('alert-success')[1].text)
+		# Anthony sees two success messages, updated and published
+		self.assertIn('Media updated successfully', 
+					self.browser.find_element_by_class_name('alert-success').text)
+		self.assertIn('Media published successfully', 
+					self.browser.find_element_by_xpath('/html/body/div/div/div/div[3]/div[2]').text)
 
 
 class EditorProfileTest(IgnoreDeprecationWarningsMixin, EditorTests):

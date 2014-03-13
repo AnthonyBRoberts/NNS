@@ -1,6 +1,7 @@
 from celery import task
 from story.email import EMail
 from apps.account.models import UserProfile
+from async_messages import message_users
 import logging
 import time
 
@@ -17,6 +18,9 @@ def create_email_batch(date_string, sender, recipients, subject, byline, email_t
         send_published_article.delay(date_string, sender, r, subject,
                                                         byline, email_text, story_text, attachment, mediaitems)
         time.sleep(2)
+    msg = "Email has been sent"
+    recip = UserProfile.objects.filter(user_type = 'Editor')
+    message_users(recip, msg)
 
 
 @task(name='send-email')

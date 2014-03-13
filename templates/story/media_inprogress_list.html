@@ -2,10 +2,10 @@
 {% load bootstrap_toolkit %}
 {% load url from future %}
 {% block media_list %}
-
+{% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
         {% if lines %}
 
-            <h2>Published Media Items</h2>
+            <h2>Media Items in Progress</h2>
                 <style>
                 table{width:100%;}
                 td{padding:5px;}
@@ -18,12 +18,7 @@
                     </tr>
                         {% for line in lines %}
                             <tr>
-                                {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
                                 <td><a href="{% url 'media_edit' line.slug %}">{{ line.title }}</a></td>
-                                {% else %}
-                                <td><a href="{% url 'media_detail' line.slug %}">{{ line.title }}</a></td>
-                                {% endif %}
-
                                 <td> {{ line.author.get_full_name }} </td>
                                 <td> {{ line.created_on|date:"D, M d, Y" }}</td>
                             </tr>
@@ -34,8 +29,8 @@
         {% else %}
             <h2>No Media Items.</h2>
         {% endif %}
-        {% if user.get_profile.user_type == 'Reporter' or user.get_profile.user_type == 'Editor' %}
         <a href="{% url 'media_add' %}"><button class="btn btn-large btn-primary" type="button">Create New Media Item</button></a>
-        {% endif %}
-
+{% else %}
+        <h3>You do not have permission to view this page</h3>
+{% endif %}  
 {% endblock %}

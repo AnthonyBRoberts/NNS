@@ -50,6 +50,24 @@ class ReporterDocsView(DetailView):
         return context
 
 @login_required 
+def story_index(request):
+    """
+    Story index view, a list of all published stories
+    """
+    story_list = Article.objects.filter(is_published=True).order_by('-publish_date')
+    paginator = Paginator(story_list, 20)
+    page = request.GET.get('page')
+    try:
+        show_lines = paginator.page(page)
+    except PageNotAnInteger:
+        show_lines = paginator.page(1)
+    except EmptyPage:
+        show_lines = paginator.page(paginator.num_pages)
+    return render_to_response('story/article_list.html', RequestContext(request, {
+        'lines': show_lines, 
+    }))
+
+@login_required 
 def inprogress_index(request):
     """
     Stories in progress view, a list of all stories in progress
@@ -72,7 +90,7 @@ def media_index(request):
     """
     Stories in progress view, a list of all stories in progress
     """
-    media_list = MediaItem.objects.filter(is_published=False).order_by('-publish_date')
+    media_list = MediaItem.objects.filter(is_published=True).order_by('-publish_date')
     paginator = Paginator(media_list, 20)
     page = request.GET.get('page')
     try:
@@ -86,12 +104,12 @@ def media_index(request):
     }))
 
 @login_required 
-def story_index(request):
+def media_inprogress_index(request):
     """
-    Story index view, a list of all published stories
+    Stories in progress view, a list of all stories in progress
     """
-    story_list = Article.objects.filter(is_published=True).order_by('-publish_date')
-    paginator = Paginator(story_list, 20)
+    media_list = MediaItem.objects.filter(is_published=False).order_by('-publish_date')
+    paginator = Paginator(media_list, 20)
     page = request.GET.get('page')
     try:
         show_lines = paginator.page(page)
@@ -99,9 +117,11 @@ def story_index(request):
         show_lines = paginator.page(1)
     except EmptyPage:
         show_lines = paginator.page(paginator.num_pages)
-    return render_to_response('story/article_list.html', RequestContext(request, {
-        'lines': show_lines, 
+    return render_to_response('story/media_inprogress_list.html', RequestContext(request, {
+        'lines': show_lines, 'media_list': media_list,
     }))
+
+
 
 
 @login_required 
@@ -158,6 +178,7 @@ def add_article(request):
 def edit_article(request, slug):
     """
     Update existing article
+    Command for sending articles comes from management.py
     """
     article = get_object_or_404(Article, slug=slug)
     if request.method == 'POST':
@@ -243,7 +264,7 @@ def add_media(request):
                     notify_editor(article)
                     msg = "Editor has been notified."
                     messages.success(request, msg, fail_silently=True)
-            return redirect('/story/media')
+            return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
             form = Media_RForm(initial={'byline': request.user.get_profile().byline})
@@ -260,6 +281,7 @@ def add_media(request):
 def edit_media(request, slug):
     """
     Update existing article
+    Command for sending articles comes from management.py
     """
     article = get_object_or_404(MediaItem, slug=slug)
     if request.method == 'POST':
@@ -287,7 +309,7 @@ def edit_media(request, slug):
                     notify_editor(article)
                     msg = "Editor has been notified."
                     messages.success(request, msg, fail_silently=True)
-            return redirect('/story/media')
+            return redirect(article)
     else:
         if request.user.get_profile().user_type == 'Reporter':
             form = Media_RForm(instance=article, initial={'byline': article.author.get_profile().byline})
