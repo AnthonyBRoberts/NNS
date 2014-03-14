@@ -138,7 +138,7 @@ def add_article(request):
         elif request.user.get_profile().user_type == 'Editor':
             form = Article_EForm(request.POST, request.FILES or None)
         else:
-            form = Article_RForm(request.POST, request.FILES or None)
+            form = Article_RForm()
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
@@ -169,7 +169,7 @@ def add_article(request):
             form = Article_EForm(initial={'byline': request.user.get_profile().byline,
                          'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'})
         else:
-            form = Article_RForm(initial={'byline': request.user.get_profile().byline})
+            form = Article_RForm()
     return render_to_response('story/article_form.html', 
                               { 'article_form': form },
                               context_instance=RequestContext(request))
@@ -188,7 +188,7 @@ def edit_article(request, slug):
         elif request.user.get_profile().user_type == 'Editor':
             form = Article_EForm(request.POST, request.FILES, instance=article)
         else:
-            form = Article_RForm(request.POST, request.FILES, instance=article)
+            form = Article_RForm()
         if form.is_valid():
             cleaned_text = replace_all(article.text)
             article.text = cleaned_text
@@ -219,7 +219,7 @@ def edit_article(request, slug):
                     initial={'byline': article.author.get_profile().byline,
                              'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'})
         else:
-            form = Article_RForm(instance=article, initial={'byline': article.author.get_profile().byline})
+            form = Article_RForm()
     return render_to_response('story/article_form.html', 
                               { 
                                   'article_form': form,
@@ -241,7 +241,7 @@ def add_media(request):
         elif request.user.get_profile().user_type == 'Editor':
             form = Media_EForm(request.POST, request.FILES or None)
         else:
-            form = Media_RForm(request.POST, request.FILES or None)
+            form = Media_RForm()
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
@@ -272,7 +272,7 @@ def add_media(request):
             form = Media_EForm(initial={'byline': request.user.get_profile().byline,
                          'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'})
         else:
-            form = Media_RForm(initial={'byline': request.user.get_profile().byline})
+            form = Media_RForm()
     return render_to_response('story/media_form.html', 
                               { 'form': form },
                               context_instance=RequestContext(request))
@@ -322,7 +322,7 @@ def edit_media(request, slug):
                     initial={'byline': article.author.get_profile().byline,
                              'email_text': '<p>Editors/News Directors:</p><p></p><p>Thank you,</p><p>Nebraska News Service</p>'})
         else:
-            form = Media_RForm(instance=article, initial={'byline': article.author.get_profile().byline})
+            form = Media_RForm()
     return render_to_response('story/media_form.html', 
                               { 
                                   'form': form,

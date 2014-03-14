@@ -27,7 +27,7 @@
                 {{ lines|pagination }}
                 <hr>
         {% else %}
-            <h2>No Media Items.</h2>
+            <h2>No Unpublished Media Items.</h2>
         {% endif %}
         <a href="{% url 'media_add' %}"><button class="btn btn-large btn-primary" type="button">Create New Media Item</button></a>
 {% else %}

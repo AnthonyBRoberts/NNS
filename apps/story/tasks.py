@@ -2,6 +2,7 @@ from celery import task
 from story.email import EMail
 from apps.account.models import UserProfile
 from async_messages import message_users
+from django.contrib.messages import constants
 import logging
 import time
 
