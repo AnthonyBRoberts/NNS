@@ -11,16 +11,19 @@ import time
 def create_email_batch(date_string, sender, recipients, subject, byline, email_text, story_text, mediaitems=None, attachment=None):
     """
     Task for emailing published articles.
-    Runs when an article is saved and both is_published & send_now==True
+    Calls a subtask for each recipient, so it sends one email at a time.
+    2 second sleep to avoid AWS rate limits
+    Task is called by story management command send_article
+    message_users is an async_messages object and notification is sent to all Editors
     """
     
     for r in recipients:
         send_published_article.delay(date_string, sender, r, subject,
                                                         byline, email_text, story_text, attachment, mediaitems)
         time.sleep(2)
-    msg = "Email has been sent"
+    msg = "Emails for story: \"" + subject + "\" -- " + byline + " has been sent."
     recip = UserProfile.objects.filter(user_type = 'Editor')
-    message_users(recip, msg)
+    message_users(recip, msg, constants.SUCCESS)
 
 
 @task(name='send-email')
