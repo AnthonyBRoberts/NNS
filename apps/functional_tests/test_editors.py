@@ -214,8 +214,7 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, EditorTests):
 
 		# Anthony clicks publsih story and send now, then clicks save.
 		self.browser.find_element_by_name('is_published').click()
-		self.browser.find_element_by_name('send_now').click()
-		self.browser.find_element_by_name('add_recipients_only').click()
+		self.browser.find_element_by_css_selector("input[type='radio'][value='additional only']").click()
 		self.browser.find_element_by_name('submit').click()
 
 		# Oops, Anthony forgot to add an email to the recipient list
@@ -243,8 +242,7 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, EditorTests):
 
 		# Anthony clicks publsih story and send now, then clicks save.
 		self.browser.find_element_by_name('is_published').click()
-		self.browser.find_element_by_name('send_now').click()
-		self.browser.find_element_by_name('broadcast_only').click()
+		self.browser.find_element_by_css_selector("input[type='radio'][value='broadcast only']").click()
 		self.browser.find_element_by_name('submit').click()
 
 		# Anthony sees two success messages.
@@ -319,9 +317,9 @@ class EditorViewsTest(IgnoreDeprecationWarningsMixin, EditorTests):
 		self.browser.find_element_by_class_name('redactor_editor').send_keys('This is an added paragraph to the create new media test.')
 		self.browser.find_element_by_id('id_tags').send_keys(', Anthonys_new_tag')
 		self.browser.find_element_by_id('id_is_published').click()
-		self.browser.find_element_by_id('id_send_now').click()
+		self.browser.find_element_by_css_selector("input[type='radio'][value='send all']").click()
 		self.browser.find_element_by_name('submit').click()
-
+		
 		# Anthony sees two success messages, updated and published
 		self.assertIn('Media updated successfully', 
 					self.browser.find_element_by_class_name('alert-success').text)

@@ -87,9 +87,7 @@ class Article_RForm(forms.ModelForm):
 
 class Media_EForm(forms.ModelForm):
 
-    #broadcast_only = forms.BooleanField(label='Send to Broadcast Only', required=False)
-    #add_recipients_only = forms.BooleanField(label='Send to Additional Recipients Only', required=False)
-    send_now = forms.ChoiceField(label='Email Sending Options', required=False)
+    send_now = forms.ChoiceField(widget=forms.RadioSelect(), required=False)
     add_recipients = MultiEmailField(label='Additional Recipients, multiple emails must be separated by a comma.', required=False)
 
     class Meta:
@@ -111,21 +109,18 @@ class Media_EForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(Article_EForm, self).__init__(*args, **kwargs)
+        super(Media_EForm, self).__init__(*args, **kwargs)
         email_options = EMAIL_OPTIONS
         self.fields['send_now'].choices = email_options
 
     def clean(self):
         cleaned_data = super(Media_EForm, self).clean()
         add_recipients = cleaned_data.get("add_recipients")
-        add_recipients_only = cleaned_data.get("add_recipients_only")
 
-        if add_recipients_only:
+        if cleaned_data.get('send_now') == 'additional only':
             if add_recipients == []:
                 raise forms.ValidationError("You selected Send to Additional Recipients Only, but didn't include any additional recipients")
         return cleaned_data
-
-    
 
 
 class Media_RForm(forms.ModelForm):

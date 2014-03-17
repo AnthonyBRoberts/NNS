@@ -45,7 +45,7 @@ def send_article(article, form):
 	else: 
 		for profile in UserProfile.objects.filter(user_type = 'Editor'):
 			recipients.append(profile.user.email)
-		for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
+		for profile in UserProfile.objects.filter(user_type = 'Reporter'):    
 			recipients.append(profile.user.email)
 		if send_option == 'broadcast only':
 			for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):

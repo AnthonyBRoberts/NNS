@@ -74,17 +74,31 @@
                 </div>
                 <div class="row-fluid">
                     <div class="span12 well">
-                        <div class="row-fluid span9">
+                        <div class="row-fluid span10">
+                            <h4>Sending Options</h4>
+                            <br />
                             <div class="row-fluid">
-                                <div class="fieldWrapper span3 well" style="background-color:#e7a1a1">
-                                {{ form.send_now|as_bootstrap }}
-                                </div>
-                                <div class="fieldWrapper span4 well" style="background-color:#e1a46d">
-                                {{ form.broadcast_only|as_bootstrap }}
-                                </div>
-                                <div class="fieldWrapper span5 well" style="background-color:#e1d76d">
-                                {{ form.add_recipients_only|as_bootstrap }}
-                                </div>
+                                {% for radio in form.send_now %}
+                                    {% if forloop.counter == 1 %}
+                                        <div class="fieldWrapper span3 well" style="background-color:#e7a1a1">
+                                        <label>
+                                            {{ radio.tag }} <strong>{{ radio.choice_label }}</strong>
+                                        </label>
+                                        </div>
+                                    {% elif forloop.counter == 2 %}
+                                        <div class="fieldWrapper span4 well" style="background-color:#e1a46d">
+                                        <label>
+                                            {{ radio.tag }} <strong>{{ radio.choice_label }}</strong>
+                                        </label>
+                                        </div>
+                                    {% elif forloop.counter == 3 %}
+                                        <div class="fieldWrapper span5 well" style="background-color:#e1d76d">
+                                        <label>
+                                            {{ radio.tag }} <strong>{{ radio.choice_label }}</strong>
+                                        </label> 
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                             <div class="row-fluid">
                                 <div class="fieldWrapper span9">
