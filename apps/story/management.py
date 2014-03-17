@@ -35,12 +35,11 @@ def send_article(article, form):
 			mediaitems[m.title] = m.docfile.url
 	except:
 		mediaitems = {}
-	bc_only = form.cleaned_data['broadcast_only']
-	add_email_only = form.cleaned_data['add_recipients_only']
 	add_email_list = form.cleaned_data['add_recipients']
+	send_option = form.cleaned_data['send_now']
 	recipients = []
 	date_string = time.strftime("%Y-%m-%d-%H-%M")
-	if add_email_only:
+	if send_option == 'additional only':
 		for r in add_email_list:
 			recipients.append(r)
 	else: 
@@ -48,7 +47,7 @@ def send_article(article, form):
 			recipients.append(profile.user.email)
 		for profile in UserProfile.objects.filter(user_type = 'Reporter'):        
 			recipients.append(profile.user.email)
-		if bc_only:
+		if send_option == 'broadcast only':
 			for profile in UserProfile.objects.filter(Q(user_type = 'Client') & (Q(pub_type = 'Radio') | Q(pub_type = 'Television'))):
 				recipients.append(profile.user.email)
 		else:
