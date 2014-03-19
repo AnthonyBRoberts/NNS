@@ -8,13 +8,14 @@ import notifications
 from account.forms import *
 from account.models import UserProfile
 from story.models import Article
-from story.views import AboutView, FrontpageView, ReporterDocsView
+from story.views import AboutView, FrontpageView, ReporterDocsView, EditorDocsView
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', FrontpageView.as_view(), name='index'),
     url(r'^about/$', AboutView.as_view(), name='about'),
     url(r'^reporterdocs/$', ReporterDocsView.as_view(), name='reporterdocs'),
+    url(r'^editordocs/$', EditorDocsView.as_view(), name='editordocs'),
     url(r'^map/$', ListView.as_view(
         template_name="newsarchive_map_fall2013.html",
         model=UserProfile,

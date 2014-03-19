@@ -49,6 +49,16 @@ class ReporterDocsView(DetailView):
         context['slug'] = "reporter-documentation"
         return context
 
+class EditorDocsView(DetailView):
+    template_name="reporterdocs.html"
+    def get_object(self):
+        return get_object_or_404(Article, slug="editor-documentation")
+    def get_context_data(self, **kwargs):
+        context = super(EditorDocsView, self).get_context_data(**kwargs)
+        context['slug'] = "editor-documentation"
+        return context
+
+
 @login_required 
 def story_index(request):
     """

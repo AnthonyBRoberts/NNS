@@ -77,6 +77,15 @@
                                     <li>
                                         <a href="/profiles/reporter/edit">Account Settings</a>
                                     </li>
+                                    {% if user.get_profile.user_type == 'Reporter' %}
+                                    <li>
+                                        <a href="/reporterdocs/">Documentation</a>
+                                    </li>
+                                    {% elif user.get_profile.user_type == 'Editor' %}
+                                    <li>
+                                        <a href="/editordocs/">Documentation</a>
+                                    </li>
+                                    {% endif %}
                                     <li>
                                         <a href="/accounts/logout/?next=/accounts/login/?next=/story/inprogress/">Logout</a>
                                     </li>
