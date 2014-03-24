@@ -19,7 +19,7 @@
                     <p style="margin-left:100px"><input type="submit" name="submit" value="Save" class="btn btn-large btn-primary"></p>
                 </form>
                 <p style="margin-left:100px">
-                    <a href="{% url "password_reset_recover" %}"><button class="btn btn-large btn-primary" type="button">{% trans "recover password" %}</button></a>
+                    <a href="{% url "auth_password_reset" %}"><button class="btn btn-large btn-primary" type="button">{% trans "recover password" %}</button></a>
                     {% if user.get_profile.user_type == 'Client' %}
                     <a href="/profiles/unsubscribe"><button class="btn btn-large btn-primary" type="button">Unsubscribe from NNS emails</button></a>
                     {% endif %}
