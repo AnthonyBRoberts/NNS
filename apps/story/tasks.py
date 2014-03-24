@@ -23,7 +23,7 @@ def create_email_batch(date_string, sender, recipients, subject, byline, email_t
         send_published_article.delay(date_string, sender, r, subject,
                                                         byline, email_text, story_text, attachment, mediaitems)
         time.sleep(2)
-    msg = "Emails for story: \"" + subject + "\" -- " + byline + " has been sent at " + datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")
+    msg = "Emails for story: \"" + subject + "\" -- " + byline + " has been sent at " + datetime.datetime.now().strftime("%m/%d/%Y - at %H:%M")
     recip = UserProfile.objects.filter(user_type = 'Editor')
     message_users(recip, msg, constants.SUCCESS)
 
