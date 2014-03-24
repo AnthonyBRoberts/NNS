@@ -1,24 +1,31 @@
 {% extends "base.html" %}
 {% load bootstrap_toolkit %}
+{% load i18n %}
 {% block extra_head %}
     {{ form.media }}
 {% endblock %}
 {% block edit_profile %}
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     <div class="well">
-    	{% if user.get_profile.user_type == 'InactiveClient' %}
         <div class="container-fluid">
-        <p class="text-error">Note: This account has been unsubscribed from email list.</p>
+            {% if user.get_profile.user_type == 'InactiveClient' %}
+            <p class="text-error">Note: This account has been unsubscribed from email list.</p>
+            {% endif %}
+            
+            <div class="span9">
+                <h2>Edit Account Settings and Contact Information:</h2>
+                <form class="form-horizontal" action="" method="POST">{% csrf_token %}
+                        {{ form|as_bootstrap }}
+                    <p style="margin-left:100px"><input type="submit" name="submit" value="Save" class="btn btn-large btn-primary"></p>
+                </form>
+                <p style="margin-left:100px">
+                    <a href="{% url "password_reset_recover" %}"><button class="btn btn-large btn-primary" type="button">{% trans "recover password" %}</button></a>
+                    {% if user.get_profile.user_type == 'Client' %}
+                    <a href="/profiles/unsubscribe"><button class="btn btn-large btn-primary" type="button">Unsubscribe from NNS emails</button></a>
+                    {% endif %}
+                </p>
+            </div>
         </div>
-        {% endif %}
-        <h2>Edit Account Settings and Contact Information:</h2>
-        <form class="form-horizontal" action="" method="POST">{% csrf_token %}
-                {{ form|as_bootstrap }}
-            <p style="margin-left:100px"><input type="submit" name="submit" value="Save" class="btn btn-large btn-primary"></p>
-        </form>
-        {% if user.get_profile.user_type == 'Client' %}
-        <p style="margin-left:100px"><a href="/profiles/unsubscribe"><button class="btn" type="button">Unsubscribe from NNS emails</button></a></p>
-        {% endif %}
     </div>
 {% endblock %}
 

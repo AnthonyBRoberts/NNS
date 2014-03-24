@@ -42,7 +42,7 @@ class UserProfileInline(admin.StackedInline):
     verbose_name_plural = 'user profiles'
     list_filter = ('user_type', )
     fieldsets = (
-        ('Staff information', {
+        ('', {
             'fields': (('user_type', 'can_publish'), 'byline', 'bio'),
         }),
         ('Client information', {
