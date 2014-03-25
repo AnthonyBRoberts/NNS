@@ -44,7 +44,7 @@ class ArticleAdmin(ModelAdmin):
         (None, {'classes': ['edit'], 
             'fields': (('title', 'slug'), ('author', 'byline'),
                        ('publish_date', 'is_published', 'send_now'),
-                       'docfile', 'tags', 'text', 'email_text'),
+                       'docfile', 'mediaitems', 'tags', 'text', 'email_text'),
             }),
     ]
 
