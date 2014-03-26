@@ -241,7 +241,7 @@ class ReporterViewsTest(IgnoreDeprecationWarningsMixin, FunctionalTest):
 
 		# Joe goes to the media list and clicks on the first media item in the list
 		self.browser.get(self.test_server + '/story/media')
-		self.browser.find_element_by_xpath('//*[@id="tab13"]/table/tbody/tr[2]/td[1]/a').click()
+		self.browser.find_element_by_xpath('//*[@id="tab14"]/table/tbody/tr[2]/td[1]/a').click()
 		self.assertIsNotNone(self.browser.find_element_by_id('id_title'))
 
 		# Joe makes some changes and saves.
